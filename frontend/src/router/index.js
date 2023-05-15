@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import firebase from 'firebase'
 import Home from '../views/Home.vue'
 import Signup from '../views/Signup.vue'
 import Login from '../views/Login.vue'
@@ -39,21 +38,6 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
-})
-
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.authRequired)) {
-    if (firebase.auth().currentUser) {
-      next()
-    } else {
-      alert('You have to be logged in')
-      next({
-        path: '/Login'
-      })
-    }
-  } else {
-    next()
-  }
 })
 
 export default router
