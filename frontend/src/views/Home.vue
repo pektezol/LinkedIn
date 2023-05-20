@@ -37,6 +37,8 @@ import post from "../components/Home/post.vue"
 import rightSide from "../components/Home/rightSide.vue"
 import message from "../components/Layout/Message.vue" 
 
+import '@/assets/main.css'
+
 export default {
   components: {
     leftSide,
