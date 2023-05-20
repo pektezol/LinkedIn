@@ -2,6 +2,7 @@ package routes
 
 import (
 	"linkedin/controllers"
+	"linkedin/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +15,8 @@ func SetupRoutes(r *gin.Engine) {
 			auth.POST("/register", controllers.Register)
 			auth.POST("/login", controllers.Login)
 		}
-		api.GET("/profile", controllers.Profile)
+		api.GET("/profile", middleware.CheckAuth, controllers.Profile)
 		api.GET("/users/:username", controllers.GetUser)
+		api.GET("/posts", controllers.GetPosts)
 	}
 }
