@@ -4,7 +4,7 @@
 
         <div class="your-input">
             <div class="input">
-                <input type="text" name="email" v-model="loginData.email" id="email" required />
+                <input type="text" name="email" v-model="loginData.userName" id="email" required />
                 <label for="email">Email</label>
             </div>
             <div class="input">
@@ -36,15 +36,15 @@ export default {
     data() {
         return {
             loginData: {
-                email: '',
+                userName: '',
                 password: ''
             },
         };
     },          
     methods: {
-        login() { 
+        login() {  
             const authStore = useAuthStore()
-            authStore.handleLogin(this.loginData)
+            const res = authStore.handleLogin(this.loginData) 
         } 
     }
 };

@@ -36,6 +36,7 @@ import mainUpper from "../components/Home/mainUpper.vue"
 import post from "../components/Home/post.vue"
 import rightSide from "../components/Home/rightSide.vue"
 import message from "../components/Layout/Message.vue" 
+import { useAuthStore } from '../store/auth';
 
 import '@/assets/main.css'
 
@@ -47,7 +48,10 @@ export default {
     rightSide,
     message
   },
-   
+  mounted() {
+    const authStore = useAuthStore()  
+    //token cookie
+  },
   data() {
     return {
       fullName: 'Irem Eker',
@@ -84,10 +88,7 @@ export default {
         }
       ],
     };
-  },
-  mounted() {
-     
-  }
+  }, 
 };
 </script>
 

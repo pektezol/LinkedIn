@@ -1,5 +1,6 @@
 import Vue from "vue";
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue' 
+ 
 
 import "axios"
 
@@ -13,8 +14,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
-Vue.use(pinia)
- 
+Vue.use(pinia) 
 
 new Vue({ 
   router,

@@ -67,10 +67,10 @@ export default {
         };
     },
     methods: { 
-        register() {
-            console.log(this.registerData);
+        register() { 
             const authStore = useAuthStore()
-            authStore.handleRegister(this.registerData)
+            authStore.handleRegister(this.registerData)  
+            
         },
         onContext(ctx) {
             // The date formatted in the locale, or the `label-no-date-selected` string
