@@ -2,8 +2,6 @@ package controllers
 
 type OkResponse struct {
 	Status string `json:"status"`
-	Logged bool   `json:"logged"`
-	Perm   string `json:"perm"`
 	Data   any    `json:"data"`
 }
 
