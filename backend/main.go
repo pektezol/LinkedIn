@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"linkedin/database"
+	"linkedin/routes"
 	"log"
 	"os"
 
@@ -15,7 +17,7 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 	router := gin.Default()
-	// database.ConnectDB()
-	// routes.InitRoutes(router)
+	database.ConnectDB()
+	routes.SetupRoutes(router)
 	router.Run(fmt.Sprintf(":%s", os.Getenv("PORT")))
 }
