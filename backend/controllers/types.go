@@ -12,6 +12,24 @@ type ErrorResponse struct {
 	Message string `json:"message"`
 }
 
+type ProfileResponse struct {
+	User User `json:"user"`
+}
+
+type User struct {
+	FirstName      string `json:"first_name"`
+	LastName       string `json:"last_name"`
+	UserName       string `json:"user_name"`
+	Email          string `json:"email"`
+	DateOfBirth    string `json:"date_of_birth"`
+	ProfilePicture string `json:"profile_picture"`
+	Headline       string `json:"headline"`
+	Industry       string `json:"industry"`
+	Location       string `json:"location"`
+	Bio            string `json:"bio"`
+	CV             string `json:"cv"`
+}
+
 func OkMessage(data any) OkResponse {
 	return OkResponse{
 		Status: "ok",
