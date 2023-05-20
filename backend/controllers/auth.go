@@ -72,7 +72,7 @@ func Login(c *gin.Context) {
 	var id string
 	var username string
 	var password string
-	sql := `SELECT id, username, password FROM users WHERE username = ?;`
+	sql := `SELECT id, username, password FROM users WHERE username = $1;`
 	database.DB.QueryRow(sql, userLoginObj.Username).Scan(&id, &username, &password)
 	if username == "" {
 		// User not found
@@ -98,7 +98,7 @@ func Login(c *gin.Context) {
 func createTokenJWT(id string) (string, error) {
 	// 1 - Start creating a new token
 	token := jwt.New(jwt.GetSigningMethod("HS256"))
-	exp := time.Now().Add(time.Hour * 24 * 14) // 14 Days
+	exp := time.Now().Add(time.Hour * 24 * 30) // 30 Days
 	// 2 - Edit token details
 	token.Claims = &jwt.RegisteredClaims{
 		ExpiresAt: jwt.NewNumericDate(exp),
