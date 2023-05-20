@@ -2,94 +2,26 @@
 
   <template>
     <div>
-        <div class="card" style="width: 19rem">
-    <div class="card-header">
-      <span>Akışınıza ekleyin</span>
+       <div class="card-header" style="font-size: 20px">
+      <span>Notifications</span>
       <span>
         <i class="fas fa-info-circle float-right">
         </i>
       </span>
+
     </div>
-    <div class="card-title mt-3">
-      <div class="ml-3">
-        <img
-          src="https://coursereport-s3-production.global.ssl.fastly.net/uploads/school/logo/180/original/11188290-461044804062854-1290850627040404888-n.png"
-          class="right-panel-pic mr-1" />
-        <div class="header ml-1 d-inline-flex" style="font-size: 14px">
-          Codecraft
-        </div>
-        <span class="float-right mr-3 mt-2">
-          <button class="btn btn-outline-info btn-sm" style="border-radius: 50px">
-            <strong>+ Takip Et</strong>
-          </button>
-        </span>
+      <div class="card" style="width: 19rem">
+    <div v-for="notification in orderedNotifications" :key="notification.id" class="notification-item">
+      <div class="notification-icon">
+        <i class="fas fa-bell"></i>
       </div>
-    </div>
-    <div class="card-title mt-2">
-      <div class="ml-3">
-        <img src="https://pbs.twimg.com/profile_images/1562752782565785600/mqyKfrHN_400x400.jpg"
-          class="right-panel-pic mr-1" />
-        <div class="header ml-1 d-inline-flex" style="font-size: 14px">
-          Podfresh
-        </div>
-        <span class="float-right mr-3 mt-2">
-          <button class="btn btn-outline-info btn-sm" style="border-radius: 50px">
-            <strong>+ Takip Et</strong>
-          </button>
-        </span>
-      </div>
-    </div>
-    <div class="card-title mt-2 mb-3">
-      <div class="ml-3">
-        <img
-          src="https://yt3.ggpht.com/ytc/AMLnZu_D4RFD8cEcBUZHIxw2MPGANf6mzfnjgVEtSrRPSg=s900-c-k-c0x00ffffff-no-rj"
-          class="right-panel-pic mr-1" />
-        <div class="header ml-1 d-inline-flex" style="font-size: 14px">
-          Navlungo
-        </div>
-        <span class="float-right mr-3 mt-2">
-          <button class="btn btn-outline-info btn-sm" style="border-radius: 50px">
-            <strong>+ Takip Et</strong>
-          </button>
-        </span>
+      <div class="notification-content">
+        <div class="notification-title">{{ notification.title }}</div>
+        <div class="notification-message">{{ notification.message }}</div>
       </div>
     </div>
   </div>
-  <div class="card mt-3" style="width: 19rem">
-    <div class="card-header">
-      <span class="text-center">
-        Bugünün en çok izlenen eğitimleri
-      </span>
-      <span>
-        <i class="fas fa-info-circle float-right"></i>
-      </span>
-    </div>
-    <div class="card-title mt-3 mb-4">
-      <ol>
-        <li>
-          The Six Morning Habits of High Per...
-          <div class="right-panel-desc">
-            Pete Mocakatais | How to be awesome at you...
-          </div>
-        </li>
-        <li class="mt-2">
-          Onconscious Blas
-          <div class="right-panel-desc">
-            Stacey Gordon
-          </div>
-        </li>
-        <li class="mt-2">
-          Critical Thinking for Better Judgem...
-          <div class="right-panel-desc">
-            Becki Saltzman
-          </div>
-        </li>
-      </ol>
-    </div>
-    <div class="card-footer" style="color: #0a66c2; font-size: 15px; margin-top: -25px">
-      Linkedin Learning'de daha fazlasını göster
-    </div>
-  </div>
+
   <div class="text-center sticky-top pt-5" style="width: 19rem;">
     <ul class="list-inline">
       <li class="list-inline-item mt-3" style=" margin-top: 5rem;">
@@ -136,14 +68,63 @@
     </div>
 </template>
   
+
 <script>
 export default {
-    name: "rightSide",
-    data() {
-        return {
-
-        }
-    }
-}
+  data() {
+    return {
+      notifications: [
+        { id: 1, title: "Notification 1", message: "This is the first notification" },
+        { id: 2, title: "Notification 2", message: "This is the second notification" },
+        { id: 3, title: "Notification 3", message: "This is the third notification" },
+        { id: 4, title: "Notification 4", message: "make comment for batu's new post" },
+        { id: 5, title: "Notification 5", message: "İrem liked your post" },
+      ],
+    };
+  },
+  computed: {
+    orderedNotifications() {
+      return this.notifications.slice().reverse();
+    },
+  },
+};
 </script>
-  
+
+<style scoped>
+
+
+
+
+.notification-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  z-index: 9999;
+}
+
+.notification-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.notification-icon {
+  margin-right: 10px;
+}
+
+.notification-title {
+  font-weight: bold;
+}
+
+.notification-message {
+  color: #666;
+}
+</style>
