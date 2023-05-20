@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <!-- navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light navbarbg sticky-top d-flex mb-5 border-bottom">
+    <nav class="navbar navbar-expand-lg navbar-light navbarbg sticky-top d-flex mb-3 border-bottom">
       <div class="container">
         <a class="navbar-brand" href="#">
           <i class="fab fa-linkedin fa-lg" style="color: #0a66c2; font-size: 2.4rem"></i>
@@ -9,7 +9,11 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         </button>
+        
         <form class="form-inline">
+          <a href="/">
+            <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="" class="mr-2" style="width: 32px;">
+          </a>
           <input class="form-control searche" type="search" placeholder="Arama Yap" aria-label="Search" />
         </form>
 
@@ -24,7 +28,7 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="/networks">
+              <a class="nav-link" href="/network">
                 <img class="transform translate-x-6" src="@/assets/images/nav-network.svg" alt="" srcset="" >
                 <p>My Networks</p>
               </a>
