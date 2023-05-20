@@ -1,5 +1,5 @@
 <script> 
-import Navbar from "./components/Layout/Navbar.vue"
+import Navbar from "./components/Layout/Navbar.vue" 
 
 export default {
   components: {

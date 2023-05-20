@@ -1,11 +1,11 @@
 <template>
-  <div> 
+  <div>
     <div class="container">
 
       <div class="row">
         <!-- left - start -->
         <div class="col-3">
-          <leftSide></leftSide> 
+          <leftSide></leftSide>
         </div>
 
         <!-- middle - start -->
@@ -15,22 +15,19 @@
 
           <hr>
           <post></post>
-          
+
         </div>
 
+   
         <!-- Right - Start -->
         <div class="col-3">
           <rightSide></rightSide>
         </div>
       </div>
     </div>
-
     <message></message>
 
-    
-    
   </div>
-  
 </template>
 
 <script>
@@ -38,7 +35,10 @@ import leftSide from "../components/Home/leftSide.vue"
 import mainUpper from "../components/Home/mainUpper.vue"
 import post from "../components/Home/post.vue"
 import rightSide from "../components/Home/rightSide.vue"
-import message from "../components/Layout/Message.vue"
+import message from "../components/Layout/Message.vue" 
+import { useAuthStore } from '../store/auth';
+
+import '@/assets/main.css'
 
 export default {
   components: {
@@ -47,6 +47,10 @@ export default {
     post,
     rightSide,
     message
+  },
+  mounted() {
+    const authStore = useAuthStore()  
+    //token cookie
   },
   data() {
     return {
@@ -82,9 +86,9 @@ export default {
           university: 'University of XYZ',
           description: 'Specialized in software engineering principles and practices. Conducted research on software design patterns and agile methodologies.'
         }
-      ]
+      ],
     };
-  }
+  }, 
 };
 </script>
 
@@ -138,4 +142,5 @@ h6 {
     background-size: cover;
     max-height: 100%;
   }
-}</style>
+}
+</style>
