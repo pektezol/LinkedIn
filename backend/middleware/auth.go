@@ -2,6 +2,8 @@ package middleware
 
 import (
 	"fmt"
+	"linkedin/controllers"
+	"linkedin/database"
 	"os"
 	"time"
 
@@ -34,17 +36,14 @@ func CheckAuth(c *gin.Context) {
 			return
 		}
 		// Get user from DB
-		// var user controllers.User
-		// sql := `SELECT id, username, displayname, email, dateofbirth, avatar, bio, location, social_twitter, social_instagram
-		// 	FROM users WHERE id = ?;`
-		// database.DB.QueryRow(sql, claims["sub"]).Scan(
-		// 	&user.ID, &user.Username, &user.Displayname, &user.Email, &user.DateOfBirth, &user.Avatar,
-		// 	&user.Bio, &user.Location, &user.Twitter, &user.Instagram)
-		// if user.ID == 0 {
-		// 	c.Next()
-		// 	return
-		// }
-		// c.Set("user", user)
+		var user controllers.User
+		sql := `SELECT id, username, firstname, lastname, email, dateofbirth, profilepicture, headline, industry, location, bio, cv FROM users WHERE id = $1;`
+		database.DB.QueryRow(sql, claims["sub"]).Scan(&user.ID, &user.UserName, &user.FirstName, &user.LastName, &user.Email, &user.DateOfBirth, &user.ProfilePicture, &user.Headline, &user.Industry, &user.Location, &user.Bio, &user.CV)
+		if user.ID == 0 {
+			c.Next()
+			return
+		}
+		c.Set("user", user)
 		c.Next()
 	} else {
 		c.Next()
