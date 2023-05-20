@@ -49,7 +49,7 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusOK, ErrorMessage("Invalid date of birth format. Use YYYY-MM-DD."))
 		return
 	}
-	sql := `INSERT INTO users (username, firstname, lastname, email, password, dateofbirth, profilepicture, headline, industry, location, bio, cv) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+	sql := `INSERT INTO users (username, firstname, lastname, email, password, dateofbirth, profilepicture, headline, industry, location, bio, cv) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);`
 	_, err = database.DB.Exec(sql, userRegisterObj.Username, userRegisterObj.FirstName, userRegisterObj.LastName, userRegisterObj.Email, string(hashedPassword), userRegisterObj.DateOfBirth, "", "", "", "", "", "")
 	// Error on SQL
 	if err != nil {
