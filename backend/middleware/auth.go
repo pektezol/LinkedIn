@@ -13,13 +13,9 @@ import (
 
 func CheckAuth(c *gin.Context) {
 	// Get auth cookie
-	tokenString, err := c.Cookie("token")
-	if err != nil {
-		c.Next()
-		return
-	}
+	tokenString := c.GetHeader("Authorization")
 	// Validate token
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
