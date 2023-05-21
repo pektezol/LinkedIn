@@ -10,7 +10,10 @@
         <div class="col-6"> 
           <mainUpper></mainUpper> 
           <hr>
-          <post></post> 
+          <div v-for="(post) in post_data" :key="post.id">
+            <post :id="post.id" :date="post.date" :first_name="post.user.first_name" :last_name="post.user.last_name" :headline="post.user.headline" :likes="post.likes" :content_text="post.content.text" :content_image="post.content.image_base64" :comments="post.comments" ></post> 
+          </div>
+          <post id="" first_name="" last_name="" ></post> 
         </div> 
         <!-- Right - Start -->
         <div class="col-3">
@@ -28,9 +31,8 @@ import mainUpper from "../components/Home/mainUpper.vue"
 import post from "../components/Home/post.vue"
 import rightSide from "../components/Home/rightSide.vue"
 import message from "../components/Layout/Message.vue" 
-import { useAuthStore } from '../store/auth';
-
-import '@/assets/main.css'
+import axios from "axios";
+import '@/assets/main.css' 
 
 export default {
   components: {
@@ -40,13 +42,19 @@ export default {
     rightSide,
     message
   },
-  mounted() {
-    const authStore = useAuthStore() 
-    this.$cookies.set('token', authStore.getToken)
-    console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrra",authStore.getToken);
+  mounted() { 
+    axios.get(`https://software.ardapektezol.com/api/posts`, {
+      headers: {
+        Authorization: this.$cookies.get("token")
+      }
+    }).then(res => {
+      console.log("home",res.data.data.posts);
+       this.post_data = res.data.data.posts
+    })
   },
   data() {
     return {
+      post_data: null,
       fullName: 'Irem Eker',
       headline: 'Software Engineer',
       location: 'Istanbul, Turkey',
