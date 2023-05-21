@@ -1,4 +1,4 @@
-CREATE TABLE Users (
+CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username TEXT NOT NULL,
     firstname TEXT NOT NULL,
@@ -12,4 +12,12 @@ CREATE TABLE Users (
     location TEXT NOT NULL,
     bio TEXT NOT NULL,
     cv TEXT NOT NULL
+);
+
+CREATE TABLE posts (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES users(id),
+    text TEXT NOT NULL,
+    image TEXT NOT NULL,
+    date DATE NOT NULL
 );

@@ -1,5 +1,7 @@
 package controllers
 
+import "time"
+
 type OkResponse struct {
 	Status string `json:"status"`
 	Data   any    `json:"data"`
@@ -12,6 +14,10 @@ type ErrorResponse struct {
 
 type ProfileResponse struct {
 	User User `json:"user"`
+}
+
+type PostsResponse struct {
+	Posts []Post `json:"posts"`
 }
 
 type User struct {
@@ -27,6 +33,21 @@ type User struct {
 	Location       string `json:"location"`
 	Bio            string `json:"bio"`
 	CV             string `json:"cv"`
+}
+
+type Post struct {
+	ID   int `json:"id"`
+	User struct {
+		ID        int    `json:"id"`
+		FirstName string `json:"first_name"`
+		LastName  string `json:"last_name"`
+		Headline  string `json:"headline"`
+	} `json:"user"`
+	Content struct {
+		Text  string `json:"text"`
+		Image string `json:"image_base64"`
+	} `json:"content"`
+	Date time.Time `json:"date"`
 }
 
 func OkMessage(data any) OkResponse {
