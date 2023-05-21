@@ -47,7 +47,21 @@ type Post struct {
 		Text  string `json:"text"`
 		Image string `json:"image_base64"`
 	} `json:"content"`
-	Date time.Time `json:"date"`
+	Likes    int       `json:"likes"`
+	Comments []Comment `json:"comments"`
+	Date     time.Time `json:"date"`
+}
+
+type Comment struct {
+	ID   int `json:"id"`
+	User struct {
+		ID        int    `json:"id"`
+		FirstName string `json:"first_name"`
+		LastName  string `json:"last_name"`
+		Headline  string `json:"headline"`
+	} `json:"user"`
+	Comment string    `json:"comment"`
+	Date    time.Time `json:"date"`
 }
 
 func OkMessage(data any) OkResponse {
