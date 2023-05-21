@@ -115,8 +115,16 @@ func RemoveConnection(c *gin.Context) {
 		return
 	}
 	if count == 0 {
-		c.JSON(http.StatusOK, ErrorMessage("You are not connected with this person!"))
-		return
+		var count2 int
+		sql := `SELECT COUNT(*) FROM connections WHERE sender_id = $2 AND reciever_id = (SELECT id FROM users WHERE username = $1);`
+		if err := database.DB.QueryRow(sql, targetUsername, userObject.ID).Scan(&count2); err != nil {
+			c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+			return
+		}
+		if count2 == 0 {
+			c.JSON(http.StatusOK, ErrorMessage("You are not connected with this person!"))
+			return
+		}
 	}
 	var status bool
 	sql = `SELECT status FROM connections WHERE reciever_id = $2 AND sender_id = (SELECT id FROM users WHERE username = $1);`
