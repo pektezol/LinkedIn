@@ -12,7 +12,11 @@
    
       <b-card>
         <b-card-body>
+<<<<<<< HEAD
           <h5 class="card-title">{{ profile_data.first_name }} {{ profile_data.last_name }}</h5>
+=======
+          <h5 class="card-title">{{ name }}</h5>
+>>>>>>> fb9079b (Profile updated)
               <ul class="list-unstyled">
                 <li><i class="fa fa-envelope-o mr-2"></i>{{ profile_data.email }}</li>  
                 <li><i class="fa fa-map-marker mr-2"></i>{{ profile_data.location }}</li>
