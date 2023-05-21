@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"linkedin/controllers"
 	"linkedin/database"
-	"log"
 	"os"
 	"time"
 
@@ -15,7 +14,6 @@ import (
 func CheckAuth(c *gin.Context) {
 	// Get auth cookie
 	tokenString := c.GetHeader("Authorization")
-	log.Println(tokenString)
 	// Validate token
 	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {

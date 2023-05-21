@@ -19,5 +19,9 @@ func SetupRoutes(r *gin.Engine) {
 		api.GET("/users/:username", controllers.GetUser)
 		api.GET("/posts", controllers.GetPosts)
 		api.POST("/posts", middleware.CheckAuth, controllers.CreatePost)
+		api.GET("/connections", middleware.CheckAuth, controllers.GetConnectionRequests)
+		api.POST("/connections/:username", middleware.CheckAuth, controllers.SendConnectionRequest)
+		api.PUT("/connections/:username", middleware.CheckAuth, controllers.AcceptConnectionRequest)
+		api.DELETE("/connections/:username", middleware.CheckAuth, controllers.RemoveConnection)
 	}
 }

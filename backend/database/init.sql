@@ -92,6 +92,7 @@ CREATE TABLE connections (
     id SERIAL PRIMARY KEY,
     sender_id INT NOT NULL REFERENCES users(id),
     reciever_id INT NOT NULL REFERENCES users(id),
+    status BOOLEAN NOT NULL,
     date DATE NOT NULL DEFAULT now()
 );
 

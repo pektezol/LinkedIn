@@ -20,6 +20,10 @@ type PostsResponse struct {
 	Posts []Post `json:"posts"`
 }
 
+type ConnectionsResponse struct {
+	Connections []Connection `json:"connections"`
+}
+
 type User struct {
 	ID             int    `json:"id"`
 	FirstName      string `json:"first_name"`
@@ -62,6 +66,14 @@ type Comment struct {
 	} `json:"user"`
 	Comment string    `json:"comment"`
 	Date    time.Time `json:"date"`
+}
+
+type Connection struct {
+	ID         int       `json:"id"`
+	SenderID   int       `json:"sender_id"`
+	RecieverID int       `json:"reciever_id"`
+	Status     bool      `json:"status"`
+	Date       time.Time `json:"date"`
 }
 
 func OkMessage(data any) OkResponse {
