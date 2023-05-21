@@ -71,7 +71,7 @@ func AcceptConnectionRequest(c *gin.Context) {
 	userObject := sessionUser.(User)
 	targetUsername := c.Param("username")
 	var count int
-	sql := `SELECT COUNT(*) FROM connections WHERE sender_id = $1 AND reciever_id = (SELECT id FROM users WHERE username = $2);`
+	sql := `SELECT COUNT(*) FROM connections WHERE reciever_id = $2 AND sender_id = (SELECT id FROM users WHERE username = $1);`
 	if err := database.DB.QueryRow(sql, targetUsername, userObject.ID).Scan(&count); err != nil {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
 		return
@@ -81,7 +81,7 @@ func AcceptConnectionRequest(c *gin.Context) {
 		return
 	}
 	var status bool
-	sql = `SELECT status FROM connections WHERE sender_id = $1 AND reciever_id = (SELECT id FROM users WHERE username = $2);`
+	sql = `SELECT status FROM connections WHERE reciever_id = $2 AND sender_id = (SELECT id FROM users WHERE username = $1);`
 	if err := database.DB.QueryRow(sql, targetUsername, userObject.ID).Scan(&status); err != nil {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
 		return
@@ -109,7 +109,7 @@ func RemoveConnection(c *gin.Context) {
 	userObject := sessionUser.(User)
 	targetUsername := c.Param("username")
 	var count int
-	sql := `SELECT COUNT(*) FROM connections WHERE sender_id = $1 AND reciever_id = (SELECT id FROM users WHERE username = $2);`
+	sql := `SELECT COUNT(*) FROM connections WHERE reciever_id = $2 AND sender_id = (SELECT id FROM users WHERE username = $1);`
 	if err := database.DB.QueryRow(sql, targetUsername, userObject.ID).Scan(&count); err != nil {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
 		return
@@ -119,7 +119,7 @@ func RemoveConnection(c *gin.Context) {
 		return
 	}
 	var status bool
-	sql = `SELECT status FROM connections WHERE sender_id = $1 AND reciever_id = (SELECT id FROM users WHERE username = $2);`
+	sql = `SELECT status FROM connections WHERE reciever_id = $2 AND sender_id = (SELECT id FROM users WHERE username = $1);`
 	if err := database.DB.QueryRow(sql, targetUsername, userObject.ID).Scan(&status); err != nil {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
 		return
@@ -128,7 +128,7 @@ func RemoveConnection(c *gin.Context) {
 		c.JSON(http.StatusOK, ErrorMessage("You are not connected with this person!"))
 		return
 	}
-	sql = `DELETE FROM connections WHERE sender_id = $1 AND reciever_id = (SELECT id FROM users WHERE username = $2);`
+	sql = `DELETE FROM connections WHERE reciever_id = $2 AND sender_id = (SELECT id FROM users WHERE username = $1);`
 	_, err := database.DB.Exec(sql, targetUsername, userObject.ID)
 	if err != nil {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
