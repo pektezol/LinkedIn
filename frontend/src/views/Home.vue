@@ -1,32 +1,24 @@
 <template>
   <div>
-    <div class="container">
-
+    <div class="container"> 
       <div class="row">
         <!-- left - start -->
         <div class="col-3">
           <leftSide></leftSide>
-        </div>
-
+        </div> 
         <!-- middle - start -->
-        <div class="col-6">
-          
-          <mainUpper></mainUpper>
-
+        <div class="col-6"> 
+          <mainUpper></mainUpper> 
           <hr>
-          <post></post>
-
-        </div>
-
-   
+          <post></post> 
+        </div> 
         <!-- Right - Start -->
         <div class="col-3">
           <rightSide></rightSide>
         </div>
       </div>
     </div>
-    <message></message>
-
+    <message></message> 
   </div>
 </template>
 
@@ -49,8 +41,9 @@ export default {
     message
   },
   mounted() {
-    const authStore = useAuthStore()  
-    //token cookie
+    const authStore = useAuthStore() 
+    this.$cookies.set('token', authStore.getToken)
+    console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrra",authStore.getToken);
   },
   data() {
     return {

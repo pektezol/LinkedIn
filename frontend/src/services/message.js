@@ -1,9 +1,9 @@
 import axios from "axios";
 
-class UserService {
+class MessageService {
   getUser(param) { 
     return axios.get(`https://software.ardapektezol.com/api/users/${param}`)
-  }
+  } 
 }
 
-export default new UserService();
+export default new MessageService();

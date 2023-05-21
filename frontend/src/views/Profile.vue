@@ -2,36 +2,51 @@
   <div class="container">
     <div class="card mt-4">
       <div class="card-body">
+<<<<<<< HEAD
+        <div>
+          <div class="header-photo">
+            <img alt="Header Photo"
+              src="https://64.media.tumblr.com/682b7be9273636dffb1d8fbe3220628b/tumblr_pdz53tIneb1sx8ybdo10_1280.png" />
+          </div>
+          <div class="profile-photo ml-5">
+            <img class="img-fluid rounded-circle mb-1"
+              src="https://img.freepik.com/free-photo/red-white-cat-i-white-studio_155003-13189.jpg?w=360"
+              alt="Profile Image" />
+          </div>
+
+          <b-card>
+            <b-card-body>
+              <h5 class="card-title">{{ name }}</h5>
+=======
   <div>
     <div class="header-photo">
       <img alt="Header Photo" src="https://64.media.tumblr.com/682b7be9273636dffb1d8fbe3220628b/tumblr_pdz53tIneb1sx8ybdo10_1280.png"/>
     </div>
     <div class="profile-photo ml-5">
-      <img class="img-fluid rounded-circle mb-1" src="https://img.freepik.com/free-photo/red-white-cat-i-white-studio_155003-13189.jpg?w=360" alt="Profile Image" />
+      <img class="img-fluid rounded-circle mb-1" src="../assets/images/profilPhoto.jpeg" alt="Profile Image" />
     </div>
    
       <b-card>
         <b-card-body>
           <h5 class="card-title">{{ name }}</h5>
+>>>>>>> ae2df81 (Profil Photo, Navbar,Jobs page information updated)
               <ul class="list-unstyled">
                 <li><i class="fa fa-envelope-o mr-2"></i>{{ email }}</li>
                 <li><i class="fa fa-phone mr-2"></i>{{ phone }}</li>
                 <li><i class="fa fa-globe mr-2"></i>{{ website }}</li>
                 <li><i class="fa fa-map-marker mr-2"></i>{{ location }}</li>
               </ul>
-                 <div class="button-group">
+              <div class="button-group">
                 <button class="btn btn-primary">Connect</button>
                 <button class="btn btn-primary">Message</button>
                 <button class="btn btn-primary">Follow</button>
               </div>
-        </b-card-body>
-      </b-card>
- 
-  </div>
+            </b-card-body>
+          </b-card>
+
+        </div>
       </div>
     </div>
-
-
 
     <div class="card mt-4">
       <div class="card-body-about">
@@ -81,7 +96,7 @@
     <div class="card mt-4">
       <div class="card-body">
         <!-- Licenses and Certificates Section -->
-        <h4 class="card-title">Licenses and Certificates</h4>
+        <h4 class="card-title">Licenses and Certificatess</h4>
         <ul class="list-unstyled">
           <li v-for="license in licenses" :key="license.id">{{ license.name }}</li>
         </ul>
@@ -91,13 +106,14 @@
 </template>
 
 <script>
-
+import { useAuthStore } from '../store/auth';
 import '@/assets/main.css'
 
 export default {
   name: 'LinkedInProfile',
   data() {
     return {
+      profile_data: null,
       profileImage: 'profile-image.jpg',
       name: 'John Doe',
       designation: 'Software Developer',
@@ -145,50 +161,51 @@ export default {
       ],
     };
   },
+  mounted() {
+    const authStore = useAuthStore() 
+    this.$cookies.set('token', authStore.getToken) // 
+    console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrra",authStore.getToken);
+  }, 
 };
 </script>
 
-<style scoped>
-
-
-
+<style scoped> 
 .header-photo {
-    position: relative;
-  width: 100%;
-  height: 350px;
-  overflow: hidden;
-}
+   position: relative;
+   width: 100%;
+   height: 350px;
+   overflow: hidden;
+ }
 
-.profile-photo {
-position: absolute;
-  top: 200px;
-  width: 200px;
-  height: 200px;
-  overflow: hidden;
+ .profile-photo {
+   position: absolute;
+   top: 200px;
+   width: 200px;
+   height: 200px;
+   overflow: hidden;
    z-index: 1;
-}
+ }
 
-.profile-photo img {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-}
+ .profile-photo img {
+   object-fit: cover;
+   width: 100%;
+   height: 100%;
+ }
 
-.card-body-about{
-    position: relative;
-    
-    padding: 20px;
-   
-}
+ .card-body-about {
+   position: relative;
 
-.button-group {
-  display: flex;
-  justify-content:left;
-  margin-top   : 15px;
-}
+   padding: 20px;
 
-.button-group button {
-  margin: 0 5px;
-}
+ }
 
+ .button-group {
+   display: flex;
+   justify-content: left;
+   margin-top: 15px;
+ }
+
+ .button-group button {
+   margin: 0 5px;
+ }
 </style>
