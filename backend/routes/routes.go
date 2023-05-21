@@ -25,5 +25,6 @@ func SetupRoutes(r *gin.Engine) {
 		api.DELETE("/connections/:username", middleware.CheckAuth, controllers.RemoveConnection)
 		api.POST("/like/:post", middleware.CheckAuth, controllers.Like)
 		api.POST("/education", middleware.CheckAuth, controllers.AddEducation)
+		api.DELETE("/education", middleware.CheckAuth, controllers.DeleteEducation)
 	}
 }

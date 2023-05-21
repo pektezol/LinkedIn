@@ -53,3 +53,17 @@ func AddEducation(c *gin.Context) {
 	database.DB.Exec(sql, userObject.ID, &educationRequest.SchoolName, &educationRequest.Degree, &educationRequest.FieldOfStudy, &educationRequest.Description, &educationRequest.StartDate, &educationRequest.EndDate)
 	c.JSON(http.StatusOK, OkMessage(educationRequest))
 }
+
+func DeleteEducation(c *gin.Context) {
+	sessionUser, exists := c.Get("user")
+	if !exists {
+		// User not logged in
+		c.JSON(http.StatusOK, ErrorMessage("User not logged in."))
+		return
+	}
+	userObject := sessionUser.(User)
+	educationID := c.Param("id")
+	sql := `DELETE FROM education WHERE id = $1 AND user_id = $2;`
+	database.DB.Exec(sql, educationID, userObject.ID)
+	c.JSON(http.StatusOK, OkMessage(nil))
+}
