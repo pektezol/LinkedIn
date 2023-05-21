@@ -35,7 +35,7 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="/jobs">
+              <a class="nav-link" href="/job">
                 <img class="transform translate-x-px" src="@/assets/images/nav-jobs.svg" alt="" srcset="">
                 <p>Jobs</p>
               </a>

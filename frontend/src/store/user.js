@@ -1,24 +1,23 @@
 import { defineStore } from "pinia" 
-import userhService from "../services/user"
+import userService from "../services/user" 
 
-export const useAuthStore = defineStore({
+export const useUserStore = defineStore({
     id: "auth",
-    state: () => ({
-        user: null,
-        loading: false
+    state: () => ({ 
+        user_data: null
     }),
 
     //login logout
     actions: {
         getUser(data){ 
-           authService.user().then(res => {
-            console.log(res);
+            userService.getUser(data).then(res => { 
+                this.user_data = res
            })
-        },
-        getProfile(data){ 
-            authService.user().then(res => {
-             console.log(res);
-            })
-         },
+        }, 
+    }, 
+    getters: { 
+        getUserData(state) {
+            return state.user_data
+        }
     }
 })
