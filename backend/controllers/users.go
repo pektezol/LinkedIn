@@ -15,9 +15,8 @@ func Profile(c *gin.Context) {
 		return
 	}
 	userObject := sessionUser.(User)
-	c.JSON(http.StatusOK, ProfileResponse{
-		User: userObject,
-	})
+	profileResponse := ProfileResponse{User: userObject}
+	c.JSON(http.StatusOK, OkMessage(profileResponse))
 }
 
 func GetUser(c *gin.Context) {
@@ -30,7 +29,27 @@ func GetUser(c *gin.Context) {
 		c.JSON(http.StatusOK, ErrorMessage("User does not exist."))
 		return
 	}
-	c.JSON(http.StatusOK, ProfileResponse{
-		User: user,
-	})
+	profileResponse := ProfileResponse{User: user}
+	c.JSON(http.StatusOK, OkMessage(profileResponse))
+}
+
+func AddEducation(c *gin.Context) {
+	sessionUser, exists := c.Get("user")
+	if !exists {
+		// User not logged in
+		c.JSON(http.StatusOK, ErrorMessage("User not logged in."))
+		return
+	}
+	userObject := sessionUser.(User)
+	var educationRequest EducationRequest
+	err := c.ShouldBindJSON(&educationRequest)
+	// Error on Invalid JSON
+	if err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	sql := `INSERT INTO education(user_id,school_name,degree,field_of_study,description,start_date,end_date) 
+	VALUES($1,$2,$3,$4,$5,$6,$7);`
+	database.DB.Exec(sql, userObject.ID, &educationRequest.SchoolName, &educationRequest.Degree, &educationRequest.FieldOfStudy, &educationRequest.Description, &educationRequest.StartDate, &educationRequest.EndDate)
+	c.JSON(http.StatusOK, OkMessage(educationRequest))
 }

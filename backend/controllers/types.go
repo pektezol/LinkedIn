@@ -39,6 +39,38 @@ type User struct {
 	CV             string `json:"cv"`
 }
 
+type Company struct {
+	ID          int    `json:"id"`
+	Name        string `json:"name"`
+	Industry    string `json:"industry"`
+	Location    string `json:"location"`
+	Description string `json:"description"`
+	Logo        string `json:"logo"`
+}
+
+type Education struct {
+	ID           int       `json:"id"`
+	SchoolName   string    `json:"school_name"`
+	Degree       string    `json:"degree"`
+	FieldOfStudy string    `json:"field_of_study"`
+	Description  string    `json:"description"`
+	StartDate    time.Time `json:"start_date"`
+	EndDate      time.Time `json:"end_date"`
+}
+
+type Experince struct {
+	ID      int `json:"id"`
+	Company struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+		Logo string `json:"logo"`
+	} `json:"company"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	StartDate   time.Time `json:"start_date"`
+	EndDate     time.Time `json:"end_date"`
+}
+
 type Post struct {
 	ID   int `json:"id"`
 	User struct {
@@ -111,4 +143,13 @@ type LoginRequest struct {
 type PostRequest struct {
 	Text  string `json:"text" binding:"required"`
 	Image string `json:"image_base64"`
+}
+
+type EducationRequest struct {
+	SchoolName   string    `json:"school_name" binding:"required"`
+	Degree       string    `json:"degree" binding:"required"`
+	FieldOfStudy string    `json:"field_of_study" binding:"required"`
+	Description  string    `json:"description" binding:"required"`
+	StartDate    time.Time `json:"start_date" binding:"required"`
+	EndDate      time.Time `json:"end_date" binding:"required"`
 }
