@@ -153,3 +153,12 @@ type EducationRequest struct {
 	StartDate    time.Time `json:"start_date" binding:"required"`
 	EndDate      time.Time `json:"end_date" binding:"required"`
 }
+
+type ExperienceRequest struct {
+	CompanyID   int       `json:"company_id" binding:"required"`
+	Title       string    `json:"title" binding:"required"`
+	Location    string    `json:"location" binding:"required"`
+	Description string    `json:"description" binding:"required"`
+	StartDate   time.Time `json:"start_date" binding:"required"`
+	EndDate     time.Time `json:"end_date" binding:"required"`
+}
