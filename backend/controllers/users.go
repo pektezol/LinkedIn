@@ -15,7 +15,13 @@ func Profile(c *gin.Context) {
 		return
 	}
 	userObject := sessionUser.(User)
-	profileResponse := ProfileResponse{User: userObject}
+	var connectionCount int
+	sql := `SELECT COUNT(*) FROM connections WHERE (sender_id = $1 OR reciever_id = $1) AND status = true;`
+	if err := database.DB.QueryRow(sql, userObject.ID).Scan(&connectionCount); err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	profileResponse := ProfileResponse{User: userObject, ConnectionCount: connectionCount}
 	c.JSON(http.StatusOK, OkMessage(profileResponse))
 }
 
@@ -29,7 +35,13 @@ func GetUser(c *gin.Context) {
 		c.JSON(http.StatusOK, ErrorMessage("User does not exist."))
 		return
 	}
-	profileResponse := ProfileResponse{User: user}
+	var connectionCount int
+	sql = `SELECT COUNT(*) FROM connections WHERE (sender_id = $1 OR reciever_id = $1) AND status = true;`
+	if err := database.DB.QueryRow(sql, user.ID).Scan(&connectionCount); err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	profileResponse := ProfileResponse{User: user, ConnectionCount: connectionCount}
 	c.JSON(http.StatusOK, OkMessage(profileResponse))
 }
 
