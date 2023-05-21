@@ -16,7 +16,7 @@ func GetConnectionRequests(c *gin.Context) {
 	}
 	userObject := sessionUser.(User)
 	connections := ConnectionsResponse{Connections: []Connection{}}
-	sql := `SELECT id, sender_id, reciever_id, status, date FROM connections WHERE sender_id = $1 OR reciever_id = $1;`
+	sql := `SELECT c.id, u.id, u.username, u.firstname, u.lastname, u.headline, c.status, c.date FROM connections c INNER JOIN users u ON c.sender_id=u.id WHERE reciever_id = $1;`
 	rows, err := database.DB.Query(sql, userObject.ID)
 	if err != nil {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
@@ -24,7 +24,7 @@ func GetConnectionRequests(c *gin.Context) {
 	}
 	for rows.Next() {
 		var connection Connection
-		if err := rows.Scan(&connection.ID, &connection.SenderID, &connection.RecieverID, &connection.Status, &connection.Date); err != nil {
+		if err := rows.Scan(&connection.ID, &connection.Sender.ID, &connection.Sender.UserName, &connection.Sender.FirstName, &connection.Sender.LastName, &connection.Sender.Headline, &connection.Status, &connection.Date); err != nil {
 			c.JSON(http.StatusOK, ErrorMessage(err.Error()))
 			return
 		}
@@ -109,30 +109,10 @@ func RemoveConnection(c *gin.Context) {
 	userObject := sessionUser.(User)
 	targetUsername := c.Param("username")
 	var connectionID int
-	sql := `SELECT id FROM connections WHERE reciever_id = $2 AND sender_id = (SELECT id FROM users WHERE username = $1);`
-	if err := database.DB.QueryRow(sql, targetUsername, userObject.ID).Scan(&connectionID); err != nil {
-		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
-		return
-	}
-	if connectionID == 0 {
-		sql := `SELECT id FROM connections WHERE sender_id = $2 AND reciever_id = (SELECT id FROM users WHERE username = $1);`
-		if err := database.DB.QueryRow(sql, targetUsername, userObject.ID).Scan(&connectionID); err != nil {
-			c.JSON(http.StatusOK, ErrorMessage(err.Error()))
-			return
-		}
-		if connectionID == 0 {
-			c.JSON(http.StatusOK, ErrorMessage("You are not connected with this person!"))
-			return
-		}
-	}
 	var status bool
-	sql = `SELECT status FROM connections WHERE id = $1;`
-	if err := database.DB.QueryRow(sql, connectionID).Scan(&status); err != nil {
-		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
-		return
-	}
-	if !status {
-		c.JSON(http.StatusOK, ErrorMessage("You are not connected with this person!"))
+	sql := `SELECT id, status FROM connections WHERE (reciever_id = $2 AND sender_id = (SELECT id FROM users WHERE username = $1)) OR (sender_id = $2 AND reciever_id = (SELECT id FROM users WHERE username = $1));`
+	if err := database.DB.QueryRow(sql, targetUsername, userObject.ID).Scan(&connectionID, &status); err != nil {
+		c.JSON(http.StatusOK, ErrorMessage("You are not connected to this person!"))
 		return
 	}
 	sql = `DELETE FROM connections WHERE id = $1;`

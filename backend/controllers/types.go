@@ -69,11 +69,16 @@ type Comment struct {
 }
 
 type Connection struct {
-	ID         int       `json:"id"`
-	SenderID   int       `json:"sender_id"`
-	RecieverID int       `json:"reciever_id"`
-	Status     bool      `json:"status"`
-	Date       time.Time `json:"date"`
+	ID     int `json:"id"`
+	Sender struct {
+		ID        int    `json:"id"`
+		UserName  string `json:"user_name"`
+		FirstName string `json:"first_name"`
+		LastName  string `json:"last_name"`
+		Headline  string `json:"headline"`
+	} `json:"sender"`
+	Status bool      `json:"status"`
+	Date   time.Time `json:"date"`
 }
 
 func OkMessage(data any) OkResponse {
