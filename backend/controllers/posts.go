@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"linkedin/database"
 	"net/http"
 
@@ -10,7 +11,7 @@ import (
 func GetPosts(c *gin.Context) {
 	var posts PostsResponse
 	posts.Posts = []Post{}
-	sql := `SELECT p.id, p.text, p.image, p.date, u.id, u.firstname, u.lastname, u.headline FROM posts p INNER JOIN users u ON p.user_id=u.id;`
+	sql := `SELECT p.id, p.text, p.image, p.date, u.id, u.firstname, u.lastname, u.headline FROM posts p INNER JOIN users u ON p.user_id=u.id ORDER BY date DESC;;`
 	rows, err := database.DB.Query(sql)
 	if err != nil {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
@@ -24,24 +25,25 @@ func GetPosts(c *gin.Context) {
 			c.JSON(http.StatusOK, ErrorMessage(err.Error()))
 			return
 		}
-		posts.Posts = append(posts.Posts, post)
 		sql = `SELECT c.id, c.comment, c.date, u.id, u.firstname, u.lastname, u.headline, (SELECT COUNT(*) FROM likes WHERE post_id = c.post_id) 
 		FROM comments c INNER JOIN users u ON c.user_id=u.id
-		INNER JOIN users u ON c.user_id=u.id WHERE c.post_id = $1;`
-		rows, err = database.DB.Query(sql, post)
+		WHERE c.post_id = $1;`
+		commentRows, err := database.DB.Query(sql, post.ID)
 		if err != nil {
 			c.JSON(http.StatusOK, ErrorMessage(err.Error()))
 			return
 		}
 		// Scan for each comments and likes
-		for rows.Next() {
+		for commentRows.Next() {
 			var comment Comment
-			if err := rows.Scan(&comment.ID, &comment.Comment, &comment.Date, &comment.User.ID, &comment.User.FirstName, &comment.User.LastName, &comment.User.Headline, &post.Likes); err != nil {
+			if err := commentRows.Scan(&comment.ID, &comment.Comment, &comment.Date, &comment.User.ID, &comment.User.FirstName, &comment.User.LastName, &comment.User.Headline, &post.Likes); err != nil {
 				c.JSON(http.StatusOK, ErrorMessage(err.Error()))
 				return
 			}
 			post.Comments = append(post.Comments, comment)
 		}
+		fmt.Println(post)
+		posts.Posts = append(posts.Posts, post)
 	}
 	c.JSON(http.StatusOK, OkMessage(posts))
 }

@@ -92,6 +92,6 @@ type LoginRequest struct {
 }
 
 type PostRequest struct {
-	Text  string `json:"text"`
+	Text  string `json:"text" binding:"required"`
 	Image string `json:"image_base64"`
 }

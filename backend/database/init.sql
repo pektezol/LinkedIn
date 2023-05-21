@@ -53,7 +53,7 @@ CREATE TABLE jobs (
     description TEXT NOT NULL,
     location TEXT NOT NULL,
     type TEXT NOT NULL,
-    date DATE NOT NULL
+    date DATE NOT NULL DEFAULT now()
 );
 
 CREATE TABLE applications (
@@ -61,7 +61,7 @@ CREATE TABLE applications (
     user_id INT NOT NULL REFERENCES users(id),
     job_id INT NOT NULL REFERENCES jobs(id),
     status BOOLEAN NOT NULL,
-    date DATE NOT NULL
+    date DATE NOT NULL DEFAULT now()
 );
 
 
@@ -70,7 +70,7 @@ CREATE TABLE posts (
     user_id INT NOT NULL REFERENCES users(id),
     text TEXT NOT NULL,
     image TEXT NOT NULL,
-    date DATE NOT NULL
+    date DATE NOT NULL DEFAULT now()
 );
 
 CREATE TABLE comments (
@@ -78,21 +78,21 @@ CREATE TABLE comments (
     user_id INT NOT NULL REFERENCES users(id),
     post_id INT NOT NULL REFERENCES posts(id),
     comment TEXT NOT NULL,
-    date DATE NOT NULL
+    date DATE NOT NULL DEFAULT now()
 );
 
 CREATE TABLE likes (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES users(id),
     post_id INT NOT NULL REFERENCES posts(id),
-    date DATE NOT NULL
+    date DATE NOT NULL DEFAULT now()
 );
 
 CREATE TABLE connections (
     id SERIAL PRIMARY KEY,
     sender_id INT NOT NULL REFERENCES users(id),
     reciever_id INT NOT NULL REFERENCES users(id),
-    date DATE NOT NULL
+    date DATE NOT NULL DEFAULT now()
 );
 
 CREATE TABLE messages (
@@ -100,7 +100,7 @@ CREATE TABLE messages (
     sender_id INT NOT NULL REFERENCES users(id),
     reciever_id INT NOT NULL REFERENCES users(id),
     message TEXT NOT NULL,
-    date DATE NOT NULL
+    date DATE NOT NULL DEFAULT now()
 );
 
 CREATE TABLE notifications (
@@ -108,5 +108,5 @@ CREATE TABLE notifications (
     user_id INT NOT NULL REFERENCES users(id),
     notification TEXT NOT NULL,
     status BOOLEAN NOT NULL,
-    date DATE NOT NULL
+    date DATE NOT NULL DEFAULT now()
 );
