@@ -71,3 +71,28 @@ func CreatePost(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, OkMessage(postRequest))
 }
+
+func Like(c *gin.Context) {
+	sessionUser, exists := c.Get("user")
+	if !exists {
+		// User not logged in
+		c.JSON(http.StatusOK, ErrorMessage("User not logged in."))
+		return
+	}
+	userObject := sessionUser.(User)
+	var likeID int
+	postID := c.Param("post")
+	sql := `SELECT id FROM likes WHERE user_id = $1 AND post_id = $2;`
+	database.DB.QueryRow(sql, userObject.ID, postID).Scan(&likeID)
+	if likeID == 0 {
+		// Didn't like the post
+		sql := `INSERT INTO likes(post_id,user_id) VALUES($1,$2);`
+		database.DB.Exec(sql, postID, userObject.ID)
+		c.JSON(http.StatusOK, OkMessage(nil))
+		return
+	}
+	// Already liked the post
+	sql = `DELETE FROM likes WHERE id = $1;`
+	database.DB.Exec(sql, likeID)
+	c.JSON(http.StatusOK, OkMessage(nil))
+}
