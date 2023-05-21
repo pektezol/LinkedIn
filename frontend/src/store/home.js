@@ -4,20 +4,39 @@ import homeService from "../services/home"
 export const useHomeStore = defineStore({
     id: "home",
     state: () => ({ 
-        post_data: null
+        post_data: null,
+        update_message: null,
+        delete_message: null
     }),  
 
     actions: {
-        getPosts(data){ 
-            homeService.getPosts(data).then(res => { 
-                this.user_data = res
+        getPosts(token){ 
+            homeService.getPosts(token).then(res => { 
+                this.post_data = res.data
+           })
+        }, 
+        /* updatePosts(data, token){ 
+            homeService.updatePosts(data, token).then(res => { 
+                this.update_message = res.data
+           })
+        },  */
+        deletePosts(data, token){ 
+            homeService.deletePosts(data, token).then(res => { 
+                this.delete_message = res.data
            })
         }, 
     }, 
 
     getters: { 
         getPostsData(state) {
-            return state.user_data
+            return state.post_data
+        },
+       /*  getUpdateMessage(state) {
+            return state.update_message
+        }, */
+        getDeleteMessage(state) {
+            return state.delete_message
         }
+
     }
 })

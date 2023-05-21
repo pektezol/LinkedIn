@@ -2,22 +2,6 @@
   <div class="container">
     <div class="card mt-4">
       <div class="card-body">
-<<<<<<< HEAD
-        <div>
-          <div class="header-photo">
-            <img alt="Header Photo"
-              src="https://64.media.tumblr.com/682b7be9273636dffb1d8fbe3220628b/tumblr_pdz53tIneb1sx8ybdo10_1280.png" />
-          </div>
-          <div class="profile-photo ml-5">
-            <img class="img-fluid rounded-circle mb-1"
-              src="https://img.freepik.com/free-photo/red-white-cat-i-white-studio_155003-13189.jpg?w=360"
-              alt="Profile Image" />
-          </div>
-
-          <b-card>
-            <b-card-body>
-              <h5 class="card-title">{{ name }}</h5>
-=======
   <div>
     <div class="header-photo">
       <img alt="Header Photo" src="https://64.media.tumblr.com/682b7be9273636dffb1d8fbe3220628b/tumblr_pdz53tIneb1sx8ybdo10_1280.png"/>
@@ -28,13 +12,10 @@
    
       <b-card>
         <b-card-body>
-          <h5 class="card-title">{{ name }}</h5>
->>>>>>> ae2df81 (Profil Photo, Navbar,Jobs page information updated)
+          <h5 class="card-title">{{ profile_data.first_name }} {{ profile_data.last_name }}</h5>
               <ul class="list-unstyled">
-                <li><i class="fa fa-envelope-o mr-2"></i>{{ email }}</li>
-                <li><i class="fa fa-phone mr-2"></i>{{ phone }}</li>
-                <li><i class="fa fa-globe mr-2"></i>{{ website }}</li>
-                <li><i class="fa fa-map-marker mr-2"></i>{{ location }}</li>
+                <li><i class="fa fa-envelope-o mr-2"></i>{{ profile_data.email }}</li>  
+                <li><i class="fa fa-map-marker mr-2"></i>{{ profile_data.location }}</li>
               </ul>
               <div class="button-group">
                 <button class="btn btn-primary">Connect</button>
@@ -52,7 +33,7 @@
       <div class="card-body-about">
         <!-- About Section -->
         <h4 class="card-title">About</h4>
-        <p>{{ about }}</p>
+        <p>{{ profile_data.bio }}</p>
       </div>
     </div>
 
@@ -93,22 +74,12 @@
       </div>
     </div>
 
-    <div class="card mt-4">
-      <div class="card-body">
-        <!-- Licenses and Certificates Section -->
-        <h4 class="card-title">Licenses and Certificatess</h4>
-        <ul class="list-unstyled">
-          <li v-for="license in licenses" :key="license.id">{{ license.name }}</li>
-        </ul>
-      </div>
-    </div>
   </div>
 </template>
 
-<script>
-import { useAuthStore } from '../store/auth';
-import '@/assets/main.css'
-
+<script> 
+import '@/assets/main.css' 
+import axios from "axios";
 export default {
   name: 'LinkedInProfile',
   data() {
@@ -153,19 +124,18 @@ export default {
         { id: 1, name: 'JavaScript' },
         { id: 2, name: 'HTML' },
         { id: 3, name: 'CSS' },
-      ],
-      licenses: [
-        { id: 1, name: 'License 1' },
-        { id: 2, name: 'License 2' },
-        { id: 3, name: 'License 3' },
-      ],
+      ], 
     };
   },
-  mounted() {
-    const authStore = useAuthStore() 
-    this.$cookies.set('token', authStore.getToken) // 
-    console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrra",authStore.getToken);
-  }, 
+  async mounted() { 
+   axios.get(`https://software.ardapektezol.com/api/profile`, {
+      headers: {
+        Authorization: this.$cookies.get("token")
+      }
+    }).then(res => {
+       this.profile_data = res.data.user
+    })
+  } 
 };
 </script>
 
