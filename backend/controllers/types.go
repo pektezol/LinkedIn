@@ -108,9 +108,10 @@ type Post struct {
 		Text  string `json:"text"`
 		Image string `json:"image_base64"`
 	} `json:"content"`
-	Likes    int       `json:"likes"`
-	Comments []Comment `json:"comments"`
-	Date     time.Time `json:"date"`
+	Likes       int       `json:"likes"`
+	Comments    []Comment `json:"comments"`
+	LikedStatus bool      `json:"liked_status"`
+	Date        time.Time `json:"date"`
 }
 
 type Comment struct {
