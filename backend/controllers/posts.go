@@ -43,5 +43,29 @@ func GetPosts(c *gin.Context) {
 			post.Comments = append(post.Comments, comment)
 		}
 	}
-	c.JSON(http.StatusOK, posts)
+	c.JSON(http.StatusOK, OkMessage(posts))
+}
+
+func CreatePost(c *gin.Context) {
+	sessionUser, exists := c.Get("user")
+	if !exists {
+		// User not logged in
+		c.JSON(http.StatusOK, ErrorMessage("User not logged in."))
+		return
+	}
+	userObject := sessionUser.(User)
+	var postRequest PostRequest
+	err := c.ShouldBindJSON(&postRequest)
+	// Error on Invalid JSON
+	if err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	sql := `INSERT INTO posts(user_id, text, image) VALUES($1, $2, $3);`
+	_, err = database.DB.Exec(sql, userObject.ID, postRequest.Text, postRequest.Image)
+	if err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	c.JSON(http.StatusOK, OkMessage(postRequest))
 }

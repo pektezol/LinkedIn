@@ -78,7 +78,7 @@ func ErrorMessage(message string) ErrorResponse {
 	}
 }
 
-type UserRegister struct {
+type RegisterRequest struct {
 	Username    string `json:"user_name" binding:"required"`
 	FirstName   string `json:"first_name" binding:"required"`
 	LastName    string `json:"last_name" binding:"required"`
@@ -86,7 +86,12 @@ type UserRegister struct {
 	Email       string `json:"email" binding:"required"`
 	DateOfBirth string `json:"date_of_birth" binding:"required"`
 }
-type UserLogin struct {
+type LoginRequest struct {
 	Username string `json:"user_name" binding:"required"`
 	Password string `json:"password" binding:"required"`
+}
+
+type PostRequest struct {
+	Text  string `json:"text"`
+	Image string `json:"image_base64"`
 }
