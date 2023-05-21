@@ -60,7 +60,7 @@
             <li class="nav-item mr-3">
               <a class="nav-link" href="/profile">
                 <img class="rounded-circle ml-2 text-center"
-                  src="https://media-exp1.licdn.com/dms/image/C4D03AQFzRzfBHzBpbA/profile-displayphoto-shrink_100_100/0/1661208519486?e=1669248000&v=beta&t=F_N3_KlkhDP4RbePX7fUwfN9TtrmwSAdb-1OW3VvUA4"
+                  src="../../assets/images/profilPhoto.jpeg"
                   style="width: 25px; height: 25px;" />
                 <div class="flex flex-wrap">
                   <div class="w-full text-center">
@@ -68,7 +68,7 @@
  -->
                     <p class="flex" >
                       Me
-                      <icon @click="" class="language-selector__label-chevron mx-1 lazy-loaded" aria-hidden="true">
+                      <icon class="language-selector__label-chevron mx-1 lazy-loaded" aria-hidden="true">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" preserveAspectRatio="xMinYMin meet"
                           focusable="false" class="lazy-loaded">
                           <path

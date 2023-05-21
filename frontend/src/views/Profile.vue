@@ -2,6 +2,7 @@
   <div class="container">
     <div class="card mt-4">
       <div class="card-body">
+<<<<<<< HEAD
         <div>
           <div class="header-photo">
             <img alt="Header Photo"
@@ -16,6 +17,19 @@
           <b-card>
             <b-card-body>
               <h5 class="card-title">{{ name }}</h5>
+=======
+  <div>
+    <div class="header-photo">
+      <img alt="Header Photo" src="https://64.media.tumblr.com/682b7be9273636dffb1d8fbe3220628b/tumblr_pdz53tIneb1sx8ybdo10_1280.png"/>
+    </div>
+    <div class="profile-photo ml-5">
+      <img class="img-fluid rounded-circle mb-1" src="../assets/images/profilPhoto.jpeg" alt="Profile Image" />
+    </div>
+   
+      <b-card>
+        <b-card-body>
+          <h5 class="card-title">{{ name }}</h5>
+>>>>>>> ae2df81 (Profil Photo, Navbar,Jobs page information updated)
               <ul class="list-unstyled">
                 <li><i class="fa fa-envelope-o mr-2"></i>{{ email }}</li>
                 <li><i class="fa fa-phone mr-2"></i>{{ phone }}</li>
