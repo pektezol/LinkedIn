@@ -1,5 +1,5 @@
 <template>
-    <div class="card mb-2">
+    <div class="card mb-2" v-if="connectionReq.status == false">
         <div class="card-body">
             <b-container class="bv-example-row">
                 <b-row>
@@ -12,18 +12,20 @@
                             </b-col>
                             <b-col cols="9">
                                 <b-row>
-                                    <h5>{{user.name}}</h5>
+                                    <h5>{{ connectionReq.sender.first_name }} {{ connectionReq.sender.last_name }}</h5>
                                 </b-row>
-                                <b-row> 
-                                    <p class="font-weight-lighter">{{user.info}}</p> 
+                                <b-row>
+                                    <p class="font-weight-lighter">{{ connectionReq.sender.headline }}</p>
                                 </b-row>
                             </b-col>
                         </b-row>
                     </b-col>
                     <b-col class="mt-3 pl-5" cols="4">
                         <div>
-                            <b-button pill variant="outline-danger" class="mr-2">Ignore</b-button>
-                            <b-button pill variant="outline-primary">Accept</b-button>
+                            <b-button @click="ignoreReq(connectionReq.sender.user_name)" pill variant="outline-danger"
+                                class="mr-2">Ignore</b-button>
+                            <b-button @click="acceptReq(connectionReq.sender.user_name)" pill
+                                variant="outline-primary">Accept</b-button>
                         </div>
                     </b-col>
                 </b-row>
@@ -32,17 +34,47 @@
     </div>
 </template>
   
-<script> 
+<script>
+import axios from 'axios';
+import router from '../../router';
+
 export default {
     name: "connectReq",
+    props: ["connectionReq"],
     data() {
         return {
+
             user: {
                 name: "Volkan Öztoklu",
                 info: "Mef University"
             }
         }
+    },
+    methods: {
+        ignoreReq(data) {
+            console.log("username", data);
+            axios.delete(`https://software.ardapektezol.com/api/connections/${data}`, {
+                headers: {
+                    Authorization: this.$cookies.get("token")
+                }
+            }).then(res => {
+                console.log(res );
+                router.push("/network")
+            })
+        },
+        acceptReq(data) {
+            console.log("username", data);
+            axios.put(`https://software.ardapektezol.com/api/connections/${data}`,{} ,{
+                headers: {
+                    Authorization: this.$cookies.get("token")
+                }
+            }).then(res => {
+                console.log(res );
+                 
+            })
+        }
     }
+
 }
 </script>
   

@@ -16,13 +16,13 @@ export const useAuthStore = defineStore({
     actions: {
         handleLogin(data){
            console.log("login",data) 
-           authService.userLogin(data).then(res => {
-            console.log(res.data);
+           authService.userLogin(data).then(res => { 
             if (res.data.status != "error") {
-                console.log("home a yönlenidr");
+                console.log("home a yönlenidr",res.data.data);
                 this.login_message = null
                 this.login_token = res.data.data
                 router.push('/')
+                return res.data.data
             }
             if (res.data.status == "error") {
                 console.log("loginede kal hata mesajı ver");

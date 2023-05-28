@@ -74,11 +74,11 @@ export default {
   data() {
     return {
       notifications: [
-        { id: 1, title: "Notification 1", message: "This is the first notification" },
-        { id: 2, title: "Notification 2", message: "This is the second notification" },
-        { id: 3, title: "Notification 3", message: "This is the third notification" },
-        { id: 4, title: "Notification 4", message: "make comment for batu's new post" },
-        { id: 5, title: "Notification 5", message: "İrem liked your post" },
+        { id: 1, title: "Message", message: "This is the message from pekdezol." },
+        { id: 2, title: "Liked Your Post", message: "İrem liked your post." },
+        { id: 3, title: "Liked Your Post", message: "Batuhan liked your post." },
+        { id: 4, title: "Commneted Your Post", message: "Batuhan commended your post." },
+        { id: 5, title: "There is connection request", message: "İrem want to conntact with you." },
       ],
     };
   },

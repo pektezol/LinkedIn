@@ -44,7 +44,9 @@ export default {
     methods: {
         login() {  
             const authStore = useAuthStore()
-            const res = authStore.handleLogin(this.loginData)
+            const res = authStore.handleLogin(this.loginData) 
+            console.log("eeeeeeeeeeeeee",authStore);
+            console.log("eeeeeeeeeeeeee",authStore.getToken);
             this.$cookies.set('token', authStore.getToken) 
         } 
     }
