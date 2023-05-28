@@ -12,11 +12,21 @@
    
       <b-card>
         <b-card-body>
-          <h5 class="card-title">{{ profile_data.first_name }} {{ profile_data.last_name }}</h5>
+          <div class="row">
+            <div class="col">
+              <h5 class="card-title">{{ profile_data.first_name }} {{ profile_data.last_name }}</h5>
+              <h6>{{ profile_data.headline }}</h6>
+            </div>
+            <div class="col">
               <ul class="list-unstyled">
-                <li><i class="fa fa-envelope-o mr-2"></i>{{ profile_data.email }}</li>  
+                <li><i class="fa fa-envelope-o mr-2"></i>Email: {{ profile_data.email }}</li>  
+                <li><i class="fa fa-map-marker mr-2"></i>Location: {{ profile_data.location }}</li>
+                <li><i class="fa fa-map-marker mr-2"></i>Date of Birth: {{ profile_data.location }}</li>
                 <li><i class="fa fa-map-marker mr-2"></i>{{ profile_data.location }}</li>
               </ul>
+            </div>
+          </div>
+           
               <div class="button-group">
                 <button class="btn btn-primary">Connect</button>
                 <button class="btn btn-primary">Message</button>
@@ -60,9 +70,7 @@
 
         </div>
       </div>
-    </div>
-
-
+    </div> 
     <div> 
       <div class="card mt-4">
         <div class="card-body-about">
