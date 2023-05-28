@@ -14,9 +14,9 @@ export const useAuthStore = defineStore({
 
     //login logout
     actions: {
-        handleLogin(data){
+        async handleLogin(data){
            console.log("login",data) 
-           authService.userLogin(data).then(res => { 
+           await authService.userLogin(data).then(res => { 
             if (res.data.status != "error") {
                 console.log("home a yönlenidr",res.data.data);
                 this.login_message = null
