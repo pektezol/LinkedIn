@@ -13,7 +13,8 @@ type ErrorResponse struct {
 }
 
 type ProfileResponse struct {
-	User User `json:"user"`
+	User            User `json:"user"`
+	ConnectionCount int  `json:"connection_count"`
 }
 
 type PostsResponse struct {
@@ -48,6 +49,25 @@ type Company struct {
 	Logo        string `json:"logo"`
 }
 
+type Application struct {
+	JobID  int       `json:"job_id"`
+	Status bool      `json:"status"`
+	Date   time.Time `json:"date"`
+}
+
+type Job struct {
+	Company struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+		Logo string `json:"logo"`
+	} `json:"company"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	Location    string    `json:"location"`
+	Type        string    `json:"type"`
+	Date        time.Time `json:"date"`
+}
+
 type Education struct {
 	ID           int       `json:"id"`
 	SchoolName   string    `json:"school_name"`
@@ -71,6 +91,11 @@ type Experince struct {
 	EndDate     time.Time `json:"end_date"`
 }
 
+type Skill struct {
+	ID   int    `json:"id"`
+	Name string `json:"title"`
+}
+
 type Post struct {
 	ID   int `json:"id"`
 	User struct {
@@ -83,9 +108,10 @@ type Post struct {
 		Text  string `json:"text"`
 		Image string `json:"image_base64"`
 	} `json:"content"`
-	Likes    int       `json:"likes"`
-	Comments []Comment `json:"comments"`
-	Date     time.Time `json:"date"`
+	Likes       int       `json:"likes"`
+	Comments    []Comment `json:"comments"`
+	LikedStatus bool      `json:"liked_status"`
+	Date        time.Time `json:"date"`
 }
 
 type Comment struct {
@@ -161,4 +187,13 @@ type ExperienceRequest struct {
 	Description string    `json:"description" binding:"required"`
 	StartDate   time.Time `json:"start_date" binding:"required"`
 	EndDate     time.Time `json:"end_date" binding:"required"`
+}
+
+type CompanyRequest struct {
+	ID          int    `json:"id" binding:"required"`
+	Name        string `json:"name" binding:"required"`
+	Industry    string `json:"industry" binding:"required"`
+	Location    string `json:"location" binding:"required"`
+	Description string `json:"description" binding:"required"`
+	Logo        string `json:"logo" binding:"required"`
 }

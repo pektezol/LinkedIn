@@ -2,33 +2,21 @@
   <div class="container">
     <div class="card mt-4">
       <div class="card-body">
-        <div>
-          <div class="header-photo">
-            <img alt="Header Photo"
-              src="https://64.media.tumblr.com/682b7be9273636dffb1d8fbe3220628b/tumblr_pdz53tIneb1sx8ybdo10_1280.png" />
-          </div>
-          <div class="profile-photo ml-5">
-            <img class="img-fluid rounded-circle mb-1" src="../assets/images/profilPhoto.jpeg" alt="Profile Image" />
-          </div>
-
-          <b-card>
-            <b-card-body>
-              <div class="row">
-                <div class="col">
-                  <h3 class="card-title">{{ profile_data.first_name }} {{ profile_data.last_name }}</h3>
-                  <h5 class="card-title">{{ profile_data.headline }}</h5>
-                </div>
-                <div class="col mt-3">
-                  <ul class="list-unstyled">
-                    <li><i class="fa fa-envelope-o mr-2"></i>Email: {{ profile_data.email }}</li>
-                    <li><i class="fa fa-map-marker mr-2"></i>Location: {{ profile_data.location }}</li>
-                    <li><i class="fa fa-map-marker mr-2"></i>Date of Birth: {{ profile_data.date_of_birth.split("T")[0] }}
-                    </li>
-                  </ul>
-
-                </div>
-              </div>
-
+  <div>
+    <div class="header-photo">
+      <img alt="Header Photo" src="https://64.media.tumblr.com/682b7be9273636dffb1d8fbe3220628b/tumblr_pdz53tIneb1sx8ybdo10_1280.png"/>
+    </div>
+    <div class="profile-photo ml-5">
+      <img class="img-fluid rounded-circle mb-1" src="../assets/images/profilPhoto.jpeg" alt="Profile Image" />
+    </div>
+   
+      <b-card>
+        <b-card-body>
+          <h5 class="card-title">{{ profile_data.first_name }} {{ profile_data.last_name }}</h5>
+              <ul class="list-unstyled">
+                <li><i class="fa fa-envelope-o mr-2"></i>{{ profile_data.email }}</li>  
+                <li><i class="fa fa-map-marker mr-2"></i>{{ profile_data.location }}</li>
+              </ul>
               <div class="button-group">
                 <button class="btn btn-primary">Connect</button>
                 <button class="btn btn-primary">Message</button>

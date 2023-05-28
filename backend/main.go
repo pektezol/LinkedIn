@@ -11,6 +11,12 @@ import (
 	"github.com/joho/godotenv"
 )
 
+//	@title			LinkedIn API
+//	@version		1.0
+//	@description	Backend API endpoints for LinkedIn.
+
+//	@host		software.ardapektezol.com/api
+//	@BasePath	/v1
 func main() {
 	err := godotenv.Load()
 	if err != nil {

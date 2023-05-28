@@ -1,4 +1,9 @@
+basePath: /v1
+host: software.ardapektezol.com/api
 info:
   contact: {}
+  description: Backend API endpoints for LinkedIn.
+  title: LinkedIn API
+  version: "1.0"
 paths: {}
 swagger: "2.0"
