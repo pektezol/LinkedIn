@@ -9,7 +9,7 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         </button>
-        
+
         <form class="form-inline">
           <a href="/">
             <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="" class="mr-2" style="width: 32px;">
@@ -29,7 +29,7 @@
 
             <li class="nav-item">
               <a class="nav-link" href="/network">
-                <img class="transform translate-x-6" src="@/assets/images/nav-network.svg" alt="" srcset="" >
+                <img class="transform translate-x-6" src="@/assets/images/nav-network.svg" alt="" srcset="">
                 <p>My Networks</p>
               </a>
             </li>
@@ -51,7 +51,7 @@
             </li> -->
 
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <a class="nav-link" href="#" @click="search()">
                 <img class="transform translate-x-6" src="@/assets/images/nav-notifications.svg" alt="" srcset="">
                 <p> Notifications</p>
               </a>
@@ -59,14 +59,13 @@
 
             <li class="nav-item mr-3">
               <a class="nav-link" href="/profile">
-                <img class="rounded-circle ml-2 text-center"
-                  src="../../assets/images/profilPhoto.jpeg"
+                <img class="rounded-circle ml-2 text-center" src="../../assets/images/profilPhoto.jpeg"
                   style="width: 25px; height: 25px;" />
                 <div class="flex flex-wrap">
                   <div class="w-full text-center">
                     <!--             <img :src="user.data.photoURL" alt="" srcset=""  ref="btnRef" class="transform translate-x-px rounded-full w-7 h-7 ease-linear transition-all duration-150">
  -->
-                    <p class="flex" >
+                    <p class="flex">
                       Me
                       <icon class="language-selector__label-chevron mx-1 lazy-loaded" aria-hidden="true">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" preserveAspectRatio="xMinYMin meet"
@@ -114,14 +113,24 @@
 </template>
   
 <script>
+import axios from 'axios';
 export default {
   name: 'Navbar',
   data() {
     return {
-      popoverShow: true
+      popoverShow: true,
+      id: null
     }
   },
-
+  methods: {
+    search() {
+      axios.get(`https://software.ardapektezol.com/api/search`, {
+        params:{
+          q: "vol"
+        }
+      })
+    }
+  }
 }
 </script>
 

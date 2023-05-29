@@ -4,13 +4,22 @@
       <h4 class="pl-4">Networks</h4>
     </b-row>
     <b-row>
+      
       <b-col>
         <networkInfos :connection_count_prop="connection_count"></networkInfos>
       </b-col>
+      
       <b-col cols="8">
-        <div v-for="(connection) in connections_data" :key="connection.id"> 
+        <div class="row">
+          <h4>Connection Requests</h4>
+          <div v-for="(connection) in connections_data" :key="connection.id">
           <connectRequest :connection-req="connection"></connectRequest>
-        </div> 
+        </div>
+        </div>
+        <div class="row">
+          <h4> All Connections</h4>
+        </div>
+        
       </b-col>
     </b-row>
   </b-container>
@@ -42,20 +51,20 @@ export default {
       headers: {
         Authorization: this.$cookies.get("token")
       }
-    }).then(res => { 
+    }).then(res => {
       this.connections_data = res.data.data.connections
     })
     this.calculate_connection_count()
   },
   methods: {
-    calculate_connection_count(){
+    calculate_connection_count() {
       console.log("değer", this.connections_data);
       for (let index = 0; index < this.connections_data.length; index++) {
         if (this.connections_data[index].status == true) {
           this.connection_count = this.connection_count + 1
         }
         console.log(this.connection_count);
-        
+
       }
     }
   }

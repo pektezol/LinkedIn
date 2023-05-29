@@ -44,10 +44,9 @@ export default {
     methods: {
          login() {  
             const authStore = useAuthStore()
-            const res = authStore.handleLogin(this.loginData) 
-            console.log("eeeeeeeeeeeeee",authStore);
-            console.log("eeeeeeeeeeeeees",authStore.getToken );
-            this.$cookies.set('token', authStore.getToken) 
+            authStore.handleLogin(this.loginData) 
+            console.log("eeeeeeeeeeeeee",authStore); 
+            this.$cookies.set('token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNjg3ODc2NDI1fQ.iovrahxPQ0DkEoUfZe9DUWssIpaVAMswYE34GZANV-E" ) 
         } 
     }
 };

@@ -21,8 +21,8 @@ export const useAuthStore = defineStore({
                 console.log("home a yönlenidr",res.data.data);
                 this.login_message = null
                 this.login_token = res.data.data
-                router.push('/')
-                return res.data.data
+                console.log(this.login_token);
+                router.push('/profile')
             }
             if (res.data.status == "error") {
                 console.log("loginede kal hata mesajı ver");
