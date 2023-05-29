@@ -154,6 +154,43 @@ type Connection struct {
 	Date   time.Time `json:"date"`
 }
 
+type Message struct {
+	ID     int `json:"id"`
+	Sender struct {
+		ID        int    `json:"id"`
+		UserName  string `json:"user_name"`
+		FirstName string `json:"first_name"`
+		LastName  string `json:"last_name"`
+		Headline  string `json:"headline"`
+	} `json:"sender"`
+	Receiver struct {
+		ID        int    `json:"id"`
+		UserName  string `json:"user_name"`
+		FirstName string `json:"first_name"`
+		LastName  string `json:"last_name"`
+		Headline  string `json:"headline"`
+	} `json:"receiver"`
+	Message string    `json:"message"`
+	Date    time.Time `json:"date"`
+}
+
+type MessageShort struct {
+	ID      int       `json:"id"`
+	Message string    `json:"message"`
+	Date    time.Time `json:"date"`
+}
+
+type UserMessages struct {
+	OtherUser struct {
+		ID        int    `json:"id"`
+		UserName  string `json:"user_name"`
+		FirstName string `json:"first_name"`
+		LastName  string `json:"last_name"`
+		Headline  string `json:"headline"`
+	} `json:"other_user"`
+	Messages []MessageShort `json:"messages"`
+}
+
 func OkMessage(data any) OkResponse {
 	return OkResponse{
 		Status: "ok",
@@ -215,4 +252,8 @@ type CompanyRequest struct {
 	Location    string `json:"location" binding:"required"`
 	Description string `json:"description" binding:"required"`
 	Logo        string `json:"logo" binding:"required"`
+}
+
+type MessageRequest struct {
+	Message string `json:"message" binding:"required"`
 }

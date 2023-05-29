@@ -32,5 +32,8 @@ func SetupRoutes(r *gin.Engine) {
 		api.DELETE("/experience/:id", middleware.CheckAuth, controllers.DeleteExperience)
 		api.POST("/company", middleware.CheckAuth, controllers.CreateCompany)
 		api.GET("/search", controllers.Search)
+		api.GET("/messages", middleware.CheckAuth, controllers.GetAllMessages)
+		api.GET("/messages/:username", middleware.CheckAuth, controllers.GetSpecificMessage)
+		api.POST("/messages/:username", middleware.CheckAuth, controllers.SendMessage)
 	}
 }
