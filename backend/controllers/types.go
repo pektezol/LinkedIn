@@ -25,6 +25,21 @@ type ConnectionsResponse struct {
 	Connections []Connection `json:"connections"`
 }
 
+type SearchResponse struct {
+	Users []struct {
+		ID        int    `json:"id"`
+		FirstName string `json:"first_name"`
+		LastName  string `json:"last_name"`
+		UserName  string `json:"user_name"`
+		Headline  string `json:"headline"`
+	} `json:"users"`
+	Company []struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+		Logo string `json:"logo"`
+	} `json:"companies"`
+}
+
 type User struct {
 	ID             int    `json:"id"`
 	FirstName      string `json:"first_name"`
