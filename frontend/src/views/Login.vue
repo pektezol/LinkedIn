@@ -42,9 +42,11 @@ export default {
         };
     },          
     methods: {
-        login() {  
+         login() {  
             const authStore = useAuthStore()
-            const res = authStore.handleLogin(this.loginData)
+            const res = authStore.handleLogin(this.loginData) 
+            console.log("eeeeeeeeeeeeee",authStore);
+            console.log("eeeeeeeeeeeeees",authStore.getToken );
             this.$cookies.set('token', authStore.getToken) 
         } 
     }

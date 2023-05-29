@@ -6,7 +6,7 @@ import Network from "../views/Network.vue";
 import Profile from "../views/Profile.vue";
 import Login from "../views/Login.vue"
 import Register from "../views/Register.vue"
-
+import User from "../views/User.vue"
 Vue.use(VueRouter);
 
 const router = new VueRouter({
@@ -42,6 +42,11 @@ const router = new VueRouter({
       path: "/profile",
       name: "profile",
       component: Profile ,
+    },
+    {
+      path: "/user/:user_name",
+      name: "user",
+      component: User ,
     }
   ],
 });

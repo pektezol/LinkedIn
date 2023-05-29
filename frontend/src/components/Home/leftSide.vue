@@ -5,12 +5,12 @@
       <div class="card-header text-center"
         style="background-image: url(https://image.shutterstock.com/image-vector/seamless-pattern-computer-background-numbers-260nw-1410295883.jpg); height: 50px;">
         <img
-          src="https://media-exp1.licdn.com/dms/image/C4D03AQFzRzfBHzBpbA/profile-displayphoto-shrink_400_400/0/1661208519486?e=1669248000&v=beta&t=XFtl1ZvqbPC7otwvvml2B1rOUT7Z-k0dlfLz-DzRq84"
+          src="../../assets/images/profilPhoto.jpeg"
           class="rounded-circle" style="width: 70px; height: 70px; border: 2px solid white;" />
       </div>
       <div class="card-body mt-4" style="font-family: 'Poppins', sans-serif;">
         <p class="card-title header text-center">
-          <a href="https://www.linkedin.com/in/alimertkocaman/" target="_blank" style="color: #212529;">{{ profile_data.first_name }}
+          <a href="../../assets/images/profilPhoto.jpeg" target="_blank" style="color: #212529;">{{ profile_data.first_name }}
              {{ profile_data.last_name }}</a>
         </p>
         <div class="text-center" style="margin-bottom: 10px; color: #5f5f5f;">
@@ -19,9 +19,7 @@
          
          
       </div>
-      <div class="card-footer ">
-        <i class="fas fa-bookmark"></i><span class="mb-4 ml-2">Ögelerim</span>
-      </div>
+      
     </div>
 
 

@@ -12,8 +12,7 @@
           <hr>
           <div v-for="(post) in post_data" :key="post.id">
             <post :id="post.id" :date="post.date" :first_name="post.user.first_name" :last_name="post.user.last_name" :headline="post.user.headline" :likes="post.likes" :content_text="post.content.text" :content_image="post.content.image_base64" :comments="post.comments" ></post> 
-          </div>
-          <post id="" first_name="" last_name="" ></post> 
+          </div> 
         </div> 
         <!-- Right - Start -->
         <div class="col-3">
@@ -54,40 +53,7 @@ export default {
   },
   data() {
     return {
-      post_data: null,
-      fullName: 'Irem Eker',
-      headline: 'Software Engineer',
-      location: 'Istanbul, Turkey',
-      profilePicture: '/path/to/profile-picture.jpg',
-      about: 'Passionate software engineer with expertise in web development and a focus on frontend technologies. Skilled in JavaScript, Vue.js, HTML, CSS, and Bootstrap. Strong problem-solving and communication skills.',
-      experiences: [
-        {
-          id: 1,
-          jobTitle: 'Frontend Developer',
-          company: 'ABC Inc.',
-          description: 'Developed and maintained frontend applications using Vue.js, HTML, CSS, and JavaScript. Collaborated with cross-functional teams to deliver high-quality software products.'
-        },
-        {
-          id: 2,
-          jobTitle: 'Web Developer',
-          company: 'XYZ Corp.',
-          description: 'Worked on building responsive web applications using modern web technologies. Implemented user-friendly interfaces and optimized performance.'
-        }
-      ],
-      educations: [
-        {
-          id: 1,
-          degree: 'Bachelor of Science in Computer Science',
-          university: 'University of ABC',
-          description: 'Studied computer science and gained a solid foundation in software development. Completed coursework in algorithms, data structures, and software engineering principles.'
-        },
-        {
-          id: 2,
-          degree: 'Master of Science in Software Engineering',
-          university: 'University of XYZ',
-          description: 'Specialized in software engineering principles and practices. Conducted research on software design patterns and agile methodologies.'
-        }
-      ],
+      post_data: null
     };
   }, 
 };
