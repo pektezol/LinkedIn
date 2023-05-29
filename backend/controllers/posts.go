@@ -9,11 +9,52 @@ import (
 )
 
 func GetPosts(c *gin.Context) {
+	sessionUser, exists := c.Get("user")
+	userObject := sessionUser.(User)
 	var posts PostsResponse
 	posts.Posts = []Post{}
-	sql := `SELECT p.id, p.text, p.image, p.date, u.id, u.firstname, u.lastname, u.headline, (SELECT COUNT(*) FROM likes WHERE post_id = p.id), (SELECT COUNT(*) FROM likes WHERE post_id = p.id AND user_id = u.id)
+	if !exists {
+		sql := `SELECT p.id, p.text, p.image, p.date, u.id, u.firstname, u.lastname, u.headline, (SELECT COUNT(*) FROM likes WHERE post_id = p.id)
 	FROM posts p INNER JOIN users u ON p.user_id=u.id ORDER BY date DESC;;`
-	rows, err := database.DB.Query(sql)
+		rows, err := database.DB.Query(sql)
+		if err != nil {
+			c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+			return
+		}
+		// Scan for each posts
+		for rows.Next() {
+			var post Post
+			post.Comments = []Comment{}
+			if err := rows.Scan(&post.ID, &post.Content.Text, &post.Content.Image, &post.Date, &post.User.ID, &post.User.FirstName, &post.User.LastName, &post.User.Headline, &post.Likes); err != nil {
+				c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+				return
+			}
+			sql = `SELECT c.id, c.comment, c.date, u.id, u.firstname, u.lastname, u.headline  
+		FROM comments c INNER JOIN users u ON c.user_id=u.id
+		WHERE c.post_id = $1;`
+			commentRows, err := database.DB.Query(sql, post.ID)
+			if err != nil {
+				c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+				return
+			}
+			// Scan for each comments and likes
+			for commentRows.Next() {
+				var comment Comment
+				if err := commentRows.Scan(&comment.ID, &comment.Comment, &comment.Date, &comment.User.ID, &comment.User.FirstName, &comment.User.LastName, &comment.User.Headline); err != nil {
+					c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+					return
+				}
+				post.Comments = append(post.Comments, comment)
+			}
+			fmt.Println(post)
+			posts.Posts = append(posts.Posts, post)
+		}
+		c.JSON(http.StatusOK, OkMessage(posts))
+		return
+	}
+	sql := `SELECT p.id, p.text, p.image, p.date, u.id, u.firstname, u.lastname, u.headline, (SELECT COUNT(*) FROM likes WHERE post_id = p.id), (SELECT COUNT(*) FROM likes WHERE post_id = p.id AND user_id = $1)
+	FROM posts p INNER JOIN users u ON p.user_id=u.id ORDER BY date DESC;;`
+	rows, err := database.DB.Query(sql, userObject.ID)
 	if err != nil {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
 		return

@@ -17,7 +17,7 @@ func SetupRoutes(r *gin.Engine) {
 		}
 		api.GET("/profile", middleware.CheckAuth, controllers.Profile)
 		api.GET("/users/:username", controllers.GetUser)
-		api.GET("/posts", controllers.GetPosts)
+		api.GET("/posts", middleware.CheckAuth, controllers.GetPosts)
 		api.POST("/posts", middleware.CheckAuth, controllers.CreatePost)
 		api.POST("/posts/:post/comment", middleware.CheckAuth, controllers.CreateComment)
 		api.DELETE("/comment/:id", middleware.CheckAuth, controllers.DeleteComment)
