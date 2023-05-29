@@ -73,6 +73,49 @@ func CreatePost(c *gin.Context) {
 	c.JSON(http.StatusOK, OkMessage(postRequest))
 }
 
+func CreateComment(c *gin.Context) {
+	sessionUser, exists := c.Get("user")
+	if !exists {
+		// User not logged in
+		c.JSON(http.StatusOK, ErrorMessage("User not logged in."))
+		return
+	}
+	userObject := sessionUser.(User)
+	postID := c.Param("post")
+	var commentRequest CommentRequest
+	err := c.ShouldBindJSON(&commentRequest)
+	// Error on Invalid JSON
+	if err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	sql := `INSERT INTO comments(user_id,post_id,comment) VALUES($1, $2, $3);`
+	_, err = database.DB.Exec(sql, userObject.ID, postID, commentRequest.Text)
+	if err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	c.JSON(http.StatusOK, OkMessage(commentRequest))
+}
+
+func DeleteComment(c *gin.Context) {
+	sessionUser, exists := c.Get("user")
+	if !exists {
+		// User not logged in
+		c.JSON(http.StatusOK, ErrorMessage("User not logged in."))
+		return
+	}
+	userObject := sessionUser.(User)
+	commentID := c.Param("id")
+	sql := `DELETE FROM comments WHERE user_id = $1 AND id = $2;`
+	_, err := database.DB.Exec(sql, userObject.ID, commentID)
+	if err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	c.JSON(http.StatusOK, OkMessage(nil))
+}
+
 func Like(c *gin.Context) {
 	sessionUser, exists := c.Get("user")
 	if !exists {

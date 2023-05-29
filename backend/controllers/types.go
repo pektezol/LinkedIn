@@ -171,6 +171,10 @@ type PostRequest struct {
 	Image string `json:"image_base64"`
 }
 
+type CommentRequest struct {
+	Text string `json:"text" binding:"required"`
+}
+
 type EducationRequest struct {
 	SchoolName   string    `json:"school_name" binding:"required"`
 	Degree       string    `json:"degree" binding:"required"`
