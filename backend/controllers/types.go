@@ -33,6 +33,24 @@ type SearchResponse struct {
 	Company []CompanyShort `json:"companies"`
 }
 
+type JobOpeningsResponse struct {
+	Openings []JobOpening `json:"openings"`
+}
+
+type JobApplicationsResponse struct {
+	Applications []Application `json:"applications"`
+}
+
+type JobOpening struct {
+	ID          int          `json:"id"`
+	Company     CompanyShort `json:"company"`
+	Title       string       `json:"title"`
+	Location    string       `json:"location"`
+	Description string       `json:"description"`
+	Type        string       `json:"type"`
+	Date        time.Time    `json:"date"`
+}
+
 type User struct {
 	ID             int    `json:"id"`
 	FirstName      string `json:"first_name"`
@@ -56,6 +74,15 @@ type UserShort struct {
 	Headline  string `json:"headline"`
 }
 
+type UserShortWithCV struct {
+	ID        int    `json:"id"`
+	UserName  string `json:"user_name"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Headline  string `json:"headline"`
+	CV        string `json:"cv"`
+}
+
 type Company struct {
 	ID          int    `json:"id"`
 	Name        string `json:"name"`
@@ -72,9 +99,9 @@ type CompanyShort struct {
 }
 
 type Application struct {
-	JobID  int       `json:"job_id"`
-	Status bool      `json:"status"`
-	Date   time.Time `json:"date"`
+	User  UserShortWithCV `json:"user"`
+	JobID int             `json:"job_id"`
+	Date  time.Time       `json:"date"`
 }
 
 type Job struct {
@@ -223,12 +250,25 @@ type SkillRequest struct {
 }
 
 type CompanyRequest struct {
-	ID          int    `json:"id" binding:"required"`
 	Name        string `json:"name" binding:"required"`
 	Industry    string `json:"industry" binding:"required"`
 	Location    string `json:"location" binding:"required"`
 	Description string `json:"description" binding:"required"`
 	Logo        string `json:"logo" binding:"required"`
+}
+
+type JobOpeningRequest struct {
+	Title       string `json:"title" binding:"required"`
+	Location    string `json:"location" binding:"required"`
+	Description string `json:"description" binding:"required"`
+	Type        string `json:"type" binding:"required"`
+}
+
+type JobApplicationRequest struct {
+	Title       string `json:"title" binding:"required"`
+	Location    string `json:"location" binding:"required"`
+	Description string `json:"description" binding:"required"`
+	Type        string `json:"type" binding:"required"`
 }
 
 type MessageRequest struct {

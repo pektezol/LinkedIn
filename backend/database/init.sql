@@ -60,6 +60,7 @@ CREATE TABLE jobs (
     description TEXT NOT NULL,
     location TEXT NOT NULL,
     type TEXT NOT NULL,
+    filled BOOLEAN NOT NULL DEFAULT false,
     date DATE NOT NULL DEFAULT now()
 );
 
