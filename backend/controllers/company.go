@@ -167,7 +167,7 @@ func GetJobApplications(c *gin.Context) {
 		return
 	}
 	response := JobApplicationsResponse{Applications: []Application{}}
-	sql = `SELECT u.id, u.username, u.firstname, u.lastname, u.headline, u.cv, a.job_id, a.date FROM applications a INNER JOIN users u ON a.user_id=u.id INNER JOIN jobs j ON a.job_id=j.id INNER JOIN companies c ON j.company_id=c.id WHERE c.id = $1 AND j.filled = false`
+	sql = `SELECT u.id, u.username, u.firstname, u.lastname, u.headline, u.cv, a.id, a.job_id, a.date FROM applications a INNER JOIN users u ON a.user_id=u.id INNER JOIN jobs j ON a.job_id=j.id INNER JOIN companies c ON j.company_id=c.id WHERE c.id = $1 AND j.filled = false`
 	rows, err := database.DB.Query(sql, companyID)
 	if err != nil {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
@@ -175,7 +175,7 @@ func GetJobApplications(c *gin.Context) {
 	}
 	for rows.Next() {
 		var application Application
-		rows.Scan(&application.User.ID, &application.User.UserName, &application.User.FirstName, &application.User.LastName, &application.User.Headline, &application.User.CV, &application.JobID, &application.Date)
+		rows.Scan(&application.User.ID, &application.User.UserName, &application.User.FirstName, &application.User.LastName, &application.User.Headline, &application.User.CV, &application.ID, &application.JobID, &application.Date)
 		response.Applications = append(response.Applications, application)
 	}
 	c.JSON(http.StatusOK, OkMessage(response))

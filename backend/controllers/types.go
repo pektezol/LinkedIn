@@ -99,6 +99,7 @@ type CompanyShort struct {
 }
 
 type Application struct {
+	ID    int             `json:"id"`
 	User  UserShortWithCV `json:"user"`
 	JobID int             `json:"job_id"`
 	Date  time.Time       `json:"date"`
