@@ -211,6 +211,10 @@ type ExperienceRequest struct {
 	EndDate     time.Time `json:"end_date" binding:"required"`
 }
 
+type SkillRequest struct {
+	Name string `json:"name" binding:"required"`
+}
+
 type CompanyRequest struct {
 	ID          int    `json:"id" binding:"required"`
 	Name        string `json:"name" binding:"required"`
@@ -222,4 +226,8 @@ type CompanyRequest struct {
 
 type MessageRequest struct {
 	Message string `json:"message" binding:"required"`
+}
+
+type CVRequest struct {
+	Data string `json:"data_base64" binding:"required"`
 }

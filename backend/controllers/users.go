@@ -51,6 +51,30 @@ func GetUser(c *gin.Context) {
 	c.JSON(http.StatusOK, OkMessage(profileResponse))
 }
 
+func AddCV(c *gin.Context) {
+	sessionUser, exists := c.Get("user")
+	if !exists {
+		// User not logged in
+		c.JSON(http.StatusOK, ErrorMessage("User not logged in."))
+		return
+	}
+	userObject := sessionUser.(User)
+	var request CVRequest
+	err := c.ShouldBindJSON(&request)
+	// Error on Invalid JSON
+	if err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	sql := `INSERT INTO cv(user_id,data_base64) VALUES($1, $2);`
+	_, err = database.DB.Exec(sql, userObject.ID, request.Data)
+	if err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	c.JSON(http.StatusOK, OkMessage(request))
+}
+
 func AddEducation(c *gin.Context) {
 	sessionUser, exists := c.Get("user")
 	if !exists {
@@ -118,6 +142,40 @@ func DeleteExperience(c *gin.Context) {
 	experienceID := c.Param("id")
 	sql := `DELETE FROM experience WHERE id = $1 AND user_id = $2;`
 	database.DB.Exec(sql, experienceID, userObject.ID)
+	c.JSON(http.StatusOK, OkMessage(nil))
+}
+
+func AddSkill(c *gin.Context) {
+	sessionUser, exists := c.Get("user")
+	if !exists {
+		// User not logged in
+		c.JSON(http.StatusOK, ErrorMessage("User not logged in."))
+		return
+	}
+	userObject := sessionUser.(User)
+	var skillRequest SkillRequest
+	err := c.ShouldBindJSON(&skillRequest)
+	// Error on Invalid JSON
+	if err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	sql := `INSERT INTO skill(user_id,name) VALUES($1,$2);`
+	database.DB.Exec(sql, userObject.ID, skillRequest.Name)
+	c.JSON(http.StatusOK, OkMessage(skillRequest))
+}
+
+func DeleteSkill(c *gin.Context) {
+	sessionUser, exists := c.Get("user")
+	if !exists {
+		// User not logged in
+		c.JSON(http.StatusOK, ErrorMessage("User not logged in."))
+		return
+	}
+	userObject := sessionUser.(User)
+	skillID := c.Param("id")
+	sql := `DELETE FROM skill WHERE id = $1 AND user_id = $2;`
+	database.DB.Exec(sql, skillID, userObject.ID)
 	c.JSON(http.StatusOK, OkMessage(nil))
 }
 
