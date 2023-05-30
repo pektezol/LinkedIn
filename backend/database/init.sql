@@ -115,6 +115,6 @@ CREATE TABLE notifications (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES users(id),
     notification TEXT NOT NULL,
-    status BOOLEAN NOT NULL,
+    status BOOLEAN NOT NULL DEFAULT false,
     date DATE NOT NULL DEFAULT now()
 );

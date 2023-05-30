@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"linkedin/database"
 	"net/http"
 
@@ -58,6 +59,11 @@ func SendConnectionRequest(c *gin.Context) {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
 		return
 	}
+	var receiverUserID int
+	sql = `SELECT id FROM users WHERE username = $1`
+	database.DB.QueryRow(sql, targetUsername).Scan(&receiverUserID)
+	SendNotification(receiverUserID, "You have a new connection request!")
+	SendNotification(userObject.ID, fmt.Sprintf("You have a sent a new connection request to %s!", targetUsername))
 	c.JSON(http.StatusOK, OkMessage(targetUsername))
 }
 
@@ -96,6 +102,11 @@ func AcceptConnectionRequest(c *gin.Context) {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
 		return
 	}
+	var receiverUserID int
+	sql = `SELECT id FROM users WHERE username = $1`
+	database.DB.QueryRow(sql, targetUsername).Scan(&receiverUserID)
+	SendNotification(receiverUserID, fmt.Sprintf("Your connection request have been accepted by %s!", userObject.UserName))
+	SendNotification(userObject.ID, fmt.Sprintf("You have accepted the connection request of %s!", targetUsername))
 	c.JSON(http.StatusOK, OkMessage(targetUsername))
 }
 

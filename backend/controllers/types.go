@@ -138,6 +138,13 @@ type Connection struct {
 	Date   time.Time `json:"date"`
 }
 
+type Notification struct {
+	ID           int       `json:"id"`
+	Notification string    `json:"notification"`
+	Status       bool      `json:"status"`
+	Date         time.Time `json:"date"`
+}
+
 type Message struct {
 	ID       int       `json:"id"`
 	Sender   UserShort `json:"sender"`

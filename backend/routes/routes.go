@@ -40,5 +40,6 @@ func SetupRoutes(r *gin.Engine) {
 		api.GET("/messages", middleware.CheckAuth, controllers.GetAllMessages)
 		api.GET("/messages/:username", middleware.CheckAuth, controllers.GetSpecificMessage)
 		api.POST("/messages/:username", middleware.CheckAuth, controllers.SendMessage)
+		api.GET("/notifications", middleware.CheckAuth, controllers.GetNotifications)
 	}
 }

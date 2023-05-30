@@ -136,6 +136,10 @@ func CreateComment(c *gin.Context) {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
 		return
 	}
+	var posterUserID int
+	sql = `SELECT user_id FROM posts WHERE id = $1`
+	database.DB.QueryRow(sql, postID).Scan(&posterUserID)
+	SendNotification(posterUserID, "You have a new comment for your post!")
 	c.JSON(http.StatusOK, OkMessage(commentRequest))
 }
 
@@ -173,6 +177,10 @@ func Like(c *gin.Context) {
 		// Didn't like the post
 		sql := `INSERT INTO likes(post_id,user_id) VALUES($1,$2);`
 		database.DB.Exec(sql, postID, userObject.ID)
+		var posterUserID int
+		sql = `SELECT user_id FROM posts WHERE id = $1`
+		database.DB.QueryRow(sql, postID).Scan(&posterUserID)
+		SendNotification(posterUserID, "You have a new like for your post!")
 		c.JSON(http.StatusOK, OkMessage(nil))
 		return
 	}
