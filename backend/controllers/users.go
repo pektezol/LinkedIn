@@ -134,7 +134,7 @@ func DeleteCV(c *gin.Context) {
 		return
 	}
 	userObject := sessionUser.(User)
-	sql := `UPDATE users SET cv = "" WHERE id = $1;`
+	sql := `UPDATE users SET cv = " " WHERE id = $1;`
 	database.DB.Exec(sql, userObject.ID)
 	c.JSON(http.StatusOK, OkMessage(nil))
 }
