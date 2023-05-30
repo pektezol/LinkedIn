@@ -30,13 +30,6 @@ func GetAllMessages(c *gin.Context) {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
 		return
 	}
-	type MiniUser struct {
-		ID        int    `json:"id"`
-		UserName  string `json:"user_name"`
-		FirstName string `json:"first_name"`
-		LastName  string `json:"last_name"`
-		Headline  string `json:"headline"`
-	}
 	for rows.Next() {
 		var message Message
 		// Scan the row into the Message struct
@@ -50,7 +43,7 @@ func GetAllMessages(c *gin.Context) {
 
 		// Determine the ID and details of the other user in the conversation
 		var otherUserID int
-		var otherUser MiniUser
+		var otherUser UserShort
 		if message.Sender.ID == userObject.ID {
 			otherUserID = message.Receiver.ID
 			otherUser = message.Receiver
@@ -126,7 +119,7 @@ func GetSpecificMessage(c *gin.Context) {
 
 		// Determine the ID and details of the other user in the conversation
 		var otherUserID int
-		var otherUser MiniUser
+		var otherUser UserShort
 		if message.Sender.ID == userObject.ID {
 			otherUserID = message.Receiver.ID
 			otherUser = message.Receiver

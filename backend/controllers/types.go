@@ -26,18 +26,8 @@ type ConnectionsResponse struct {
 }
 
 type SearchResponse struct {
-	Users []struct {
-		ID        int    `json:"id"`
-		FirstName string `json:"first_name"`
-		LastName  string `json:"last_name"`
-		UserName  string `json:"user_name"`
-		Headline  string `json:"headline"`
-	} `json:"users"`
-	Company []struct {
-		ID   int    `json:"id"`
-		Name string `json:"name"`
-		Logo string `json:"logo"`
-	} `json:"companies"`
+	Users   []UserShort    `json:"users"`
+	Company []CompanyShort `json:"companies"`
 }
 
 type User struct {
@@ -55,6 +45,14 @@ type User struct {
 	CV             string `json:"cv"`
 }
 
+type UserShort struct {
+	ID        int    `json:"id"`
+	UserName  string `json:"user_name"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Headline  string `json:"headline"`
+}
+
 type Company struct {
 	ID          int    `json:"id"`
 	Name        string `json:"name"`
@@ -64,6 +62,12 @@ type Company struct {
 	Logo        string `json:"logo"`
 }
 
+type CompanyShort struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+	Logo string `json:"logo"`
+}
+
 type Application struct {
 	JobID  int       `json:"job_id"`
 	Status bool      `json:"status"`
@@ -71,16 +75,12 @@ type Application struct {
 }
 
 type Job struct {
-	Company struct {
-		ID   int    `json:"id"`
-		Name string `json:"name"`
-		Logo string `json:"logo"`
-	} `json:"company"`
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	Location    string    `json:"location"`
-	Type        string    `json:"type"`
-	Date        time.Time `json:"date"`
+	Company     CompanyShort `json:"company"`
+	Title       string       `json:"title"`
+	Description string       `json:"description"`
+	Location    string       `json:"location"`
+	Type        string       `json:"type"`
+	Date        time.Time    `json:"date"`
 }
 
 type Education struct {
@@ -94,16 +94,12 @@ type Education struct {
 }
 
 type Experince struct {
-	ID      int `json:"id"`
-	Company struct {
-		ID   int    `json:"id"`
-		Name string `json:"name"`
-		Logo string `json:"logo"`
-	} `json:"company"`
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	StartDate   time.Time `json:"start_date"`
-	EndDate     time.Time `json:"end_date"`
+	ID          int          `json:"id"`
+	Company     CompanyShort `json:"company"`
+	Title       string       `json:"title"`
+	Description string       `json:"description"`
+	StartDate   time.Time    `json:"start_date"`
+	EndDate     time.Time    `json:"end_date"`
 }
 
 type Skill struct {
@@ -112,13 +108,8 @@ type Skill struct {
 }
 
 type Post struct {
-	ID   int `json:"id"`
-	User struct {
-		ID        int    `json:"id"`
-		FirstName string `json:"first_name"`
-		LastName  string `json:"last_name"`
-		Headline  string `json:"headline"`
-	} `json:"user"`
+	ID      int       `json:"id"`
+	User    UserShort `json:"user"`
 	Content struct {
 		Text  string `json:"text"`
 		Image string `json:"image_base64"`
@@ -130,48 +121,25 @@ type Post struct {
 }
 
 type Comment struct {
-	ID   int `json:"id"`
-	User struct {
-		ID        int    `json:"id"`
-		FirstName string `json:"first_name"`
-		LastName  string `json:"last_name"`
-		Headline  string `json:"headline"`
-	} `json:"user"`
+	ID      int       `json:"id"`
+	User    UserShort `json:"user"`
 	Comment string    `json:"comment"`
 	Date    time.Time `json:"date"`
 }
 
 type Connection struct {
-	ID     int `json:"id"`
-	Sender struct {
-		ID        int    `json:"id"`
-		UserName  string `json:"user_name"`
-		FirstName string `json:"first_name"`
-		LastName  string `json:"last_name"`
-		Headline  string `json:"headline"`
-	} `json:"sender"`
+	ID     int       `json:"id"`
+	Sender UserShort `json:"sender"`
 	Status bool      `json:"status"`
 	Date   time.Time `json:"date"`
 }
 
 type Message struct {
-	ID     int `json:"id"`
-	Sender struct {
-		ID        int    `json:"id"`
-		UserName  string `json:"user_name"`
-		FirstName string `json:"first_name"`
-		LastName  string `json:"last_name"`
-		Headline  string `json:"headline"`
-	} `json:"sender"`
-	Receiver struct {
-		ID        int    `json:"id"`
-		UserName  string `json:"user_name"`
-		FirstName string `json:"first_name"`
-		LastName  string `json:"last_name"`
-		Headline  string `json:"headline"`
-	} `json:"receiver"`
-	Message string    `json:"message"`
-	Date    time.Time `json:"date"`
+	ID       int       `json:"id"`
+	Sender   UserShort `json:"sender"`
+	Receiver UserShort `json:"receiver"`
+	Message  string    `json:"message"`
+	Date     time.Time `json:"date"`
 }
 
 type MessageShort struct {
@@ -181,14 +149,8 @@ type MessageShort struct {
 }
 
 type UserMessages struct {
-	OtherUser struct {
-		ID        int    `json:"id"`
-		UserName  string `json:"user_name"`
-		FirstName string `json:"first_name"`
-		LastName  string `json:"last_name"`
-		Headline  string `json:"headline"`
-	} `json:"other_user"`
-	Messages []MessageShort `json:"messages"`
+	OtherUser UserShort      `json:"other_user"`
+	Messages  []MessageShort `json:"messages"`
 }
 
 func OkMessage(data any) OkResponse {
