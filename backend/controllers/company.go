@@ -146,6 +146,7 @@ func AcceptJobApplication(c *gin.Context) {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
 		return
 	}
+	c.JSON(http.StatusOK, OkMessage(nil))
 }
 
 func GetJobApplications(c *gin.Context) {
