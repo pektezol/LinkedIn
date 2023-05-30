@@ -22,6 +22,9 @@ func Profile(c *gin.Context) {
 		return
 	}
 	profileResponse := ProfileResponse{User: userObject, ConnectionCount: connectionCount}
+	profileResponse.Educations = getEducations(userObject.ID)
+	profileResponse.Experiences = getExperiences(userObject.ID)
+	profileResponse.Skills = getSkills(userObject.ID)
 	c.JSON(http.StatusOK, OkMessage(profileResponse))
 }
 
@@ -42,6 +45,9 @@ func GetUser(c *gin.Context) {
 		return
 	}
 	profileResponse := ProfileResponse{User: user, ConnectionCount: connectionCount}
+	profileResponse.Educations = getEducations(user.ID)
+	profileResponse.Experiences = getExperiences(user.ID)
+	profileResponse.Skills = getSkills(user.ID)
 	c.JSON(http.StatusOK, OkMessage(profileResponse))
 }
 
@@ -113,4 +119,41 @@ func DeleteExperience(c *gin.Context) {
 	sql := `DELETE FROM experience WHERE id = $1 AND user_id = $2;`
 	database.DB.Exec(sql, experienceID, userObject.ID)
 	c.JSON(http.StatusOK, OkMessage(nil))
+}
+
+func getEducations(id int) []Education {
+	var educations []Education
+	sql := `SELECT id, school_name, degree, field_of_study, description, start_date, end_date FROM education WHERE user_id = $1;`
+	rows, _ := database.DB.Query(sql, id)
+	for rows.Next() {
+		var education Education
+		rows.Scan(&education.ID, &education.SchoolName, &education.Degree, &education.FieldOfStudy, &education.Description, &education.StartDate, &education.EndDate)
+		educations = append(educations, education)
+	}
+	return educations
+}
+
+func getExperiences(id int) []Experince {
+	var experiences []Experince
+	sql := `SELECT c.id, c.name, c.logo, e.id, e.title, e.description, e.location, e.start_date, e.end_date
+	FROM experience e INNER JOIN companies c ON e.company_id=c.id WHERE e.user_id = $1;`
+	rows, _ := database.DB.Query(sql, id)
+	for rows.Next() {
+		var experience Experince
+		rows.Scan(&experience.Company.ID, &experience.Company.Name, &experience.Company.Logo, &experience.ID, &experience.Title, &experience.Description, &experience.Location, &experience.StartDate, &experience.EndDate)
+		experiences = append(experiences, experience)
+	}
+	return experiences
+}
+
+func getSkills(id int) []Skill {
+	var skills []Skill
+	sql := `SELECT id, name FROM skill WHERE user_id = $1;`
+	rows, _ := database.DB.Query(sql, id)
+	for rows.Next() {
+		var skill Skill
+		rows.Scan(&skill.ID, &skill.Name)
+		skills = append(skills, skill)
+	}
+	return skills
 }
