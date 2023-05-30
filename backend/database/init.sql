@@ -24,13 +24,6 @@ CREATE TABLE companies (
     description TEXT NOT NULL
 );
 
-CREATE TABLE cv (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES users(id),
-    data_base64 TEXT NOT NULL,
-    date DATE NOT NULL DEFAULT now()
-);
-
 CREATE TABLE education (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES users(id),

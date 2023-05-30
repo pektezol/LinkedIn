@@ -16,6 +16,7 @@ func SetupRoutes(r *gin.Engine) {
 			auth.POST("/login", controllers.Login)
 		}
 		api.GET("/profile", middleware.CheckAuth, controllers.Profile)
+		api.PUT("/profile", middleware.CheckAuth, controllers.EditProfile)
 		api.GET("/users/:username", controllers.GetUser)
 		api.GET("/posts", middleware.CheckAuth, controllers.GetPosts)
 		api.POST("/posts", middleware.CheckAuth, controllers.CreatePost)
@@ -33,7 +34,7 @@ func SetupRoutes(r *gin.Engine) {
 		api.POST("/skill", middleware.CheckAuth, controllers.AddSkill)
 		api.DELETE("/skill/:id", middleware.CheckAuth, controllers.DeleteSkill)
 		api.POST("/cv", middleware.CheckAuth, controllers.AddCV)
-		api.DELETE("/cv/:id", middleware.CheckAuth, controllers.DeleteCV)
+		api.DELETE("/cv", middleware.CheckAuth, controllers.DeleteCV)
 		api.POST("/company", middleware.CheckAuth, controllers.CreateCompany)
 		api.GET("/search", controllers.Search)
 		api.GET("/messages", middleware.CheckAuth, controllers.GetAllMessages)

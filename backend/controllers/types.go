@@ -231,3 +231,17 @@ type MessageRequest struct {
 type CVRequest struct {
 	Data string `json:"data_base64" binding:"required"`
 }
+
+type UserUpdateRequest struct {
+	FirstName      string `json:"first_name"`
+	LastName       string `json:"last_name"`
+	UserName       string `json:"user_name"`
+	Email          string `json:"email"`
+	Password       string `json:"password"`
+	DateOfBirth    string `json:"date_of_birth"`
+	ProfilePicture string `json:"profile_picture"`
+	Headline       string `json:"headline"`
+	Industry       string `json:"industry"`
+	Location       string `json:"location"`
+	Bio            string `json:"bio"`
+}

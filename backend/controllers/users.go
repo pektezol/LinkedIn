@@ -28,6 +28,57 @@ func Profile(c *gin.Context) {
 	c.JSON(http.StatusOK, OkMessage(profileResponse))
 }
 
+func EditProfile(c *gin.Context) {
+	sessionUser, exists := c.Get("user")
+	if !exists {
+		// User not logged in
+		c.JSON(http.StatusOK, ErrorMessage("User not logged in."))
+		return
+	}
+	userObject := sessionUser.(User)
+	var request UserUpdateRequest
+	err := c.ShouldBindJSON(&request)
+	// Error on Invalid JSON
+	if err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	if request.FirstName == "" {
+		request.FirstName = userObject.FirstName
+	}
+	if request.LastName == "" {
+		request.LastName = userObject.LastName
+	}
+	if request.Email == "" {
+		request.Email = userObject.Email
+	}
+	if request.DateOfBirth == "" {
+		request.DateOfBirth = userObject.DateOfBirth
+	}
+	if request.ProfilePicture == "" {
+		request.ProfilePicture = userObject.ProfilePicture
+	}
+	if request.Headline == "" {
+		request.Headline = userObject.Headline
+	}
+	if request.Industry == "" {
+		request.Industry = userObject.Industry
+	}
+	if request.Location == "" {
+		request.Location = userObject.Location
+	}
+	if request.Bio == "" {
+		request.Bio = userObject.Bio
+	}
+	sql := `UPDATE users SET firstname = $1, lastname = $2, email = $3, dateofbirth = $4, profilepicture = $5, headline = $6, industry = $7, location = $8, bio = $9 WHERE id = $10`
+	_, err = database.DB.Exec(sql, request.FirstName, request.LastName, request.Email, request.DateOfBirth, request.ProfilePicture, request.Headline, request.Industry, request.Location, request.Bio, userObject.ID)
+	if err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	c.JSON(http.StatusOK, OkMessage(request))
+}
+
 func GetUser(c *gin.Context) {
 	var user User
 	username := c.Param("username")
@@ -66,7 +117,7 @@ func AddCV(c *gin.Context) {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
 		return
 	}
-	sql := `INSERT INTO cv(user_id,data_base64) VALUES($1, $2);`
+	sql := `UPDATE users SET cv = $2 WHERE id = $1`
 	_, err = database.DB.Exec(sql, userObject.ID, request.Data)
 	if err != nil {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
@@ -83,9 +134,8 @@ func DeleteCV(c *gin.Context) {
 		return
 	}
 	userObject := sessionUser.(User)
-	cvID := c.Param("id")
-	sql := `DELETE FROM cv WHERE id = $1 AND user_id = $2;`
-	database.DB.Exec(sql, cvID, userObject.ID)
+	sql := `UPDATE users SET cv = "" WHERE id = $1;`
+	database.DB.Exec(sql, userObject.ID)
 	c.JSON(http.StatusOK, OkMessage(nil))
 }
 
