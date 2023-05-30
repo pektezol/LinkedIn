@@ -75,6 +75,20 @@ func AddCV(c *gin.Context) {
 	c.JSON(http.StatusOK, OkMessage(request))
 }
 
+func DeleteCV(c *gin.Context) {
+	sessionUser, exists := c.Get("user")
+	if !exists {
+		// User not logged in
+		c.JSON(http.StatusOK, ErrorMessage("User not logged in."))
+		return
+	}
+	userObject := sessionUser.(User)
+	cvID := c.Param("id")
+	sql := `DELETE FROM cv WHERE id = $1 AND user_id = $2;`
+	database.DB.Exec(sql, cvID, userObject.ID)
+	c.JSON(http.StatusOK, OkMessage(nil))
+}
+
 func AddEducation(c *gin.Context) {
 	sessionUser, exists := c.Get("user")
 	if !exists {
