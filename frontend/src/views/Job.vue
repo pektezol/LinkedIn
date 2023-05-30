@@ -217,6 +217,11 @@ export default {
       selectedJob: null,
     };
   },
+  watch: {
+    selectJob() {
+      console.log("sdfgsdgfsdf")
+    }
+  },
   methods: {
     selectJob(job, index) {
       this.selectedJob = job;

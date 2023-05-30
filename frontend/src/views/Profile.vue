@@ -16,6 +16,7 @@
             <div class="col">
               <h5 class="card-title">{{ profile_data.first_name }} {{ profile_data.last_name }}</h5>
               <h6>{{ profile_data.headline }}</h6>
+              <h6 class="text-primary">Connection Count: {{ connection_count }}</h6>
             </div>
             <div class="col">
               <ul class="list-unstyled">
@@ -27,10 +28,7 @@
             </div>
           </div>
            
-              <div class="button-group">
-                <button class="btn btn-primary">Connect</button>
-                <button class="btn btn-primary">Message</button>
-                <button class="btn btn-primary">Follow</button>
+              <div class="button-group"> 
                 <div>
                   <button class="btn btn-primary" @click="openModal">Edit Profile</button>
                   <b-modal v-model="modalOpen" @ok="saveChanges" @hidden="resetForm">
@@ -139,6 +137,8 @@ export default {
   data() {
     return {
       profile_data: null,
+      connection_count: null,
+
       profileImage: 'profile-image.jpg',
       modalOpen: false,
       modalOpen1: false,
@@ -193,7 +193,9 @@ export default {
       }
     }).then(res => {
       this.profile_data = res.data.data.user
+      this.connection_count = res.data.data.connection_count
       console.log("eee", this.profile_data);
+      this.$cookies.set('user_id',  this.profile_data.id )
     })
   },
   methods: {
@@ -239,7 +241,8 @@ export default {
 };
 </script>
 
-<style scoped> .header-photo {
+<style scoped> 
+.header-photo {
    position: relative;
    width: 100%;
    height: 350px;
