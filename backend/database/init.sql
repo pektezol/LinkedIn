@@ -16,6 +16,7 @@ CREATE TABLE users (
 
 CREATE TABLE companies (
     id SERIAL PRIMARY KEY,
+    employer_id INT NOT NULL REFERENCES users(id),
     name TEXT NOT NULL,
     industry TEXT NOT NULL,
     logo TEXT NOT NULL,
@@ -44,6 +45,12 @@ CREATE TABLE experience (
     description TEXT NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL
+);
+
+CREATE TABLE skill (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES users(id),
+    name TEXT NOT NULL
 );
 
 CREATE TABLE jobs (

@@ -13,8 +13,11 @@ type ErrorResponse struct {
 }
 
 type ProfileResponse struct {
-	User            User `json:"user"`
-	ConnectionCount int  `json:"connection_count"`
+	User            User        `json:"user"`
+	ConnectionCount int         `json:"connection_count"`
+	Experiences     []Experince `json:"experiences"`
+	Educations      []Education `json:"educations"`
+	Skills          []Skill     `json:"skills"`
 }
 
 type PostsResponse struct {
