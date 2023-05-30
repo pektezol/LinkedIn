@@ -128,7 +128,7 @@ func AcceptJobApplication(c *gin.Context) {
 		c.JSON(http.StatusOK, ErrorMessage("You are not the employer of this company."))
 		return
 	}
-	sql = `UPDATE appliactions SET status = true WHERE id = $1`
+	sql = `UPDATE applications SET status = true WHERE id = $1`
 	_, err := database.DB.Exec(sql, applicationID)
 	if err != nil {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
