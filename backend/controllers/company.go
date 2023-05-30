@@ -23,7 +23,7 @@ func CreateCompany(c *gin.Context) {
 		return
 	}
 	sql := `INSERT INTO companies(name,industry,logo,location,description,employer_id) VALUES($1,$2,$3,$4,$5,$6);`
-	_, err = database.DB.Exec(sql, request.Name, request.Logo, request.Location, request.Description, userObject.ID)
+	_, err = database.DB.Exec(sql, request.Name, request.Industry, request.Logo, request.Location, request.Description, userObject.ID)
 	if err != nil {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
 		return
