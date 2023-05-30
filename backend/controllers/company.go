@@ -1,10 +1,13 @@
 package controllers
 
 import (
+	"fmt"
 	"linkedin/database"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/lib/pq"
 )
 
 func CreateCompany(c *gin.Context) {
@@ -41,8 +44,9 @@ func CreateJobOpening(c *gin.Context) {
 	userObject := sessionUser.(User)
 	companyID := c.Param("id")
 	var employerID int
-	sql := `SELECT employer_id FROM companies WHERE id = $1;`
-	database.DB.QueryRow(sql, companyID).Scan(&employerID)
+	var companyName string
+	sql := `SELECT employer_id, name FROM companies WHERE id = $1;`
+	database.DB.QueryRow(sql, companyID).Scan(&employerID, &companyName)
 	if employerID != userObject.ID {
 		c.JSON(http.StatusOK, ErrorMessage("You are not the employer of this company."))
 		return
@@ -59,6 +63,13 @@ func CreateJobOpening(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
 		return
+	}
+	var users pq.StringArray
+	sql = `SELECT array_agg(id) FROM users`
+	database.DB.QueryRow(`SELECT array_agg(id) FROM users`).Scan(users)
+	for _, u := range users {
+		id, _ := strconv.Atoi(u)
+		SendNotification(id, fmt.Sprintf("%s has created a new job opening!", companyName))
 	}
 	c.JSON(http.StatusOK, OkMessage(request))
 }
