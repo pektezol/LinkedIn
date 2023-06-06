@@ -35,12 +35,11 @@
         </div>
     </div>
 
-    <div class="card mb-2" v-if="connectionReq.status == true && req_or_not== 'not'">
-
+    <div class="card mb-2" v-if=" req_or_not== 'not'"> 
         <div class="card-body">
             <b-container class="bv-example-row">
                 <b-row>
-                    <b-col cols="12">
+                    <b-col cols="8">
                         <b-row>
                             <b-col>
                                 <div class="mb-2">
@@ -57,7 +56,14 @@
                                     <p class="font-weight-lighter">{{ connectionReq.sender.headline }}</p>
                                 </b-row>
                             </b-col>
+                            
                         </b-row>
+                    </b-col>
+                    <b-col class="mt-1 pl-5" cols="4">
+                        <div>
+                            <b-button @click="removeConnection(connectionReq.sender.user_name)" pill variant="outline-danger"
+                                class="mr-2">Remove</b-button> 
+                        </div>
                     </b-col>
                 </b-row>
             </b-container>
@@ -100,7 +106,17 @@ export default {
                 }
             }).then(res => {
                 console.log(res );
-                 
+                router.push("/network")
+            })
+        },
+        removeConnection(data){
+            axios.delete(`https://software.ardapektezol.com/api/connections/${data}`, {
+                headers: {
+                    Authorization: this.$cookies.get("token")
+                }
+            }).then(res => {
+                console.log(res );
+                router.push("/network")
             })
         }
     }

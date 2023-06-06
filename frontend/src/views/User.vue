@@ -148,6 +148,7 @@
           </li>
         </ul>
       </div>
+      <Message></Message>
     </div>
   </div>
 </template>
@@ -155,8 +156,10 @@
 <script>
 import '@/assets/main.css'
 import axios from "axios";
+import Message from '../components/Layout/Message.vue';
 export default {
   name: 'LinkedInProfile',
+  components: {Message},
   data() {
     return {
       profile_data: null,

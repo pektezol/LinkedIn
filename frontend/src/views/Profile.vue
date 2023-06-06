@@ -213,7 +213,7 @@
                   </div>
                   <div class="col">
                     <b-form-datepicker v-model="edit_educations_form.start_date" class="mb-2"></b-form-datepicker>
-                  </div> 
+                  </div>
                   <div class="col">
                     <b-form-datepicker v-model="edit_educations_form.end_date" class="mb-2"></b-form-datepicker>
                   </div>
@@ -281,14 +281,17 @@
         </div>
       </div>
     </div>
+    <Message></Message>
   </div>
 </template>
 
 <script>
 import '@/assets/main.css'
 import axios from "axios";
+import Message from '../components/Layout/Message.vue'; 
 export default {
   name: 'LinkedInProfile',
+  components: {Message},
   data() {
     return {
       profile_data: null,
@@ -334,6 +337,7 @@ export default {
   },
   async mounted() {
     this.profile_datas()
+    Message.methods.select_user_for_message()
   },
   methods: {
     profile_datas() {
@@ -347,21 +351,21 @@ export default {
         this.connection_count = res.data.data.connection_count
         this.$cookies.set('user_id', this.profile_data.id)
         //educations
-        if (res.data.data.education != null) {
-          this.educations = []
-          for (let index = 0; index < res.data.data.educations.length; index++) {
-            this.educations.push({
-              id: `${res.data.data.educations[index].id}`,
-              description: `${res.data.data.educations[index].description}`,
-              school_name: `${res.data.data.educations[index].school_name}`,
-              field_of_study: `${res.data.data.educations[index].field_of_study}`,
-              degree: `${res.data.data.educations[index].degree}`,
-              start_date: `${res.data.data.educations[index].start_date}`,
-              end_date: `${res.data.data.educations[index].end_date}`
-            })
-          }
+
+        this.educations = []
+        for (let index = 0; index < res.data.data.educations.length; index++) {
+          this.educations.push({
+            id: `${res.data.data.educations[index].id}`,
+            description: `${res.data.data.educations[index].description}`,
+            school_name: `${res.data.data.educations[index].school_name}`,
+            field_of_study: `${res.data.data.educations[index].field_of_study}`,
+            degree: `${res.data.data.educations[index].degree}`,
+            start_date: `${res.data.data.educations[index].start_date}`,
+            end_date: `${res.data.data.educations[index].end_date}`
+          })
         }
-        if (res.data.data.skills != null) {
+
+         
           //skills
           this.skills = []
           for (let index = 0; index < res.data.data.skills.length; index++) {
@@ -370,27 +374,27 @@ export default {
               name: `${res.data.data.skills[index].title}`
             })
           }
-        }
-        if (res.data.data.experiences != null) {
-          //experience
-        this.experiences = []
-        for (let index = 0; index < res.data.data.experiences.length; index++) {
-          this.experiences.push({
-            id: `${res.data.data.experiences[index].id}`,
-            company: {
-              id: `${res.data.data.experiences[index].company.id}`,
-              logo: `${res.data.data.experiences[index].company.logo}`,
-              name: `${res.data.data.experiences[index].company.name}`
-            },
-            description: `${res.data.data.experiences[index].description}`,
-            title: `${res.data.data.experiences[index].title}`,
-            location: `${res.data.data.experiences[index].location}`,
-            start_date: `${res.data.data.experiences[index].start_date}`,
-            end_date: `${res.data.data.experiences[index].end_date}`
-          })
-        }
-        }
         
+         
+          //experience
+          this.experiences = []
+          for (let index = 0; index < res.data.data.experiences.length; index++) {
+            this.experiences.push({
+              id: `${res.data.data.experiences[index].id}`,
+              company: {
+                id: `${res.data.data.experiences[index].company.id}`,
+                logo: `${res.data.data.experiences[index].company.logo}`,
+                name: `${res.data.data.experiences[index].company.name}`
+              },
+              description: `${res.data.data.experiences[index].description}`,
+              title: `${res.data.data.experiences[index].title}`,
+              location: `${res.data.data.experiences[index].location}`,
+              start_date: `${res.data.data.experiences[index].start_date}`,
+              end_date: `${res.data.data.experiences[index].end_date}`
+            })
+          }
+        
+
         this.profile_edit.bio = this.profile_data.bio
         this.profile_edit.headline = this.profile_data.headline
         this.profile_edit.location = this.profile_data.location
@@ -433,7 +437,7 @@ export default {
     },
     create_experience() {
       axios.post(`https://software.ardapektezol.com/api/experience`, {
-        company_id: this.create_experience_form.company_id,
+        company_id: parseInt(this.create_experience_form.company_id),
         title: this.create_experience_form.title,
         description: this.create_experience_form.description,
         location: this.create_experience_form.location,

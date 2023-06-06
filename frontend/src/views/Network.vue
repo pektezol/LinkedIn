@@ -15,20 +15,21 @@
             <h4>Connection Reqests</h4>
           </b-col>
           <b-row class="ml-4">
-            <div v-for="(connection) in connections_data" :key="connection.id">
+            <div v-for="(connection) in connections_data" :key="connection.id"> 
               <connectRequest :connection-req="connection" req_or_not="req"></connectRequest>
             </div>
-          </b-row> 
+          </b-row>
         </div>
         <div class="row">
           <b-col cols="12">
             <h4>All Connections</h4>
+
           </b-col>
-          <b-row class="ml-4">
-            <div v-for="(connection) in connections_data" :key="connection.id">
-              <connectRequest :connection-req="connection" req_or_not="not"></connectRequest>
-            </div>
-          </b-row> 
+          <b-row class="ml-4"> 
+             <div v-for="(item) in all_connections.connections" :key="item.id">
+              <connectRequest :connection-req="item" req_or_not="not"></connectRequest>
+             </div>
+          </b-row>
         </div>
 
       </b-col>
@@ -50,14 +51,11 @@ export default {
     return {
       connections_data: null,
       connection_count: 0,
-      connections: [
-        { id: 1, name: 'John Doe' },
-        { id: 2, name: 'Jane Smith' },
-        { id: 3, name: 'Mike Johnson' }
-      ]
+      all_connections: []
     };
   },
   async mounted() {
+    this.get_all_connections()
     await axios.get(`https://software.ardapektezol.com/api/connections`, {
       headers: {
         Authorization: this.$cookies.get("token")
@@ -74,9 +72,18 @@ export default {
         if (this.connections_data[index].status == true) {
           this.connection_count = this.connection_count + 1
         }
-        console.log(this.connection_count);
-
+        this.all_connections = this.connection_count
       }
+    },
+    get_all_connections() {
+      axios.get(`https://software.ardapektezol.com/api/allconnections`, {
+        headers: {
+          Authorization: this.$cookies.get("token")
+        }
+      }).then(res => {
+        console.log(res.data.data);
+        this.all_connections = res.data.data 
+      })
     }
   }
 };
