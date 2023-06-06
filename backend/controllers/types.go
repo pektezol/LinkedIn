@@ -190,6 +190,7 @@ type Message struct {
 type MessageShort struct {
 	ID      int       `json:"id"`
 	Message string    `json:"message"`
+	Sent    bool      `json:"sent"`
 	Date    time.Time `json:"date"`
 }
 

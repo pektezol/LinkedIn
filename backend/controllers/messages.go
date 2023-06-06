@@ -44,7 +44,9 @@ func GetAllMessages(c *gin.Context) {
 		// Determine the ID and details of the other user in the conversation
 		var otherUserID int
 		var otherUser UserShort
+		var sent bool
 		if message.Sender.ID == userObject.ID {
+			sent = true
 			otherUserID = message.Receiver.ID
 			otherUser = message.Receiver
 		} else {
@@ -52,7 +54,7 @@ func GetAllMessages(c *gin.Context) {
 			otherUser = message.Sender
 		}
 
-		shortMessage := MessageShort{ID: message.ID, Message: message.Message, Date: message.Date}
+		shortMessage := MessageShort{ID: message.ID, Message: message.Message, Date: message.Date, Sent: sent}
 
 		// Check if we already have a group for the other user
 		if _, ok := messagesByUser[otherUserID]; !ok {
@@ -120,7 +122,9 @@ func GetSpecificMessage(c *gin.Context) {
 		// Determine the ID and details of the other user in the conversation
 		var otherUserID int
 		var otherUser UserShort
+		var sent bool
 		if message.Sender.ID == userObject.ID {
+			sent = true
 			otherUserID = message.Receiver.ID
 			otherUser = message.Receiver
 		} else {
@@ -128,7 +132,7 @@ func GetSpecificMessage(c *gin.Context) {
 			otherUser = message.Sender
 		}
 
-		shortMessage := MessageShort{ID: message.ID, Message: message.Message, Date: message.Date}
+		shortMessage := MessageShort{ID: message.ID, Message: message.Message, Date: message.Date, Sent: sent}
 
 		// Check if we already have a group for the other user
 		if _, ok := messagesByUser[otherUserID]; !ok {
