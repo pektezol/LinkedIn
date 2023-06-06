@@ -17,8 +17,22 @@ func GetConnections(c *gin.Context) {
 	}
 	userObject := sessionUser.(User)
 	connections := ConnectionsResponse{Connections: []Connection{}}
-	sql := `SELECT c.id, u.id, u.username, u.firstname, u.lastname, u.headline, c.status, c.date FROM connections c INNER JOIN users u ON c.sender_id=u.id WHERE reciever_id = $1 OR sender_id = $1 AND c.status = true;`
+	sql := `SELECT c.id, u.id, u.username, u.firstname, u.lastname, u.headline, c.status, c.date FROM connections c INNER JOIN users u ON c.sender_id=u.id WHERE reciever_id = $1 AND c.status = true;`
 	rows, err := database.DB.Query(sql, userObject.ID)
+	if err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	for rows.Next() {
+		var connection Connection
+		if err := rows.Scan(&connection.ID, &connection.Sender.ID, &connection.Sender.UserName, &connection.Sender.FirstName, &connection.Sender.LastName, &connection.Sender.Headline, &connection.Status, &connection.Date); err != nil {
+			c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+			return
+		}
+		connections.Connections = append(connections.Connections, connection)
+	}
+	sql = `SELECT c.id, u.id, u.username, u.firstname, u.lastname, u.headline, c.status, c.date FROM connections c INNER JOIN users u ON c.reciever_id=u.id WHERE sender_id = $1 AND c.status = true;`
+	rows, err = database.DB.Query(sql, userObject.ID)
 	if err != nil {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
 		return

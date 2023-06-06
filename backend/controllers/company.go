@@ -50,6 +50,48 @@ func CreateCompany(c *gin.Context) {
 	c.JSON(http.StatusOK, OkMessage(request))
 }
 
+func UpdateCompany(c *gin.Context) {
+	_, exists := c.Get("user")
+	if !exists {
+		// User not logged in
+		c.JSON(http.StatusOK, ErrorMessage("User not logged in."))
+		return
+	}
+	companyID := c.Param("id")
+	var request CompanyRequest
+	var old CompanyRequest
+	err := c.ShouldBindJSON(&request)
+	// Error on Invalid JSON
+	if err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	sql := `SELECT name, industry, location, description, logo FROM companies WHERE id = $1;`
+	database.DB.QueryRow(sql, companyID).Scan(&old.Name, &old.Industry, &old.Location, &old.Description, &old.Logo)
+	if request.Name == "" {
+		request.Name = old.Name
+	}
+	if request.Description == "" {
+		request.Description = old.Description
+	}
+	if request.Industry == "" {
+		request.Industry = old.Industry
+	}
+	if request.Logo == "" {
+		request.Logo = old.Logo
+	}
+	if request.Location == "" {
+		request.Location = old.Location
+	}
+	sql = `UPDATE companies SET name=$1,industry=$2,logo=$3,location=$4,description=$5 WHERE id=$6;`
+	_, err = database.DB.Exec(sql, request.Name, request.Industry, request.Logo, request.Location, request.Description, companyID)
+	if err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	c.JSON(http.StatusOK, OkMessage(request))
+}
+
 func CreateJobOpening(c *gin.Context) {
 	sessionUser, exists := c.Get("user")
 	if !exists {
@@ -92,7 +134,7 @@ func CreateJobOpening(c *gin.Context) {
 
 func GetJobOpenings(c *gin.Context) {
 	response := JobOpeningsResponse{Openings: []JobOpening{}}
-	sql := `SELECT c.id, c.name, c.logo, j.id, j.title, j.location, j.description, j.type, j.date FROM jobs j INNER JOIN companies c ON j.company_id=c.id WHERE j.filled = false`
+	sql := `SELECT c.id, c.name, c.logo, j.id, j.title, j.location, j.description, j.type, j.date, u.id, u.username, u.firstname, u.lastname, u.headline FROM jobs j INNER JOIN companies c ON j.company_id=c.id INNER JOIN users u ON c.employer_id=u.id WHERE j.filled = false;`
 	rows, err := database.DB.Query(sql)
 	if err != nil {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
@@ -100,7 +142,7 @@ func GetJobOpenings(c *gin.Context) {
 	}
 	for rows.Next() {
 		var job JobOpening
-		rows.Scan(&job.Company.ID, &job.Company.Name, &job.Company.Logo, &job.ID, &job.Title, &job.Location, &job.Description, &job.Type, &job.Date)
+		rows.Scan(&job.Company.ID, &job.Company.Name, &job.Company.Logo, &job.ID, &job.Title, &job.Location, &job.Description, &job.Type, &job.Date, &job.Company.Employer.ID, &job.Company.Employer.UserName, &job.Company.Employer.FirstName, &job.Company.Employer.LastName, &job.Company.Employer.Headline)
 		response.Openings = append(response.Openings, job)
 	}
 	c.JSON(http.StatusOK, OkMessage(response))
