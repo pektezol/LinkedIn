@@ -109,7 +109,7 @@ CREATE TABLE messages (
     sender_id INT NOT NULL REFERENCES users(id),
     reciever_id INT NOT NULL REFERENCES users(id),
     message TEXT NOT NULL,
-    date DATE NOT NULL DEFAULT now()
+    date TIMESTAMP NOT NULL DEFAULT now()
 );
 
 CREATE TABLE notifications (
