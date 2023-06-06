@@ -20,6 +20,10 @@ type ProfileResponse struct {
 	Skills          []Skill     `json:"skills"`
 }
 
+type CompanyResponse struct {
+	Companies []Company `json:"companies"`
+}
+
 type PostsResponse struct {
 	Posts []Post `json:"posts"`
 }
@@ -84,12 +88,13 @@ type UserShortWithCV struct {
 }
 
 type Company struct {
-	ID          int    `json:"id"`
-	Name        string `json:"name"`
-	Industry    string `json:"industry"`
-	Location    string `json:"location"`
-	Description string `json:"description"`
-	Logo        string `json:"logo"`
+	ID          int       `json:"id"`
+	Name        string    `json:"name"`
+	Industry    string    `json:"industry"`
+	Location    string    `json:"location"`
+	Description string    `json:"description"`
+	Logo        string    `json:"logo"`
+	Employer    UserShort `json:"employer"`
 }
 
 type CompanyShort struct {
