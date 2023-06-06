@@ -35,6 +35,7 @@ func SetupRoutes(r *gin.Engine) {
 		api.DELETE("/skill/:id", middleware.CheckAuth, controllers.DeleteSkill)
 		api.POST("/cv", middleware.CheckAuth, controllers.AddCV)
 		api.DELETE("/cv", middleware.CheckAuth, controllers.DeleteCV)
+		api.GET("/company", controllers.GetCompany)
 		api.POST("/company", middleware.CheckAuth, controllers.CreateCompany)
 		api.GET("/company/:id/job", middleware.CheckAuth, controllers.GetJobApplications)
 		api.POST("/company/:id/job", middleware.CheckAuth, controllers.CreateJobOpening)

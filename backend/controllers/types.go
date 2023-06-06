@@ -20,6 +20,10 @@ type ProfileResponse struct {
 	Skills          []Skill     `json:"skills"`
 }
 
+type CompanyResponse struct {
+	Companies []Company `json:"companies"`
+}
+
 type PostsResponse struct {
 	Posts []Post `json:"posts"`
 }
@@ -84,12 +88,13 @@ type UserShortWithCV struct {
 }
 
 type Company struct {
-	ID          int    `json:"id"`
-	Name        string `json:"name"`
-	Industry    string `json:"industry"`
-	Location    string `json:"location"`
-	Description string `json:"description"`
-	Logo        string `json:"logo"`
+	ID          int       `json:"id"`
+	Name        string    `json:"name"`
+	Industry    string    `json:"industry"`
+	Location    string    `json:"location"`
+	Description string    `json:"description"`
+	Logo        string    `json:"logo"`
+	Employer    UserShort `json:"employer"`
 }
 
 type CompanyShort struct {
@@ -120,8 +125,8 @@ type Education struct {
 	Degree       string    `json:"degree"`
 	FieldOfStudy string    `json:"field_of_study"`
 	Description  string    `json:"description"`
-	StartDate    time.Time `json:"start_date"`
-	EndDate      time.Time `json:"end_date"`
+	StartDate    time.Time `json:"start_date" time_format:"2006-01-02"`
+	EndDate      time.Time `json:"end_date" time_format:"2006-01-02"`
 }
 
 type Experince struct {
@@ -130,8 +135,8 @@ type Experince struct {
 	Title       string       `json:"title"`
 	Description string       `json:"description"`
 	Location    string       `json:"location"`
-	StartDate   time.Time    `json:"start_date"`
-	EndDate     time.Time    `json:"end_date"`
+	StartDate   time.Time    `json:"start_date" time_format:"2006-01-02"`
+	EndDate     time.Time    `json:"end_date" time_format:"2006-01-02"`
 }
 
 type Skill struct {
@@ -233,8 +238,8 @@ type EducationRequest struct {
 	Degree       string    `json:"degree" binding:"required"`
 	FieldOfStudy string    `json:"field_of_study" binding:"required"`
 	Description  string    `json:"description" binding:"required"`
-	StartDate    time.Time `json:"start_date" binding:"required"`
-	EndDate      time.Time `json:"end_date" binding:"required"`
+	StartDate    time.Time `json:"start_date" binding:"required" time_format:"2006-01-02"`
+	EndDate      time.Time `json:"end_date" binding:"required" time_format:"2006-01-02"`
 }
 
 type ExperienceRequest struct {
@@ -242,8 +247,8 @@ type ExperienceRequest struct {
 	Title       string    `json:"title" binding:"required"`
 	Location    string    `json:"location" binding:"required"`
 	Description string    `json:"description" binding:"required"`
-	StartDate   time.Time `json:"start_date" binding:"required"`
-	EndDate     time.Time `json:"end_date" binding:"required"`
+	StartDate   time.Time `json:"start_date" binding:"required" time_format:"2006-01-02"`
+	EndDate     time.Time `json:"end_date" binding:"required" time_format:"2006-01-02"`
 }
 
 type SkillRequest struct {
