@@ -24,5 +24,19 @@ func Search(c *gin.Context) {
 		}
 		response.Users = append(response.Users, user)
 	}
+	sql = `SELECT id, name, logo FROM companies WHERE LOWER(name) LIKE $1;`
+	rows, err = database.DB.Query(sql, "%"+query+"%")
+	if err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	for rows.Next() {
+		var company CompanyShort
+		if err := rows.Scan(&company.ID, &company.Name, &company.Logo); err != nil {
+			c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+			return
+		}
+		response.Company = append(response.Company, company)
+	}
 	c.JSON(http.StatusOK, OkMessage(response))
 }
