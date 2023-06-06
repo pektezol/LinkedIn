@@ -8,7 +8,7 @@
               src="https://64.media.tumblr.com/682b7be9273636dffb1d8fbe3220628b/tumblr_pdz53tIneb1sx8ybdo10_1280.png" />
           </div>
           <div class="profile-photo ml-5">
-            <img class="img-fluid rounded-circle mb-1" src="../assets/images/profilPhoto.jpeg" alt="Profile Image" />
+            <img class="img-fluid rounded-circle mb-1" :src="profile_data.profile_picture" alt="Profile Image" />
           </div>
           <b-card>
             <b-card-body>
@@ -336,8 +336,7 @@ export default {
     };
   },
   async mounted() {
-    this.profile_datas()
-    Message.methods.select_user_for_message()
+    this.profile_datas() 
   },
   methods: {
     profile_datas() {
@@ -346,6 +345,7 @@ export default {
           Authorization: this.$cookies.get("token")
         }
       }).then(res => {
+        
         //user infos
         this.profile_data = res.data.data.user
         this.connection_count = res.data.data.connection_count
@@ -363,9 +363,7 @@ export default {
             start_date: `${res.data.data.educations[index].start_date}`,
             end_date: `${res.data.data.educations[index].end_date}`
           })
-        }
-
-         
+        } 
           //skills
           this.skills = []
           for (let index = 0; index < res.data.data.skills.length; index++) {
@@ -373,9 +371,7 @@ export default {
               id: `${res.data.data.skills[index].id}`,
               name: `${res.data.data.skills[index].title}`
             })
-          }
-        
-         
+          } 
           //experience
           this.experiences = []
           for (let index = 0; index < res.data.data.experiences.length; index++) {
@@ -392,16 +388,13 @@ export default {
               start_date: `${res.data.data.experiences[index].start_date}`,
               end_date: `${res.data.data.experiences[index].end_date}`
             })
-          }
-        
-
+          } 
         this.profile_edit.bio = this.profile_data.bio
         this.profile_edit.headline = this.profile_data.headline
         this.profile_edit.location = this.profile_data.location
       })
     },
-    saveChangesProfileEdit() {
-
+    saveChangesProfileEdit() { 
       axios.put(`https://software.ardapektezol.com/api/profile`, {
         headline: this.profile_edit.headline,
         bio: this.profile_edit.bio,
@@ -426,14 +419,12 @@ export default {
     },
     // EXPERIENCE
     open_experience_settings() {
-      // şirket isteği at
-
+      // şirket isteği at 
       if (this.edit_experiences == false) {
         this.edit_experiences = true
       } else {
         this.edit_experiences = false
-      }
-
+      } 
     },
     create_experience() {
       axios.post(`https://software.ardapektezol.com/api/experience`, {
@@ -498,12 +489,26 @@ export default {
       }).then(res => {
         this.profile_datas()
       })
+    },
+    encode_file(data) {
+      const file = data
+      const reader = new FileReader()
+      let rawImg;
+      reader.onloadend = () => {
+        rawImg = reader.result;
+        console.log(rawImg);
+        this.img=rawImg
+      }
+      reader.readAsDataURL(file);
+      this.post_form.file = file
+      console.log(this.post_form.file) 
     }
   },
 };
 </script>
 
-<style scoped> .header-photo {
+<style scoped> 
+.header-photo {
    position: relative;
    width: 100%;
    height: 350px;

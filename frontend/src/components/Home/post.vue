@@ -23,8 +23,8 @@
       <p class="card-text m-3 card-desc">
         {{ content_text }}
       </p>
-      <div>
-        <img src="https://miro.medium.com/max/1080/1*gdDWFSvHDt57DS2zsh_0Bg.png" class="card-img-top mb-1" alt="..." />
+      <div v-if="content_image != ''"> 
+        <img :src="content_image" class="card-img-top mb-1" alt="..." />
       </div>
       <div class="ml-3 mb-2">
         <span class="profile-desc">
@@ -98,7 +98,7 @@ export default {
     }
   },
   created() {
-
+    console.log(this.content_image);
   },
   methods: {
     like_post() {

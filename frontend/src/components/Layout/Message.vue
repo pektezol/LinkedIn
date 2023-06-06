@@ -4,91 +4,84 @@
     <div class="fixed">
       <nav class="navbar navbar-expand-xl navbar-light bg-white position-sticky fixed-bottom border ml-auto "
         style=" width: 300px; height: 50px; position: -webkit-sticky; border-radius: 5px;  right: 15px;">
-        <b-button block variant="primary" @click="message_list_toggle = !message_list_toggle">Messages</b-button>
-
+        <b-button block variant="primary" @click="message_list_toggle = !message_list_toggle">Messages</b-button> 
       </nav>
-    </div>
-
+    </div> 
     <div class="fixed2" v-if="message_list_toggle">
       <nav class="navbar navbar-expand-xl navbar-light bg-white position-sticky fixed-bottom border ml-auto ">
         <div class="row">
           <b-list-group
-            style=" width: 298px; height: 400px; position: -webkit-sticky; border-radius: 5px;  right: 15px; ">
-
-            <div v-for="item in message_list.connections" :key="item.index">
-
+            style=" width: 298px; height: 400px; position: -webkit-sticky; border-radius: 5px;  right: 15px; "> 
+            <div v-for="item in message_list.connections" :key="item.index"> 
               <b-list-group-item>
                 <b-avatar class="mr-3"></b-avatar>
-                <b-button variant="link text-dark" @click="select_user_for_message(item.sender.user_name)"><span class="mr-auto">{{ item.sender.first_name }} {{
-                  item.sender.last_name }}</span> </b-button>
+                <b-button variant="link text-dark" @click="select_user_for_message(item.sender.user_name)"><span
+                    class="mr-auto">{{ item.sender.first_name }} {{
+                      item.sender.last_name }}</span> </b-button>
               </b-list-group-item>
-            </div>
-
+            </div> 
           </b-list-group>
         </div>
       </nav>
-    </div>
-
-    <div class="fixed3" v-if="message_list_toggle && message_box">
-
+    </div> 
+    <div class="fixed3" v-if="message_list_toggle && message_box"> 
       <div class="page-content page-container fixed3" id="page-content">
         <div class="padding">
           <div class="row container d-flex justify-content-center">
             <div style="width: 450px!important;">
-              <div class="card card-bordered">
-
+              <div class="card card-bordered"> 
                 <div class="card-header">
                   <h4 class="card-title"><strong>{{ message_user_name }}</strong></h4>
-                </div>
-
+                </div> 
                 <div class="ps-container ps-theme-default ps-active-y" id="chat-content"
                   style="overflow-y: scroll !important; height:400px !important;">
+ 
+                  <div v-for="item in message_box_list" :key="item.id">
+                    <div v-for="(message) in item.messages.slice().reverse()" :key="message.id">
 
+                      <div v-if="message.sent == false"> 
+                        <div class="media media-chat">
+                          <div class="media-body">
+                            <p>{{message.message}}</p>
+                            <p class="meta"><time >{{ message.date.split("T")[1].slice(0, 5) }}</time></p>
+                          </div>
+                        </div>
+                      </div>
 
-                  <div class="media media-chat media-chat-reverse">
-                    <div class="media-body">
-                      <p>Hiii, I'm good.</p>
-                      <p class="meta"><time datetime="2018">00:06</time></p>
-                    </div>
-                  </div>
+                      <div v-else> 
+                        <div class="media media-chat media-chat-reverse">
+                          <div class="media-body">
+                            <p>{{message.message}}</p>
+                            <p class="meta"><time >{{ message.date.split("T")[1].slice(0, 5) }}</time></p>
+                          </div>
+                        </div>
+                      </div>
 
-                  <div class="media media-chat">
-                    <div class="media-body">
-                      <p>Okay</p>
-                      <p class="meta"><time datetime="2018">00:07</time></p>
-                    </div>
+                    </div> 
                   </div> 
-
                   <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
                     <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
                   </div>
                   <div class="ps-scrollbar-y-rail" style="top: 0px; height: 0px; right: 2px;">
                     <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 2px;"></div>
                   </div>
-                </div>
-
-                <div class="publisher bt-1 border-light">
-
+                </div> 
+                <div class="publisher bt-1 border-light"> 
                   <div class="row">
                     <div class="col-10">
-                      <input class="publisher-input" type="text" placeholder="Write something"> 
+                      <input class="publisher-input" type="text" placeholder="Write something" v-model="message_item">
                     </div>
                     <div class="col-2">
-                      <b-button variant="outline-primary">Send</b-button>
+                      <b-button @click="message_send(message_user_name)" variant="outline-primary">Send</b-button>
                     </div>
-                  </div>
-                    
-                </div>
-
+                  </div> 
+                </div> 
               </div>
             </div>
           </div>
         </div>
-      </div>
-
-    </div>
-
-
+      </div> 
+    </div> 
   </div>
 </template>
 
@@ -99,18 +92,21 @@ export default {
   data() {
     return {
       message_list: null,
-      message_box: false, 
+      message_box_list: null,
+      message_box: false,
       message_list_toggle: true,
       user_messages: null,
-      message_user_name: null
+      message_user_name: null,
+      message_item: ""
     }
   },
   created() {
     this.get_message_list()
+    
   },
   methods: {
     get_message_list() {
-      axios.get(`https://software.ardapektezol.com/api/connections`, {
+      axios.get(`https://software.ardapektezol.com/api/allconnections`, {
         headers: {
           Authorization: this.$cookies.get("token")
         }
@@ -119,19 +115,35 @@ export default {
         this.message_list = res.data.data
       })
     },
-    select_user_for_message(data) {  
+    select_user_for_message(data) {
       this.message_list_toggle = true,
-      this.message_user_name = data
+        this.message_user_name = data
       axios.get(`https://software.ardapektezol.com/api/messages/${this.message_user_name}`, {
         headers: {
           Authorization: this.$cookies.get("token")
         }
       }).then(res => {
         console.log(res.data.data);
+        this.message_box_list = res.data.data
+        this.message_box = true
+         
+      })
+    },
+    message_send(send_to) { 
+      axios.post(`https://software.ardapektezol.com/api/messages/${send_to}`, {
+        message: this.message_item
+      }, {
+        headers: {
+          Authorization: this.$cookies.get("token")
+        }
+      }).then(res => { 
+        console.log(res.data.data);
         this.user_messages = res.data.data
         this.message_box = true
+        this.message_item = null
+        this.select_user_for_message(this.message_user_name)
       })
-    }, 
+    }
   }
 }
 </script>
