@@ -14,7 +14,8 @@
           <a href="/">
             <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="" class="mr-2" style="width: 32px;">
           </a>
-          <input class="form-control searche" type="search" placeholder="Arama Yap" aria-label="Search" />
+          <input class="form-control searche" type="search" placeholder="Arama Yap" aria-label="Search" v-model="search"/>
+           
         </form>
 
         <div class="collapse navbar-collapse">
@@ -29,7 +30,7 @@
 
             <li class="nav-item">
               <a class="nav-link" href="/network">
-                <img class="transform translate-x-6" src="@/assets/images/nav-network.svg" alt="" srcset="">
+                <img class="transform translate-x-6 ml-4" src="@/assets/images/nav-network.svg" alt="" srcset="">
                 <p>My Networks</p>
               </a>
             </li>
@@ -50,12 +51,12 @@
               </a>
             </li> -->
 
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link" href="#" @click="search()">
                 <img class="transform translate-x-6" src="@/assets/images/nav-notifications.svg" alt="" srcset="">
                 <p> Notifications</p>
               </a>
-            </li>
+            </li> -->
 
             <li class="nav-item mr-3">
               <a class="nav-link" href="/profile">
@@ -109,6 +110,28 @@
         </div>
       </div>
     </nav>
+    <div v-if="search_toggle">
+      <div class="modalss">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="row" >
+              <button  @click="search_toggle = false"> 
+                <b-icon icon="x" aria-hidden="true"></b-icon>
+              </button>
+            </div>
+            <b-list-group>
+              <div v-for="user in search_users_data" :key="user.id"> 
+                <b-list-group-item class="d-flex align-items-center" :href="`/user/${user.user_name}`">
+                  <b-avatar variant="success" icon="people-fill" class="mr-3"></b-avatar>
+                  <span class="mr-auto">{{ user.full_name }}  </span>
+                </b-list-group-item>
+              </div>
+            </b-list-group>
+          </div>
+        </div>
+      </div>
+    </div> 
+
   </div>
 </template>
   
@@ -118,15 +141,35 @@ export default {
   name: 'Navbar',
   data() {
     return {
+      search: "",
+      search_toggle: false,
       popoverShow: true,
-      id: null
+      id: null,
+      search_users_data: [], 
     }
   },
+  watch: {
+    async search() { 
+      this.search_func() 
+    },
+     
+  },
   methods: {
-    search() {
+    search_func() {
+      
       axios.get(`https://software.ardapektezol.com/api/search`, {
-        params:{
-          q: "vol"
+        params: {
+          q: this.search
+        }
+      }).then(res => {
+        this.search_users_data = []
+        for (let index = 0; index < res.data.data.users.length; index++) {
+           this.search_users_data.push({full_name: `${res.data.data.users[index].first_name} ${res.data.data.users[index].last_name}`, user_name: `${res.data.data.users[index].user_name}`})
+        } 
+        if (res.data.data.users.length != 0) {
+          this.search_toggle = true
+        } else {
+          this.search_toggle = false
         }
       })
     }
@@ -134,4 +177,15 @@ export default {
 }
 </script>
 
-<style ></style>
+<style >
+.modalss {
+  position: absolute;
+  top: 30px;
+  right: 30%;
+  bottom: 0;
+  left: 0%;
+  z-index: 10040;
+  overflow: auto;
+  overflow-y: auto;
+}
+</style>

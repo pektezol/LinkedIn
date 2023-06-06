@@ -16,8 +16,8 @@
         <i class="fas fa-bell"></i>
       </div>
       <div class="notification-content">
-        <div class="notification-title">{{ notification.title }}</div>
-        <div class="notification-message">{{ notification.message }}</div>
+        <div class="notification-title">{{ notification.notification }}</div>
+        <div class="notification-message">{{ notification.date.split("T")[0] }}</div>
       </div>
     </div>
   </div>
@@ -70,23 +70,40 @@
   
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
-      notifications: [
-        { id: 1, title: "Message", message: "This is the message from pekdezol." },
-        { id: 2, title: "Liked Your Post", message: "İrem liked your post." },
-        { id: 3, title: "Liked Your Post", message: "Batuhan liked your post." },
-        { id: 4, title: "Commneted Your Post", message: "Batuhan commended your post." },
-        { id: 5, title: "There is connection request", message: "İrem want to conntact with you." },
-      ],
+      notifications: [],
+      length_of_notifications: null
     };
+  },
+  mounted(){
+    this.get_notifications()
   },
   computed: {
     orderedNotifications() {
       return this.notifications.slice().reverse();
     },
   },
+  methods: {
+    get_notifications(){
+      axios.get(`https://software.ardapektezol.com/api/notifications`, {
+        headers: {
+          Authorization: this.$cookies.get("token")
+        }
+      }).then(res => {
+        console.log(res.data);
+        this.notifications = res.data.data
+        this.length_of_notifications = res.data.data.length
+        if (this.length_of_notifications >= 5) {
+          for (let index = 5; index < this.length_of_notifications; index++) {
+            this.notifications.pop() 
+          }
+        }
+      })
+    }
+  }
 };
 </script>
 

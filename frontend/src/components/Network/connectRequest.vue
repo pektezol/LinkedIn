@@ -1,5 +1,7 @@
 <template>
-    <div class="card mb-2" v-if="connectionReq.status == false">
+    <div>
+        
+        <div class="card mb-2" v-if="connectionReq.status == false && req_or_not== 'req'"> 
         <div class="card-body">
             <b-container class="bv-example-row">
                 <b-row>
@@ -10,7 +12,7 @@
                                     <b-avatar src="https://placekitten.com/300/300" size="4rem"></b-avatar>
                                 </div>
                             </b-col>
-                            <b-col cols="9">
+                            <b-col cols="8">
                                 <b-row>
                                     <h5>{{ connectionReq.sender.first_name }} {{ connectionReq.sender.last_name }}</h5>
                                 </b-row>
@@ -20,17 +22,47 @@
                             </b-col>
                         </b-row>
                     </b-col>
-                    <b-col class="mt-3 pl-5" cols="4">
+                    <b-col class="mt-1 pl-5" cols="4">
                         <div>
                             <b-button @click="ignoreReq(connectionReq.sender.user_name)" pill variant="outline-danger"
                                 class="mr-2">Ignore</b-button>
-                            <b-button @click="acceptReq(connectionReq.sender.user_name)" pill
+                            <b-button @click="acceptReq(connectionReq.sender.user_name)" pill class="mt-1"
                                 variant="outline-primary">Accept</b-button>
                         </div>
                     </b-col>
                 </b-row>
             </b-container>
         </div>
+    </div>
+
+    <div class="card mb-2" v-if="connectionReq.status == true && req_or_not== 'not'">
+
+        <div class="card-body">
+            <b-container class="bv-example-row">
+                <b-row>
+                    <b-col cols="12">
+                        <b-row>
+                            <b-col>
+                                <div class="mb-2">
+                                    <b-avatar src="https://placekitten.com/300/300" size="4rem"></b-avatar>
+                                </div>
+                            </b-col>
+                            <b-col cols="7">
+                                <b-row>
+                                   <a :href="`user/${connectionReq.sender.user_name}`">
+                                    <h5>{{ connectionReq.sender.first_name }} {{ connectionReq.sender.last_name }}</h5>
+                                   </a>
+                                </b-row>
+                                <b-row>
+                                    <p class="font-weight-lighter">{{ connectionReq.sender.headline }}</p>
+                                </b-row>
+                            </b-col>
+                        </b-row>
+                    </b-col>
+                </b-row>
+            </b-container>
+        </div>
+    </div>
     </div>
 </template>
   
@@ -40,7 +72,7 @@ import router from '../../router';
 
 export default {
     name: "connectReq",
-    props: ["connectionReq"],
+    props: ["connectionReq", "req_or_not"],
     data() {
         return {
 
@@ -51,8 +83,7 @@ export default {
         }
     },
     methods: {
-        ignoreReq(data) {
-            console.log("username", data);
+        ignoreReq(data) { 
             axios.delete(`https://software.ardapektezol.com/api/connections/${data}`, {
                 headers: {
                     Authorization: this.$cookies.get("token")
@@ -62,8 +93,7 @@ export default {
                 router.push("/network")
             })
         },
-        acceptReq(data) {
-            console.log("username", data);
+        acceptReq(data) { 
             axios.put(`https://software.ardapektezol.com/api/connections/${data}`,{} ,{
                 headers: {
                     Authorization: this.$cookies.get("token")
