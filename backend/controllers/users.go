@@ -248,7 +248,7 @@ func DeleteSkill(c *gin.Context) {
 }
 
 func getEducations(id int) []Education {
-	var educations []Education
+	educations := []Education{}
 	sql := `SELECT id, school_name, degree, field_of_study, description, start_date, end_date FROM education WHERE user_id = $1;`
 	rows, _ := database.DB.Query(sql, id)
 	for rows.Next() {
@@ -260,7 +260,7 @@ func getEducations(id int) []Education {
 }
 
 func getExperiences(id int) []Experince {
-	var experiences []Experince
+	experiences := []Experince{}
 	sql := `SELECT c.id, c.name, c.logo, e.id, e.title, e.description, e.location, e.start_date, e.end_date
 	FROM experience e INNER JOIN companies c ON e.company_id=c.id WHERE e.user_id = $1;`
 	rows, _ := database.DB.Query(sql, id)
@@ -273,7 +273,7 @@ func getExperiences(id int) []Experince {
 }
 
 func getSkills(id int) []Skill {
-	var skills []Skill
+	skills := []Skill{}
 	sql := `SELECT id, name FROM skill WHERE user_id = $1;`
 	rows, _ := database.DB.Query(sql, id)
 	for rows.Next() {
