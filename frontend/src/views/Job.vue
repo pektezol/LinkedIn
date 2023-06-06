@@ -13,7 +13,7 @@
               </div>
               <div class="job-info">
                 <h5 class="card-title">{{ job.title }}</h5>
-                <p class="card-text company-info">{{ job.company }}</p>
+                <p class="card-text company-info">{{ job.company.name }}</p>
                 <p class="card-text company-info">{{ job.location }}</p>
               </div>
             </div>
@@ -26,7 +26,7 @@
             <div class="card-title">
               <h5>{{ selectedJob.title }}</h5>
             </div>
-            <p class="card-text company-info">{{ selectedJob.company }}</p>
+            <p class="card-text company-info">{{ selectedJob.company.name }}</p>
             <p class="card-text company-info">{{ selectedJob.location }}</p>
             <p class="card-text">{{ selectedJob.description }}</p>
             <p class="card-text">{{ selectedJob.requirements }}</p>
@@ -56,6 +56,9 @@
 </template>
 
 <script>
+import axios from 'axios';
+
+
 export default {
   data() {
     return {
@@ -63,18 +66,23 @@ export default {
         {
           id: 1,
           title: "Senior Embedded Software Developer",
-          employee: "Backend Developer",
-          company: "Siemens Company",
+          type: "Backend Developer",
+          company: {
+            id: 2,
+            name: "Siemens Company",
+            logo: ""
+          },
           location: "San Francisco",
           logo: "path/to/logo1.png",
-          description: "For more than 35 years, ground breaking technologies and business models engineered and developed by Siemens Turkey R&D department contributes to the global success of Siemens. Our R&D activities focused on the fields of electrification, automation and digitalization, provides end-to-end support to our global customers on their unique digital transformation journey. We aim to increase our strength on solution and product development with world class SW development experts, with the vision to be the digitalization partner for our global customers. We need game changers like you, to bring the next level of smart manufacturing and infrastructure from mere concept to reality, develop tomorrow’s smart cities, and address the most critical digitalization challenges across a comprehensive range of industries.",
-          requirements: "BSc., MSc. Or PhD in Computer Science, Electronics, Control Engineering or related areas. Proven 5+ years of experience in embedded software development. Strong knowledge in C / C++ Strong knowledge in object-oriented programming, analysis, and design. Experience in development of industrial communication network protocols, tools, and libraries (Switching & Routing Protocols, Netlink, Netfilter, Iproute2, Quagga, ConfD, Netconf, SNMP, etc.) is a must. Development experience in Linux environment is a must Experience with creating and building custom Linux OS (Yocto, Windriver, Isar, etc.). Experience in Linux kernel driver development and U-boot. Knowledge and experience in computer architecture is a plus. Knowledge and experience in Real-time concepts and RTOS are a plusKnowledge in Switching ASICs (Marvell, Broadcom, Mellanox, . etc.) is a plus. Knowledge and experience in virtualization technologies (Linux KVM, Libvirt, VMware, VirtualBox, Vagrant, etc.) is a plus. Experience with source control systems (GIT, ClearCase etc.) Very good command of English.",
-          responsibilities: "What We Offer: Speak up Culture, Respectful Workplace,Being part of a global work environment,Remote working and remote living flexibility,Attractive remuneration package,Excellent recognition tools providing spot awards,Learning & Development opportunities for both personal and professional growth,Leave days for parents and a variety of flexible working models that allow time off for yourself and your family,Creche allowance for mothers,Share matching programs to become a shareholder of Siemens AG,Find more benefits here,",
+          description: "",
+          requirements: "",
+          responsibilities: "",
           postedBy: {
             name: "John Doe",
             photo: "path/to/photo1.png",
             position: "HR Manager",
           },
+          date: "01/01/2020"
         },
         {
           id: 2,
@@ -222,6 +230,9 @@ export default {
       console.log("sdfgsdgfsdf")
     }
   },
+  mounted(){
+    this.get_job()
+  },
   methods: {
     selectJob(job, index) {
       this.selectedJob = job;
@@ -230,6 +241,12 @@ export default {
       // Implement your apply job functionality here
       console.log("Applying for job:", job.title);
     },
+    get_job() { 
+      axios.get(`https://software.ardapektezol.com/api/jobs`)
+      .then(res => {
+         console.log(res.data.data.openings);
+      })
+    }
   },
 };
 </script>

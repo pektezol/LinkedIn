@@ -4,22 +4,33 @@
       <h4 class="pl-4">Networks</h4>
     </b-row>
     <b-row>
-      
+
       <b-col>
         <networkInfos :connection_count_prop="connection_count"></networkInfos>
       </b-col>
-      
+
       <b-col cols="8">
         <div class="row">
-          <h4>Connection Requests</h4>
-          <div v-for="(connection) in connections_data" :key="connection.id">
-          <connectRequest :connection-req="connection"></connectRequest>
-        </div>
+          <b-col cols="12">
+            <h4>Connection Reqests</h4>
+          </b-col>
+          <b-row class="ml-4">
+            <div v-for="(connection) in connections_data" :key="connection.id">
+              <connectRequest :connection-req="connection" req_or_not="req"></connectRequest>
+            </div>
+          </b-row> 
         </div>
         <div class="row">
-          <h4> All Connections</h4>
+          <b-col cols="12">
+            <h4>All Connections</h4>
+          </b-col>
+          <b-row class="ml-4">
+            <div v-for="(connection) in connections_data" :key="connection.id">
+              <connectRequest :connection-req="connection" req_or_not="not"></connectRequest>
+            </div>
+          </b-row> 
         </div>
-        
+
       </b-col>
     </b-row>
   </b-container>
