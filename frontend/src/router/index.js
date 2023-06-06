@@ -10,6 +10,7 @@ import User from "../views/User.vue"
 import Company from "../views/CompanyProfile.vue"
 Vue.use(VueRouter);
 
+
 const router = new VueRouter({
     mode: "history",
     base: import.meta.env.BASE_URL,
