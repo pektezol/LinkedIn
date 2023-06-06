@@ -92,7 +92,7 @@ func CreateJobOpening(c *gin.Context) {
 
 func GetJobOpenings(c *gin.Context) {
 	response := JobOpeningsResponse{Openings: []JobOpening{}}
-	sql := `SELECT c.id, c.name, c.logo, j.id, j.title, j.location, j.description, j.type, j.date FROM jobs j INNER JOIN companies c ON j.company_id=c.id WHERE j.filled = false`
+	sql := `SELECT c.id, c.name, c.logo, j.id, j.title, j.location, j.description, j.type, j.date, u.id, u.username, u.firstname, u.lastname, u.headline FROM jobs j INNER JOIN companies c ON j.company_id=c.id INNER JOIN users u ON c.employer_id=u.id WHERE j.filled = false;`
 	rows, err := database.DB.Query(sql)
 	if err != nil {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
@@ -100,7 +100,7 @@ func GetJobOpenings(c *gin.Context) {
 	}
 	for rows.Next() {
 		var job JobOpening
-		rows.Scan(&job.Company.ID, &job.Company.Name, &job.Company.Logo, &job.ID, &job.Title, &job.Location, &job.Description, &job.Type, &job.Date)
+		rows.Scan(&job.Company.ID, &job.Company.Name, &job.Company.Logo, &job.ID, &job.Title, &job.Location, &job.Description, &job.Type, &job.Date, &job.Company.Employer.ID, &job.Company.Employer.UserName, &job.Company.Employer.FirstName, &job.Company.Employer.LastName, &job.Company.Employer.Headline)
 		response.Openings = append(response.Openings, job)
 	}
 	c.JSON(http.StatusOK, OkMessage(response))
