@@ -98,9 +98,10 @@ type Company struct {
 }
 
 type CompanyShort struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
-	Logo string `json:"logo"`
+	ID       int       `json:"id"`
+	Name     string    `json:"name"`
+	Logo     string    `json:"logo"`
+	Employer UserShort `json:"employer"`
 }
 
 type Application struct {
@@ -234,21 +235,21 @@ type CommentRequest struct {
 }
 
 type EducationRequest struct {
-	SchoolName   string    `json:"school_name" binding:"required"`
-	Degree       string    `json:"degree" binding:"required"`
-	FieldOfStudy string    `json:"field_of_study" binding:"required"`
-	Description  string    `json:"description" binding:"required"`
-	StartDate    time.Time `json:"start_date" binding:"required" time_format:"2006-01-02"`
-	EndDate      time.Time `json:"end_date" binding:"required" time_format:"2006-01-02"`
+	SchoolName   string `json:"school_name" binding:"required"`
+	Degree       string `json:"degree" binding:"required"`
+	FieldOfStudy string `json:"field_of_study" binding:"required"`
+	Description  string `json:"description" binding:"required"`
+	StartDate    string `json:"start_date"`
+	EndDate      string `json:"end_date"`
 }
 
 type ExperienceRequest struct {
-	CompanyID   int       `json:"company_id" binding:"required"`
-	Title       string    `json:"title" binding:"required"`
-	Location    string    `json:"location" binding:"required"`
-	Description string    `json:"description" binding:"required"`
-	StartDate   time.Time `json:"start_date" binding:"required" time_format:"2006-01-02"`
-	EndDate     time.Time `json:"end_date" binding:"required" time_format:"2006-01-02"`
+	CompanyID   int    `json:"company_id" binding:"required"`
+	Title       string `json:"title" binding:"required"`
+	Location    string `json:"location" binding:"required"`
+	Description string `json:"description" binding:"required"`
+	StartDate   string `json:"start_date"`
+	EndDate     string `json:"end_date"`
 }
 
 type SkillRequest struct {
