@@ -71,11 +71,12 @@ type User struct {
 }
 
 type UserShort struct {
-	ID        int    `json:"id"`
-	UserName  string `json:"user_name"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Headline  string `json:"headline"`
+	ID             int    `json:"id"`
+	UserName       string `json:"user_name"`
+	FirstName      string `json:"first_name"`
+	LastName       string `json:"last_name"`
+	Headline       string `json:"headline"`
+	ProfilePicture string `json:"profile_picture"`
 }
 
 type UserShortWithCV struct {
