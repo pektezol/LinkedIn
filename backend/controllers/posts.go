@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"linkedin/database"
 	"net/http"
 
@@ -46,7 +45,6 @@ func GetPosts(c *gin.Context) {
 				}
 				post.Comments = append(post.Comments, comment)
 			}
-			fmt.Println(post)
 			posts.Posts = append(posts.Posts, post)
 		}
 		c.JSON(http.StatusOK, OkMessage(posts))
@@ -84,7 +82,6 @@ func GetPosts(c *gin.Context) {
 			}
 			post.Comments = append(post.Comments, comment)
 		}
-		fmt.Println(post)
 		posts.Posts = append(posts.Posts, post)
 	}
 	c.JSON(http.StatusOK, OkMessage(posts))
