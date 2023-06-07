@@ -8,26 +8,21 @@
             <img alt="Header Photo" src="https://example.com/header-image.png" />
           </div>
           <div class="profile-photo ml-5">
-            <img class="img-fluid rounded-circle mb-1" src="../assets/images/profilPhoto.jpeg" alt="Profile Image" />
+            <img class="img-fluid rounded-circle mb-1" :src="`${company_info.logo}`" alt="Profile Image" />
           </div>
           <b-card>
             <b-card-body>
               <div class="row">
                 <div class="col">
-                  <h5 class="card-title">{{ companyData.name }}</h5>
-                  <h6>{{ companyData.headline }}</h6>
-                  <h6 class="text-primary">Connection Count: {{ connectionCount }}</h6>
+                  <h5 class="card-title">{{ company_info.name }}</h5>
+
                 </div>
                 <div class="col">
                   <ul class="list-unstyled">
-                    <li><i class="fa fa-envelope-o mr-2"></i>Email: {{ companyData.email }}</li>
-                    <li><i class="fa fa-map-marker mr-2"></i>Location: {{ companyData.location }}</li>
+                    <li><i class="fa fa-map-marker mr-2"></i>Location: {{ company_info.location }}</li>
+                    <li><i class="fa fa-map-marker mr-2"></i>Industry: {{ company_info.industry }}</li>
                   </ul>
                 </div>
-              </div>
-              <div class="button-group">
-                <b-button variant="primary" @click="connectWithCompany">Connect</b-button>
-                <b-button variant="primary">Message</b-button>
               </div>
             </b-card-body>
           </b-card>
@@ -35,22 +30,18 @@
       </div>
     </div>
 
-    <div class="card mt-1">
-     <div class="button-group2">
-      <button @click="navigateTo('home')">Ana Sayfa</button>
-      <button @click="navigateTo('about')">Hakkında</button>
-      <button @click="navigateTo('posts')">Gönderiler</button>
-      <button @click="navigateTo('jobs')">İş İlanları</button>
-    </div>
-    </div>
 
-    <div class="card mt-4">
-      <div class="card-body-about">
-        <!-- About Section -->
-        <h4 class="card-title">About</h4>
-        <p>{{ companyData.about }}</p>
+
+    <div class="card mt-1">
+      <div class="button-group2">
+        <button @click="navigateTo('home')">Ana Sayfa</button>
+        <button @click="navigateTo('about')">Hakkında</button>
+        <button @click="navigateTo('jobs')">İş İlanları</button>
+        <button @click="navigateTo('team')">İş Arkadaşları</button>
       </div>
     </div>
+
+
 
     <div class="card mt-4">
       <div class="card-body">
@@ -65,17 +56,24 @@
           </div>
           <ul class="list-unstyled">
             <li v-for="position in jobPositions" :key="position.id">
-              <div class="border-bottom">
-                <div class="row">
-                  <div class="col-12">
-                    <h4>{{ position.title }}</h4>
-                    <h5>{{ position.department }}</h5>
-                    <h6 class="font-weight-lighter">{{ position.location }}</h6>
-                  </div>
+              <div class="card mt-4">
+                <div class="card-body-about"> 
+                  <h4 class="card-title">{{ position.title }}</h4>
+                  <p>{{ position.department }}</p>
+                  <h6 class="font-weight-lighter">{{ position.location }}</h6>
                 </div>
               </div>
             </li>
           </ul>
+        </div>
+        <div v-else-if="activeSection === 'about'">
+          <div class="card mt-4">
+            <div class="card-body-about">
+              <!-- About Section -->
+              <h4 class="card-title">About</h4>
+              <p>{{ company_info.description }}</p>
+            </div>
+          </div>
         </div>
 
         <!-- Team Members Section -->
@@ -87,7 +85,7 @@
           </div>
           <ul class="list-unstyled">
             <li v-for="member in teamMembers" :key="member.id">
-              <div class="border-bottom">
+              <div class="card mt-4">
                 <div class="row">
                   <div class="col-2">
                     <img :src="member.photo" class="rounded-circle" alt="Profile Image" />
@@ -98,31 +96,12 @@
                     <h6>{{ member.location }}</h6>
                   </div>
                 </div>
-              </div>
+              </div> 
             </li>
           </ul>
         </div>
 
-        <!-- Posts Section -->
-        <div v-else-if="activeSection === 'posts'">
-          <div class="row">
-            <div class="col-11">
-              <h4 class="card-title">Posts</h4>
-            </div>
-          </div>
-          <ul class="list-unstyled">
-            <li v-for="post in posts" :key="post.id">
-              <div class="border-bottom">
-                <div class="row">
-                  <div class="col-12">
-                    <h4>{{ post.title }}</h4>
-                    <p>{{ post.content }}</p>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
+
 
         <!-- Default Section (Home) -->
         <div v-else>
@@ -135,10 +114,13 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'CompanyPage',
   data() {
     return {
+      owner: true,
+      company_info: [],
       activeSection: 'home',
       companyData: {
         name: "Company Name",
@@ -210,6 +192,19 @@ export default {
       ]
     };
   },
+  mounted() {
+    const company_id = this.$route.path.split("/")[3]
+    console.log(`${company_id}  ${this.owner}`);
+    axios.get(`https://software.ardapektezol.com/api/company/${company_id}`, {}, {
+      headers: {
+        Authorization: this.$cookies.get("token")
+      }
+    }).then(res => {
+      console.log(res.data.data.companies);
+      this.company_info = res.data.data.companies[0]
+    })
+    this.connectionCount = Math.floor(Math.random() * 100); // Random connection count
+  },
   methods: {
     navigateTo(section) {
       this.activeSection = section;
@@ -219,14 +214,11 @@ export default {
     }
 
   },
-  mounted() {
-    this.connectionCount = Math.floor(Math.random() * 100); // Random connection count
-  }
+
 };
 </script>
 
 <style scoped>
-
 .button-group {
   margin-bottom: 20px;
 }
@@ -241,19 +233,19 @@ export default {
 }
 
 .header-photo {
-   position: relative;
-   width: 100%;
-   height: 350px;
-   overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
 }
 
 .profile-photo {
-   position: absolute;
-   top: 200px;
-   width: 200px;
-   height: 200px;
-   overflow: hidden;
-   z-index: 1;
+  position: absolute;
+  top: 200px;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  z-index: 1;
 }
 
 .profile-photo img {
@@ -271,7 +263,7 @@ export default {
   display: flex;
   justify-content: left;
   margin-top: 15px;
-  
+
 }
 
 .button-group2 button {
@@ -290,8 +282,7 @@ export default {
 
 .button-group2 button.active {
   color: #007bff;
-  background-color: rgb(0, 255, 89); /* Set the background color to green */
+  background-color: rgb(0, 255, 89);
+  /* Set the background color to green */
 }
-
-
 </style>
