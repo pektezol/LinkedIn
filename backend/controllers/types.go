@@ -90,13 +90,14 @@ type UserShortWithCV struct {
 }
 
 type Company struct {
-	ID          int       `json:"id"`
-	Name        string    `json:"name"`
-	Industry    string    `json:"industry"`
-	Location    string    `json:"location"`
-	Description string    `json:"description"`
-	Logo        string    `json:"logo"`
-	Employer    UserShort `json:"employer"`
+	ID          int         `json:"id"`
+	Name        string      `json:"name"`
+	Industry    string      `json:"industry"`
+	Location    string      `json:"location"`
+	Description string      `json:"description"`
+	Logo        string      `json:"logo"`
+	Employer    UserShort   `json:"employer"`
+	Employees   []UserShort `json:"employees"`
 }
 
 type CompanyShort struct {
@@ -107,13 +108,14 @@ type CompanyShort struct {
 }
 
 type Application struct {
-	ID    int             `json:"id"`
-	User  UserShortWithCV `json:"user"`
-	JobID int             `json:"job_id"`
-	Date  time.Time       `json:"date"`
+	ID   int             `json:"id"`
+	User UserShortWithCV `json:"user"`
+	Job  Job             `json:"job"`
+	Date time.Time       `json:"date"`
 }
 
 type Job struct {
+	ID          int          `json:"id"`
 	Company     CompanyShort `json:"company"`
 	Title       string       `json:"title"`
 	Description string       `json:"description"`

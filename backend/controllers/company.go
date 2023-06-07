@@ -40,6 +40,17 @@ func GetCompany(c *gin.Context) {
 		rows.Scan(&company.ID, &company.Name, &company.Industry, &company.Logo, &company.Location, &company.Description, &company.Employer.ID, &company.Employer.UserName, &company.Employer.FirstName, &company.Employer.LastName, &company.Employer.Headline)
 		response.Companies = append(response.Companies, company)
 	}
+	sql = `SELECT u.id, u.username, u.firstname, u.lastname, u.headline FROM applications a INNER JOIN users u ON a.user_id=u.id INNER JOIN jobs j ON a.job_id=j.id INNER JOIN companies c ON j.company_id=c.id WHERE c.id = $1 AND j.filled = true AND a.status = true;`
+	rows, err = database.DB.Query(sql, companyID)
+	if err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	for rows.Next() {
+		var company Company
+		rows.Scan(&company.ID, &company.Name, &company.Industry, &company.Logo, &company.Location, &company.Description, &company.Employer.ID, &company.Employer.UserName, &company.Employer.FirstName, &company.Employer.LastName, &company.Employer.Headline)
+		response.Companies = append(response.Companies, company)
+	}
 	c.JSON(http.StatusOK, OkMessage(response))
 }
 
@@ -165,6 +176,23 @@ func GetJobOpenings(c *gin.Context) {
 	c.JSON(http.StatusOK, OkMessage(response))
 }
 
+func GetJobOpeningsFromCompany(c *gin.Context) {
+	companyID := c.Param("id")
+	response := JobOpeningsResponse{Openings: []JobOpening{}}
+	sql := `SELECT c.id, c.name, c.logo, j.id, j.title, j.location, j.description, j.type, j.date, u.id, u.username, u.firstname, u.lastname, u.headline, u.profilepicture FROM jobs j INNER JOIN companies c ON j.company_id=c.id INNER JOIN users u ON c.employer_id=u.id WHERE j.filled = false AND c.id = $1;`
+	rows, err := database.DB.Query(sql, companyID)
+	if err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	for rows.Next() {
+		var job JobOpening
+		rows.Scan(&job.Company.ID, &job.Company.Name, &job.Company.Logo, &job.ID, &job.Title, &job.Location, &job.Description, &job.Type, &job.Date, &job.Company.Employer.ID, &job.Company.Employer.UserName, &job.Company.Employer.FirstName, &job.Company.Employer.LastName, &job.Company.Employer.Headline, &job.Company.Employer.ProfilePicture)
+		response.Openings = append(response.Openings, job)
+	}
+	c.JSON(http.StatusOK, OkMessage(response))
+}
+
 func SendJobApplication(c *gin.Context) {
 	sessionUser, exists := c.Get("user")
 	if !exists {
@@ -182,8 +210,8 @@ func SendJobApplication(c *gin.Context) {
 		c.JSON(http.StatusOK, ErrorMessage("This job opening is filled."))
 		return
 	}
-	sql = `SELECT COUNT(*) FROM applications WHERE user_id = $1`
-	database.DB.QueryRow(sql, userObject.ID).Scan(&count)
+	sql = `SELECT COUNT(*) FROM applications WHERE user_id = $1 AND job_id = $2`
+	database.DB.QueryRow(sql, userObject.ID, jobID).Scan(&count)
 	if count != 0 {
 		c.JSON(http.StatusOK, ErrorMessage("You have already applied for this job application."))
 		return
@@ -253,7 +281,7 @@ func GetJobApplications(c *gin.Context) {
 		return
 	}
 	response := JobApplicationsResponse{Applications: []Application{}}
-	sql = `SELECT u.id, u.username, u.firstname, u.lastname, u.headline, u.cv, a.id, a.job_id, a.date FROM applications a INNER JOIN users u ON a.user_id=u.id INNER JOIN jobs j ON a.job_id=j.id INNER JOIN companies c ON j.company_id=c.id WHERE c.id = $1 AND j.filled = false`
+	sql = `SELECT u.id, u.username, u.firstname, u.lastname, u.headline, u.cv, a.id, j.id, j.title, j.description, j.location, j.type, j.date, a.date FROM applications a INNER JOIN users u ON a.user_id=u.id INNER JOIN jobs j ON a.job_id=j.id INNER JOIN companies c ON j.company_id=c.id WHERE c.id = $1 AND j.filled = false`
 	rows, err := database.DB.Query(sql, companyID)
 	if err != nil {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
@@ -261,7 +289,7 @@ func GetJobApplications(c *gin.Context) {
 	}
 	for rows.Next() {
 		var application Application
-		rows.Scan(&application.User.ID, &application.User.UserName, &application.User.FirstName, &application.User.LastName, &application.User.Headline, &application.User.CV, &application.ID, &application.JobID, &application.Date)
+		rows.Scan(&application.User.ID, &application.User.UserName, &application.User.FirstName, &application.User.LastName, &application.User.Headline, &application.User.CV, &application.ID, &application.Job.ID, &application.Job.Title, &application.Job.Description, &application.Job.Location, &application.Job.Type, &application.Job.Date, &application.Date)
 		response.Applications = append(response.Applications, application)
 	}
 	c.JSON(http.StatusOK, OkMessage(response))
