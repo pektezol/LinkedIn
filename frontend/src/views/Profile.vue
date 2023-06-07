@@ -30,7 +30,6 @@
               </div>
               <div class="button-group">
                 <div>
-
                   <div>
                     <b-button id="show-btn" @click="$bvModal.show('bv-modal-example')"><b-icon class="mr-2"
                         icon="gear-fill" aria-hidden="true"></b-icon>Edit Profile</b-button>
@@ -55,7 +54,40 @@
                           </div>
                         </div>
                       </form>
+                    </b-modal>
 
+                    <b-button id="show-btn" @click="$bvModal.show('bv-modal-example-company')">Create Company</b-button>
+                    <b-modal id="bv-modal-example-company" hide-footer>
+                      <form @submit.prevent="create_company()">
+                        <div class="form-group">
+                          <label for="position">Name</label>
+                          <input type="text" class="form-control" v-model="company_form.name">
+                        </div>
+                        <div class="form-group">
+                          <label for="position">Industry</label>
+                          <input type="text" class="form-control" v-model="company_form.industry">
+                        </div>
+                        <div class="form-group">
+                          <label for="position">Location</label>
+                          <input type="text" class="form-control" v-model="company_form.location">
+                        </div>
+                        <div class="form-group">
+                          <label for="position">Description</label>
+                          <b-form-textarea id="textarea" v-model="company_form.description"
+                            placeholder="Enter something..." rows="3" max-rows="6"></b-form-textarea>
+                        </div>
+                        <div class="form-group">
+                          <label for="position">Logo File</label> 
+                            <b-form-file id="file-default" v-model="company_form.logo"></b-form-file> 
+                          <div class="mt-3">Selected file: {{ company_form.logo ? company_form.logo.name : '' }}</div>
+                        </div>
+                        <div class="row">
+                          <div class="row ml-4 ">
+                            <b-button type="submit" @click="$bvModal.hide('bv-modal-example-company')"
+                              variant="success">Submit</b-button>
+                          </div>
+                        </div>
+                      </form>
                     </b-modal>
                   </div>
                 </div>
@@ -288,10 +320,10 @@
 <script>
 import '@/assets/main.css'
 import axios from "axios";
-import Message from '../components/Layout/Message.vue'; 
+import Message from '../components/Layout/Message.vue';
 export default {
   name: 'LinkedInProfile',
-  components: {Message},
+  components: { Message },
   data() {
     return {
       profile_data: null,
@@ -333,10 +365,18 @@ export default {
         end_date: null
       },
       experiences: [],
+      //Create Company
+      company_form: {
+        name: "",
+        industry: "",
+        location: "",
+        description: "",
+        logo: null
+      }
     };
   },
   async mounted() {
-    this.profile_datas() 
+    this.profile_datas()
   },
   methods: {
     profile_datas() {
@@ -345,7 +385,7 @@ export default {
           Authorization: this.$cookies.get("token")
         }
       }).then(res => {
-        
+
         //user infos
         this.profile_data = res.data.data.user
         this.connection_count = res.data.data.connection_count
@@ -363,38 +403,38 @@ export default {
             start_date: `${res.data.data.educations[index].start_date}`,
             end_date: `${res.data.data.educations[index].end_date}`
           })
-        } 
-          //skills
-          this.skills = []
-          for (let index = 0; index < res.data.data.skills.length; index++) {
-            this.skills.push({
-              id: `${res.data.data.skills[index].id}`,
-              name: `${res.data.data.skills[index].title}`
-            })
-          } 
-          //experience
-          this.experiences = []
-          for (let index = 0; index < res.data.data.experiences.length; index++) {
-            this.experiences.push({
-              id: `${res.data.data.experiences[index].id}`,
-              company: {
-                id: `${res.data.data.experiences[index].company.id}`,
-                logo: `${res.data.data.experiences[index].company.logo}`,
-                name: `${res.data.data.experiences[index].company.name}`
-              },
-              description: `${res.data.data.experiences[index].description}`,
-              title: `${res.data.data.experiences[index].title}`,
-              location: `${res.data.data.experiences[index].location}`,
-              start_date: `${res.data.data.experiences[index].start_date}`,
-              end_date: `${res.data.data.experiences[index].end_date}`
-            })
-          } 
+        }
+        //skills
+        this.skills = []
+        for (let index = 0; index < res.data.data.skills.length; index++) {
+          this.skills.push({
+            id: `${res.data.data.skills[index].id}`,
+            name: `${res.data.data.skills[index].title}`
+          })
+        }
+        //experience
+        this.experiences = []
+        for (let index = 0; index < res.data.data.experiences.length; index++) {
+          this.experiences.push({
+            id: `${res.data.data.experiences[index].id}`,
+            company: {
+              id: `${res.data.data.experiences[index].company.id}`,
+              logo: `${res.data.data.experiences[index].company.logo}`,
+              name: `${res.data.data.experiences[index].company.name}`
+            },
+            description: `${res.data.data.experiences[index].description}`,
+            title: `${res.data.data.experiences[index].title}`,
+            location: `${res.data.data.experiences[index].location}`,
+            start_date: `${res.data.data.experiences[index].start_date}`,
+            end_date: `${res.data.data.experiences[index].end_date}`
+          })
+        }
         this.profile_edit.bio = this.profile_data.bio
         this.profile_edit.headline = this.profile_data.headline
         this.profile_edit.location = this.profile_data.location
       })
     },
-    saveChangesProfileEdit() { 
+    saveChangesProfileEdit() {
       axios.put(`https://software.ardapektezol.com/api/profile`, {
         headline: this.profile_edit.headline,
         bio: this.profile_edit.bio,
@@ -424,7 +464,7 @@ export default {
         this.edit_experiences = true
       } else {
         this.edit_experiences = false
-      } 
+      }
     },
     create_experience() {
       axios.post(`https://software.ardapektezol.com/api/experience`, {
@@ -490,25 +530,46 @@ export default {
         this.profile_datas()
       })
     },
+    create_company() {   
+
+      const file = this.company_form.logo
+      const reader = new FileReader()
+      let rawImg;
+      reader.onloadend = () => {
+        rawImg = reader.result; 
+        axios.post(`https://software.ardapektezol.com/api/company`, {
+        name: this.company_form.name,
+        industry: this.company_form.industry,
+        location: this.company_form.location,
+        description: this.company_form.description,
+        logo: rawImg
+      }, {
+        headers: {
+          Authorization: this.$cookies.get("token")
+        }
+      }).then(res => {
+        console.log("company response", res.data.data);
+      })
+      }
+      reader.readAsDataURL(file);   
+
+      
+    },
     encode_file(data) {
       const file = data
       const reader = new FileReader()
       let rawImg;
       reader.onloadend = () => {
         rawImg = reader.result;
-        console.log(rawImg);
-        this.img=rawImg
+        console.log(rawImg); 
       }
-      reader.readAsDataURL(file);
-      this.post_form.file = file
-      console.log(this.post_form.file) 
+      reader.readAsDataURL(file);   
     }
   },
 };
 </script>
 
-<style scoped> 
-.header-photo {
+<style scoped> .header-photo {
    position: relative;
    width: 100%;
    height: 350px;

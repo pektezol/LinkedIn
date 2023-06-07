@@ -1,5 +1,22 @@
 <template>
-  <div class="container">
+  <div class="container"> 
+    <div class="row border-bottom mb-3" v-if="users_companies.length != 0">
+      <h4 class="ml-4">Your Company(ies)</h4>
+      <div class="row">
+
+        <div class="col mt-35" v-for="(company) in users_companies" :key="company.id">
+          <b-card :title="company.name" :img-src="company.logo" img-alt="Image" img-top
+            tag="article" style="max-width: 20rem;" class="mb-2">
+            <p>Industry: {{ company.industry }}</p>
+            <p>Location: {{ company.location }}</p>
+            <b-button :href="`company/${company.name}/${company.id}`" variant="primary">Go Your Company Page</b-button>
+          </b-card>
+        </div>
+ 
+      </div>
+    </div>
+
+
     <div class="row">
       <div class="col-md-4">
         <div class="profile-box">
@@ -9,7 +26,7 @@
           <div class="card-body" @click="selectJob(job, index)">
             <div class="company-details">
               <div class="company-logo">
-               
+
               </div>
               <div class="job-info">
                 <h5 class="card-title">{{ job.title }}</h5>
@@ -33,14 +50,16 @@
             <p class="card-text">{{ selectedJob.responsibilities }}</p>
             <div class="posted-by">
               <div class="posted-by-img">
-                <img src="../assets/images/hRPhotoArda_.jpeg" :alt="selectedJob.postedBy.name" class="img-fluid rounded-circle" style="position:relative; top:-4px;" />
+                <img :src="selectedJob.company.employer.profile_picture" :alt="selectedJob.company.employer.user_name"
+                  class="img-fluid rounded-circle" style="position:relative; top:-4px;" />
               </div>
               <div class="posted-by-info">
                 <p class="card-text mb-1">
-                  <strong>Posted By: </strong>{{ selectedJob.postedBy.name }}
+                  <strong>Posted By: </strong> {{ selectedJob.company.employer.first_name }} {{
+                    selectedJob.company.employer.last_name }}
                 </p>
                 <p class="card-text mb-0">
-                  <strong>Position: </strong>{{ selectedJob.postedBy.position }}
+                  <strong>Position: </strong> {{ selectedJob.company.employer.headline }}
                 </p>
               </div>
             </div>
@@ -63,175 +82,39 @@ export default {
   data() {
     return {
       jobs: [
-        {
+        /* {
           id: 1,
           title: "Senior Embedded Software Developer",
           type: "Backend Developer",
           company: {
             id: 2,
             name: "Siemens Company",
-            logo: ""
+            logo: "path/to/logo1.png",
+            employer: {
+              id: "1",
+              user_name: "John Doe",
+              first_name: "Volkan",
+              last_name: "Öztoklu",
+              headline: "Student of mef",
+              profile_picture: "../assets/images/hRPhotoArda_.jpeg",
+              position: "HR Manager",
+            },
           },
           location: "San Francisco",
-          logo: "path/to/logo1.png",
-          description: "",
-          requirements: "",
-          responsibilities: "",
-          postedBy: {
-            name: "John Doe",
-            photo: "path/to/photo1.png",
-            position: "HR Manager",
-          },
+          description: "asfdasdfasdfasdfasdfasdfasfdasdfasdfasdfasdfasdfasdfasdfasdfasdf",
           date: "01/01/2020"
-        },
-        {
-          id: 2,
-          title: "Software Engineer",
-          employee: "Full Stack Developer",
-          company: "Evil Co",
-          location: "New York",
-          logo: "../assets/images/linkedin.png",
-          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elitLorem ipsum dolor sit amet, consectetur adipiscing elit",
-          requirements: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          responsibilities: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          postedBy: {
-            name: "Jane Smith",
-            photo: "path/to/photo2.png",
-            position: "Senior Software Engineer",
-          },
-        },
-        {
-          id: 3,
-          title: "Data Analyst",
-          employee: "Data Analyitica",
-          company: "Alpha Industries",
-          location: "Chicago",
-          logo: "path/to/logo3.png",
-          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          requirements: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          responsibilities: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          postedBy: {
-            name: "Alice Johnson",
-            photo: "path/to/photo3.png",
-            position: "Data Science Manager",
-          },
-        },
-        {
-          id: 4,
-          title: "Graphic Designer",
-          company: "Samsung",
-          location: "London",
-          logo: "path/to/logo4.png",
-          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          requirements: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          responsibilities: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          postedBy: {
-            name: "David Brown",
-            photo: "path/to/photo4.png",
-            position: "Creative Director",
-          },
-        },
-        {
-          id: 5,
-          title: "UI/UX Designer",
-          company: "Dijital Dusler Co.",
-          location: "Los Angeles",
-          logo: "path/to/logo5.png",
-          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          requirements: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          responsibilities: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          postedBy: {
-            name: "Emily Brown",
-            photo: "path/to/photo5.png",
-            position: "Lead Designer",
-          },
-        },
-        {
-          id: 6,
-          title: "Product Manager",
-          company: "Beyin Takimi Solutions",
-          location: "San Francisco",
-          logo: "path/to/logo6.png",
-          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          requirements: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          responsibilities: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          postedBy: {
-            name: "Michael Clark",
-            photo: "path/to/photo6.png",
-            position: "Product Director",
-          },
-        },
-        {
-          id: 7,
-          title: "Data Scientist",
-          company: "Big Data Analytics",
-          location: "New York",
-          logo: "path/to/logo7.png",
-          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          requirements: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          responsibilities: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          postedBy: {
-            name: "Sophia Roberts",
-            photo: "path/to/photo7.png",
-            position: "Data Science Lead",
-          },
-        },
-        {
-          id: 8,
-          title: "Marketing Specialist",
-          company: "Digital Marketing Agency",
-          location: "Chicago",
-          logo: "path/to/logo8.png",
-          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          requirements: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          responsibilities: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          postedBy: {
-            name: "Daniel Wilson",
-            photo: "path/to/photo8.png",
-            position: "Marketing Manager",
-          },
-        },
-        {
-          id: 9,
-          title: "Business Analyst",
-          company: "Global Consulting",
-          location: "London",
-          logo: "path/to/logo9.png",
-          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          requirements: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          responsibilities: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          postedBy: {
-            name: "Olivia Adams",
-            photo: "path/to/photo9.png",
-            position: "Business Analyst Lead",
-          },
-        },
-        {
-          id: 10,
-          title: "Sales Manager",
-          company: "E-commerce Solutions",
-          location: "Sydney",
-          logo: "path/to/logo10.png",
-          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          requirements: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          responsibilities: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          postedBy: {
-            name: "Ryan Taylor",
-            photo: "path/to/photo10.png",
-            position: "Sales Director",
-          },
-        },
+        }, */
       ],
       selectedJob: null,
+      users_companies: []
     };
   },
   watch: {
-    selectJob() {
-      console.log("sdfgsdgfsdf")
-    }
+
   },
-  mounted(){
+  mounted() {
     this.get_job()
+    this.get_company()
   },
   methods: {
     selectJob(job, index) {
@@ -240,12 +123,28 @@ export default {
     applyJob(job) {
       // Implement your apply job functionality here
       console.log("Applying for job:", job.title);
+
+
     },
-    get_job() { 
+    get_job() {
       axios.get(`https://software.ardapektezol.com/api/jobs`)
-      .then(res => {
-         console.log(res.data.data.openings);
-      })
+        .then(res => {
+          this.jobs = res.data.data.openings
+          console.log(res.data.data.openings);
+        })
+    },
+    get_company() {
+      axios.get(`https://software.ardapektezol.com/api/company`)
+        .then(res => {
+          console.log(res.data.data);
+          if (res.data.data.companies.length != 0) {
+            for (let index = 0; index < res.data.data.companies.length; index++) { 
+              if (res.data.data.companies[index].employer.id == this.$cookies.get("user_id")) {
+                this.users_companies.push(res.data.data.companies[index])
+              }    
+            } 
+          }
+        })
     }
   },
 };

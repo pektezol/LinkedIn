@@ -49,7 +49,7 @@ const router = new VueRouter({
             component: User,
         },
         {
-            path: "/companyProfile",
+            path: "/company/:company_name/:id",
             name: "company",
             component: Company,
         }
