@@ -90,13 +90,14 @@ type UserShortWithCV struct {
 }
 
 type Company struct {
-	ID          int       `json:"id"`
-	Name        string    `json:"name"`
-	Industry    string    `json:"industry"`
-	Location    string    `json:"location"`
-	Description string    `json:"description"`
-	Logo        string    `json:"logo"`
-	Employer    UserShort `json:"employer"`
+	ID          int         `json:"id"`
+	Name        string      `json:"name"`
+	Industry    string      `json:"industry"`
+	Location    string      `json:"location"`
+	Description string      `json:"description"`
+	Logo        string      `json:"logo"`
+	Employer    UserShort   `json:"employer"`
+	Employees   []UserShort `json:"employees"`
 }
 
 type CompanyShort struct {

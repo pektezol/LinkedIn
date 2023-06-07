@@ -48,6 +48,7 @@ func SetupRoutes(r *gin.Engine) {
 		api.POST("/messages/:username", middleware.CheckAuth, controllers.SendMessage)
 		api.GET("/notifications", middleware.CheckAuth, controllers.GetNotifications)
 		api.GET("/jobs", middleware.CheckAuth, controllers.GetJobOpenings)
+		api.GET("/jobs/:id", middleware.CheckAuth, controllers.GetJobOpeningsFromCompany)
 		api.POST("/jobs/:id", middleware.CheckAuth, controllers.SendJobApplication)
 		api.PUT("/jobs/:applicationid", middleware.CheckAuth, controllers.AcceptJobApplication)
 	}
