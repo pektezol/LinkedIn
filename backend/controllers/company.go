@@ -210,8 +210,8 @@ func SendJobApplication(c *gin.Context) {
 		c.JSON(http.StatusOK, ErrorMessage("This job opening is filled."))
 		return
 	}
-	sql = `SELECT COUNT(*) FROM applications WHERE user_id = $1`
-	database.DB.QueryRow(sql, userObject.ID).Scan(&count)
+	sql = `SELECT COUNT(*) FROM applications WHERE user_id = $1 AND job_id = $2`
+	database.DB.QueryRow(sql, userObject.ID, jobID).Scan(&count)
 	if count != 0 {
 		c.JSON(http.StatusOK, ErrorMessage("You have already applied for this job application."))
 		return
