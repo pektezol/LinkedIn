@@ -77,8 +77,8 @@
                             placeholder="Enter something..." rows="3" max-rows="6"></b-form-textarea>
                         </div>
                         <div class="form-group">
-                          <label for="position">Logo File</label> 
-                            <b-form-file id="file-default" v-model="company_form.logo"></b-form-file> 
+                          <label for="position">Logo File</label>
+                          <b-form-file id="file-default" v-model="company_form.logo"></b-form-file>
                           <div class="mt-3">Selected file: {{ company_form.logo ? company_form.logo.name : '' }}</div>
                         </div>
                         <div class="row">
@@ -313,6 +313,46 @@
         </div>
       </div>
     </div>
+
+    <div class="card mt-4">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-11">
+            <h4 class="card-title ">CV</h4>
+          </div>
+          <div class="col ml-4">
+            <b-button size="sm" class="mb-2" @click="edit_cv == false ? edit_cv = true : edit_cv = false">
+              <b-icon icon="gear-fill" aria-hidden="true"></b-icon>
+            </b-button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="border-bottom">
+            <div class="row px-4 pb-2">
+              <b-form @submit.prevent="post_cv()" v-if="edit_cv">
+                <div class="row" style="max-width: 100%;">
+                  <div class="col">
+                    <b-form-file v-model="cv_upload_file" :state="Boolean(file1)"
+                      placeholder="Choose a file or drop it here..." drop-placeholder="Drop file here..."></b-form-file>
+                    <div class="mt-3">Selected file: {{ cv_upload_file ? cv_upload_file.name : '' }}</div>
+                  </div>
+                  <div class="col">
+                    <b-button type="submit" variant="success">Submit</b-button>
+                  </div>
+                </div>
+              </b-form>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="border-bottom">
+            <div class="row px-4 pb-2">
+              <iframe style="height: 1000px; width: 1080px;" :src="profile_data.cv"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <Message></Message>
   </div>
 </template>
@@ -372,7 +412,9 @@ export default {
         location: "",
         description: "",
         logo: null
-      }
+      },
+      edit_cv: false,
+      cv_upload_file: null
     };
   },
   async mounted() {
@@ -530,30 +572,30 @@ export default {
         this.profile_datas()
       })
     },
-    create_company() {   
+    create_company() {
 
       const file = this.company_form.logo
       const reader = new FileReader()
       let rawImg;
       reader.onloadend = () => {
-        rawImg = reader.result; 
+        rawImg = reader.result;
         axios.post(`https://software.ardapektezol.com/api/company`, {
-        name: this.company_form.name,
-        industry: this.company_form.industry,
-        location: this.company_form.location,
-        description: this.company_form.description,
-        logo: rawImg
-      }, {
-        headers: {
-          Authorization: this.$cookies.get("token")
-        }
-      }).then(res => {
-        console.log("company response", res.data.data);
-      })
+          name: this.company_form.name,
+          industry: this.company_form.industry,
+          location: this.company_form.location,
+          description: this.company_form.description,
+          logo: rawImg
+        }, {
+          headers: {
+            Authorization: this.$cookies.get("token")
+          }
+        }).then(res => {
+          console.log("company response", res.data.data);
+        })
       }
-      reader.readAsDataURL(file);   
+      reader.readAsDataURL(file);
 
-      
+
     },
     encode_file(data) {
       const file = data
@@ -561,9 +603,28 @@ export default {
       let rawImg;
       reader.onloadend = () => {
         rawImg = reader.result;
-        console.log(rawImg); 
+        console.log(rawImg);
       }
-      reader.readAsDataURL(file);   
+      reader.readAsDataURL(file);
+    },
+    post_cv() {
+      const file = this.cv_upload_file
+      const reader = new FileReader()
+      let rawImg;
+      reader.onloadend = () => {
+        rawImg = reader.result;
+        console.log(rawImg);
+        axios.post(`https://software.ardapektezol.com/api/cv`, {
+          data_base64: rawImg
+        }, {
+          headers: {
+            Authorization: this.$cookies.get("token")
+          }
+        }).then(res => {
+          this.profile_datas()
+        })
+      }
+      reader.readAsDataURL(file);
     }
   },
 };

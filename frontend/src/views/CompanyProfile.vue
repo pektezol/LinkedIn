@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-
     <div class="card mt-4">
       <div class="card-body">
         <div>
@@ -15,7 +14,6 @@
               <div class="row">
                 <div class="col">
                   <h5 class="card-title">{{ company_info.name }}</h5>
-
                 </div>
                 <div class="col">
                   <ul class="list-unstyled">
@@ -25,13 +23,43 @@
                 </div>
               </div>
             </b-card-body>
+            <b-button id="show-btn" @click="$bvModal.show('bv-modal-example-company')">Update Company</b-button>
+            <b-modal id="bv-modal-example-company" hide-footer>
+              <form @submit.prevent="update_company_func()">
+                <div class="form-group">
+                  <label for="position">Name</label>
+                  <input type="text" class="form-control" v-model="update_company.name">
+                </div>
+                <div class="form-group">
+                  <label for="position">Industry</label>
+                  <input type="text" class="form-control" v-model="update_company.industry">
+                </div>
+                <div class="form-group">
+                  <label for="position">Location</label>
+                  <input type="text" class="form-control" v-model="update_company.location">
+                </div>
+                <div class="form-group">
+                  <label for="position">Description</label>
+                  <b-form-textarea id="textarea" v-model="update_company.description" placeholder="Enter something..."
+                    rows="3" max-rows="6"></b-form-textarea>
+                </div>
+                <div class="form-group">
+                  <label for="position">Logo File</label>
+                  <b-form-file id="file-default" v-model="update_company.logo"></b-form-file>
+                  <div class="mt-3">Selected file: {{ update_company.logo ? update_company.logo.name : '' }}</div>
+                </div>
+                <div class="row">
+                  <div class="row ml-4 ">
+                    <b-button type="submit" @click="$bvModal.hide('bv-modal-example-company')"
+                      variant="success">Submit</b-button>
+                  </div>
+                </div>
+              </form>
+            </b-modal>
           </b-card>
         </div>
       </div>
     </div>
-
-
-
     <div class="card mt-1">
       <div class="button-group2">
         <button @click="navigateTo('home')">Ana Sayfa</button>
@@ -40,27 +68,60 @@
         <button @click="navigateTo('team')">İş Arkadaşları</button>
       </div>
     </div>
-
-
-
     <div class="card mt-4">
       <div class="card-body">
         <!-- Job Positions Section -->
         <div v-if="activeSection === 'jobs'">
           <div class="row">
-            <div class="col-11">
-              <h4 class="card-title">Job Positions</h4>
+            <div class="col-10">
+              <h2 class="card-title">Job Positions</h2>
             </div>
-            <div class="col ml-4">
+            <div class="col-2 mt-2" v-if="owner">
+              <b-button variant="outline-success" @click="create_job_toggle = !create_job_toggle">Create</b-button>
+            </div>
+          </div>
+          <div class="ml-2" v-if="owner && create_job_toggle">
+            <div class="border-bottom">
+              <div class="row px-4 pb-2">
+                <b-form @submit.prevent="create_job_opening()">
+                  <div class="row">
+                    <div class="col-3">
+                      <b-form-input v-model="create_job_openings.title" placeholder="Title" required></b-form-input>
+                      <b-form-input v-model="create_job_openings.type" class="mt-2" placeholder="Type"
+                        required></b-form-input>
+                    </div>
+                    <div class="col-6 ">
+                      <b-form-textarea id="textarea" v-model="create_job_openings.description"
+                        placeholder="Description..." rows="3" max-rows="6"></b-form-textarea>
+                    </div>
+                    <div class="col-3">
+                      <b-form-input v-model="create_job_openings.location" placeholder="Location" required></b-form-input>
+                      <b-button type="submit" variant="success" class="mt-2 ml-4">Submit</b-button>
+                    </div>
+                  </div>
+                </b-form>
+              </div>
             </div>
           </div>
           <ul class="list-unstyled">
-            <li v-for="position in jobPositions" :key="position.id">
+            <li v-for="open in open_job" :key="open.id">
               <div class="card mt-4">
-                <div class="card-body-about"> 
-                  <h4 class="card-title">{{ position.title }}</h4>
-                  <p>{{ position.department }}</p>
-                  <h6 class="font-weight-lighter">{{ position.location }}</h6>
+                <div class="card-body-about">
+                  <div class="row">
+                    <h4 class="card-title">{{ open.title }}</h4>
+                    <p class="ml-2 mt-3">{{ open.type }}</p>
+                    <h6 class="font-weight-lighter ml-4 mt-3">{{ open.location }}</h6>
+                    <p class="ml-4 mt-3">{{ open.date.split("T")[0] }}</p>
+                  </div>
+                  <div v-for="(item) in job_applications" :key="item.id">
+                    <div class="row ml-2 my-2 border-bottom" v-if="item.job.id == open.id">
+                      <h6 class="mt-2">{{ item.user.first_name }} {{ item.user.last_name }}</h6>
+                      <p class="ml-4 mt-2"> {{ item.user.headline }}</p>
+                      <a :href="`/user/${item.user.user_name}`" class="mt-2 ml-4">Visit profile</a>
+                      <b-button variant="link" class="ml-5" @click="accept_job_req(item.id)"
+                        v-if="owner">Accept</b-button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </li>
@@ -96,13 +157,10 @@
                     <h6>{{ member.location }}</h6>
                   </div>
                 </div>
-              </div> 
+              </div>
             </li>
           </ul>
         </div>
-
-
-
         <!-- Default Section (Home) -->
         <div v-else>
           <h2>Home Section</h2>
@@ -121,6 +179,22 @@ export default {
     return {
       owner: true,
       company_info: [],
+      job_applications: [],
+      create_job_toggle: false,
+      open_job: [],
+      create_job_openings: {
+        title: "",
+        location: "",
+        description: "",
+        type: ""
+      },
+      update_company: {
+        name: "",
+        industry: "",
+        location: "",
+        description: "",
+        logo: ""
+      },
       activeSection: 'home',
       companyData: {
         name: "Company Name",
@@ -193,24 +267,133 @@ export default {
     };
   },
   mounted() {
-    const company_id = this.$route.path.split("/")[3]
-    console.log(`${company_id}  ${this.owner}`);
-    axios.get(`https://software.ardapektezol.com/api/company/${company_id}`, {}, {
-      headers: {
-        Authorization: this.$cookies.get("token")
-      }
-    }).then(res => {
-      console.log(res.data.data.companies);
-      this.company_info = res.data.data.companies[0]
-    })
-    this.connectionCount = Math.floor(Math.random() * 100); // Random connection count
+
+    this.reload()
   },
   methods: {
+    reload() {
+      this.get_company_info()
+      this.get_job_application()
+      this.get_job_open()
+    },
     navigateTo(section) {
       this.activeSection = section;
+    }, 
+    get_company_info() {
+      const company_id = this.$route.path.split("/")[3]
+      axios.get(`https://software.ardapektezol.com/api/company/${company_id}`, {
+        headers: {
+          Authorization: this.$cookies.get("token")
+        }
+      }).then(res => {
+        this.company_info = res.data.data.companies[0]
+      })
     },
-    connectWithCompany() {
-      // Connect with the company logic
+    update_company_func() {
+      console.log(this.update_company.logo)
+      if (this.update_company.name == "") {
+        this.update_company.name = this.company_info.name
+      }
+      if (this.update_company.industry == "") {
+        this.update_company.industry = this.company_info.industry
+      }
+      if (this.update_company.location == "") {
+        this.update_company.location = this.company_info.location
+      }
+      if (this.update_company.description == "") {
+        this.update_company.description = this.company_info.description
+      }
+      if (this.update_company.logo == "") {
+        this.update_company.logo = this.company_info.logo
+        const company_id = this.$route.path.split("/")[3]
+        axios.put(`https://software.ardapektezol.com/api/company/${company_id}`, {
+          name: this.update_company.name,
+          industry: this.update_company.industry,
+          location: this.update_company.location,
+          description: this.update_company.description,
+          logo: this.update_company.logo
+        }, {
+          headers: {
+            Authorization: this.$cookies.get("token")
+          }
+        }).then(res => {
+          this.reload()
+        })
+      } else {
+        const company_id = this.$route.path.split("/")[3]
+        const file = this.update_company.logo
+        const reader = new FileReader()
+        let rawImg;
+        reader.onloadend = () => {
+          rawImg = reader.result;
+          axios.put(`https://software.ardapektezol.com/api/company/${company_id}`, {
+            name: this.update_company.name,
+            industry: this.update_company.industry,
+            location: this.update_company.location,
+            description: this.update_company.description,
+            logo: rawImg
+          }, {
+            headers: {
+              Authorization: this.$cookies.get("token")
+            }
+          }).then(res => {
+            this.reload()
+          })
+        }
+        reader.readAsDataURL(file);
+      }
+
+    },
+    get_job_application() {
+      const company_id = this.$route.path.split("/")[3]
+      axios.get(`https://software.ardapektezol.com/api/company/${company_id}/job`, {
+        headers: {
+          Authorization: this.$cookies.get("token")
+        }
+      }).then(res => {
+        this.job_applications = res.data.data.applications
+        console.log(res.data.data.applications);
+        //this.job_applications = res.data.data.companies[0]
+      })
+    },
+    get_job_open() {
+      const company_id = this.$route.path.split("/")[3]
+      axios.get(`https://software.ardapektezol.com/api/jobs/${company_id}`, {
+        headers: {
+          Authorization: this.$cookies.get("token")
+        }
+      }).then(res => {
+        this.open_job = res.data.data.openings
+        console.log(res.data.data.openings);
+        //this.job_applications = res.data.data.companies[0]
+      })
+    },
+    accept_job_req(application_id) {
+      axios.put(`https://software.ardapektezol.com/api/jobs/${application_id}`,{}, {
+        headers: {
+          Authorization: this.$cookies.get("token")
+        }
+      }).then(res => { 
+        this.reload()
+        //this.job_applications = res.data.data.companies[0]
+      })
+    },
+    create_job_opening() {
+      const company_id = this.$route.path.split("/")[3]
+      axios.post(`https://software.ardapektezol.com/api/company/${company_id}/job`, {
+        title: this.create_job_openings.title,
+        location: this.create_job_openings.location,
+        description: this.create_job_openings.description,
+        type: this.create_job_openings.type
+      }, {
+        headers: {
+          Authorization: this.$cookies.get("token")
+        }
+      }).then(res => { 
+        //this.job_applications = res.data.data.companies[0]
+        this.create_job_toggle = false
+        this.reload()
+      })
     }
 
   },

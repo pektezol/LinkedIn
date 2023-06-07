@@ -1,18 +1,18 @@
 <template>
-  <div class="container"> 
+  <div class="container">
     <div class="row border-bottom mb-3" v-if="users_companies.length != 0">
       <h4 class="ml-4">Your Company(ies)</h4>
       <div class="row">
 
         <div class="col mt-35" v-for="(company) in users_companies" :key="company.id">
-          <b-card :title="company.name" :img-src="company.logo" img-alt="Image" img-top
-            tag="article" style="max-width: 20rem;" class="mb-2">
+          <b-card :title="company.name" :img-src="company.logo" img-alt="Image" img-top tag="article"
+            style="max-width: 20rem;" class="mb-2">
             <p>Industry: {{ company.industry }}</p>
             <p>Location: {{ company.location }}</p>
             <b-button :href="`company/${company.name}/${company.id}`" variant="primary">Go Your Company Page</b-button>
           </b-card>
         </div>
- 
+
       </div>
     </div>
 
@@ -25,8 +25,9 @@
         <div v-for="(job, index) in jobs" :key="job.id" class="card mb-3">
           <div class="card-body" @click="selectJob(job, index)">
             <div class="company-details">
-              <div class="company-logo">
-
+              <div class="company-logo"> 
+                 
+                    <b-avatar :src="job.company.logo"></b-avatar>
               </div>
               <div class="job-info">
                 <h5 class="card-title">{{ job.title }}</h5>
@@ -123,8 +124,15 @@ export default {
     applyJob(job) {
       // Implement your apply job functionality here
       console.log("Applying for job:", job.title);
-
-
+      axios.post(`https://software.ardapektezol.com/api/jobs/${job.id}`, {},{
+            headers: {
+              Authorization: this.$cookies.get("token")
+            }
+          })
+        .then(res => {
+          this.jobs = res.data.data.openings
+          console.log(res.data.data.openings);
+        })
     },
     get_job() {
       axios.get(`https://software.ardapektezol.com/api/jobs`)
@@ -138,11 +146,11 @@ export default {
         .then(res => {
           console.log(res.data.data);
           if (res.data.data.companies.length != 0) {
-            for (let index = 0; index < res.data.data.companies.length; index++) { 
+            for (let index = 0; index < res.data.data.companies.length; index++) {
               if (res.data.data.companies[index].employer.id == this.$cookies.get("user_id")) {
                 this.users_companies.push(res.data.data.companies[index])
-              }    
-            } 
+              }
+            }
           }
         })
     }

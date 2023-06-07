@@ -147,9 +147,31 @@
             </div>
           </li>
         </ul>
-      </div>
-      <Message></Message>
+      </div>  
     </div>
+    <div class="card mt-4">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-11">
+            <h4 class="card-title ">CV</h4>
+          </div>
+          <div class="col ml-4"> 
+          </div>
+        </div>
+        <div class="row">
+          <div class="border-bottom"> 
+          </div>
+        </div>
+        <div class="row">
+          <div class="border-bottom">
+            <div class="row px-4 pb-2">
+              <iframe style="height: 1000px; width: 1080px;" :src="profile_data.cv"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <Message></Message>
   </div>
 </template>
 

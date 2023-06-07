@@ -4,8 +4,8 @@
 
         <div class="your-input">
             <div class="input">
-                <input type="text" name="email" v-model="loginData.userName" id="email" required />
-                <label for="email">Email</label>
+                <input type="text" name="email" v-model="loginData.user_name" id="email" required />
+                <label for="email">Username</label>
             </div>
             <div class="input">
                 <input type="password" name="password" v-model="loginData.password" id="password" required />
@@ -30,24 +30,28 @@
 </template>
   
 <script>
-import { useAuthStore } from '../store/auth'; 
+import axios from 'axios';
 
 export default {
     data() {
         return {
             loginData: {
-                userName: '',
+                user_name: '',
                 password: ''
             },
         };
-    },          
+    },
     methods: {
-         login() {  
-            const authStore = useAuthStore()
-            authStore.handleLogin(this.loginData) 
-            console.log("eeeeeeeeeeeeee",authStore); 
-            this.$cookies.set('token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjg4MjgyODc4fQ.DyJne-oTn6_jsbc14lTOkenMXKtoGc1HSrxFyICsF2c" ) 
-        } 
+        login() {
+            axios.post(`https://software.ardapektezol.com/api/auth/login`, {
+                user_name: this.loginData.user_name,
+                password: this.loginData.password
+            }).then(res => {
+                  console.log(res.data.data);
+                  this.$cookies.set('token', res.data.data)
+                    this.$router.push("/profile")
+            }) 
+        }
     }
 };
 </script>

@@ -119,11 +119,17 @@
                 <b-icon icon="x" aria-hidden="true"></b-icon>
               </button>
             </div>
-            <b-list-group>
+            <b-list-group> 
               <div v-for="user in search_users_data" :key="user.id"> 
                 <b-list-group-item class="d-flex align-items-center" :href="`/user/${user.user_name}`">
                   <b-avatar variant="success" icon="people-fill" class="mr-3"></b-avatar>
                   <span class="mr-auto">{{ user.full_name }}  </span>
+                </b-list-group-item>
+              </div>
+              <div v-for="user in search_companies_data" :key="user.id"> 
+                <b-list-group-item class="d-flex align-items-center" :href="`/company/${user.name}/${user.id}`">
+                  <b-avatar :src="user.logo" size="2rem"></b-avatar>
+                  <span class="mr-auto ml-2">{{ user.name }}  </span>
                 </b-list-group-item>
               </div>
             </b-list-group>
@@ -146,6 +152,7 @@ export default {
       popoverShow: true,
       id: null,
       search_users_data: [], 
+      search_companies_data: []
     }
   },
   watch: {
@@ -162,11 +169,20 @@ export default {
           q: this.search
         }
       }).then(res => {
-        this.search_users_data = []
+        this.search_users_data = [] 
         for (let index = 0; index < res.data.data.users.length; index++) {
            this.search_users_data.push({full_name: `${res.data.data.users[index].first_name} ${res.data.data.users[index].last_name}`, user_name: `${res.data.data.users[index].user_name}`})
         } 
         if (res.data.data.users.length != 0) {
+          this.search_toggle = true
+        } else {
+          this.search_toggle = false
+        }
+        this.search_companies_data = [] 
+        for (let index = 0; index < res.data.data.companies.length; index++) {
+           this.search_companies_data.push({name: `${res.data.data.companies[index].name}`, id: `${res.data.data.companies[index].id}`, logo: `${res.data.data.companies[index].logo}`})
+        } 
+        if (res.data.data.companies.length != 0) {
           this.search_toggle = true
         } else {
           this.search_toggle = false
