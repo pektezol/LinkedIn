@@ -70,8 +70,11 @@ func EditProfile(c *gin.Context) {
 	if request.Bio == "" {
 		request.Bio = userObject.Bio
 	}
-	sql := `UPDATE users SET firstname = $1, lastname = $2, email = $3, dateofbirth = $4, profilepicture = $5, headline = $6, industry = $7, location = $8, bio = $9 WHERE id = $10`
-	_, err = database.DB.Exec(sql, request.FirstName, request.LastName, request.Email, request.DateOfBirth, request.ProfilePicture, request.Headline, request.Industry, request.Location, request.Bio, userObject.ID)
+	if request.Background == "" {
+		request.Background = userObject.Background
+	}
+	sql := `UPDATE users SET firstname = $1, lastname = $2, email = $3, dateofbirth = $4, profilepicture = $5, headline = $6, industry = $7, location = $8, bio = $9, background = $10 WHERE id = $11`
+	_, err = database.DB.Exec(sql, request.FirstName, request.LastName, request.Email, request.DateOfBirth, request.ProfilePicture, request.Headline, request.Industry, request.Location, request.Bio, request.Background, userObject.ID)
 	if err != nil {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
 		return
@@ -82,8 +85,8 @@ func EditProfile(c *gin.Context) {
 func GetUser(c *gin.Context) {
 	var user User
 	username := c.Param("username")
-	sql := `SELECT id, username, firstname, lastname, email, dateofbirth, profilepicture, headline, industry, location, bio, cv FROM users WHERE username = $1;`
-	database.DB.QueryRow(sql, username).Scan(&user.ID, &user.UserName, &user.FirstName, &user.LastName, &user.Email, &user.DateOfBirth, &user.ProfilePicture, &user.Headline, &user.Industry, &user.Location, &user.Bio, &user.CV)
+	sql := `SELECT id, username, firstname, lastname, email, dateofbirth, profilepicture, headline, industry, location, bio, cv, background FROM users WHERE username = $1;`
+	database.DB.QueryRow(sql, username).Scan(&user.ID, &user.UserName, &user.FirstName, &user.LastName, &user.Email, &user.DateOfBirth, &user.ProfilePicture, &user.Headline, &user.Industry, &user.Location, &user.Bio, &user.CV, &user.Background)
 	if user.ID == 0 {
 		// User does not exist
 		c.JSON(http.StatusOK, ErrorMessage("User does not exist."))

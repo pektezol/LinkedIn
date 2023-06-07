@@ -68,6 +68,7 @@ type User struct {
 	Location       string `json:"location"`
 	Bio            string `json:"bio"`
 	CV             string `json:"cv"`
+	Background     string `json:"background"`
 }
 
 type UserShort struct {
@@ -300,4 +301,5 @@ type UserUpdateRequest struct {
 	Industry       string `json:"industry"`
 	Location       string `json:"location"`
 	Bio            string `json:"bio"`
+	Background     string `json:"background"`
 }
