@@ -50,7 +50,7 @@
             <p class="card-text">{{ selectedJob.requirements }}</p>
             <p class="card-text">{{ selectedJob.responsibilities }}</p>
             <div class="posted-by">
-              <div class="posted-by-img">
+              <div class="posted-by-img"> 
                 <img :src="selectedJob.company.employer.profile_picture" :alt="selectedJob.company.employer.user_name"
                   class="img-fluid rounded-circle" style="position:relative; top:-4px;" />
               </div>

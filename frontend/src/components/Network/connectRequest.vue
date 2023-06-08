@@ -9,10 +9,11 @@
                         <b-row>
                             <b-col>
                                 <div class="mb-2">
-                                    <b-avatar src="https://placekitten.com/300/300" size="4rem"></b-avatar>
+                                    <b-avatar :src="connectionReq.sender.profile_picture" size="4rem"></b-avatar>
                                 </div>
                             </b-col>
                             <b-col cols="8">
+                                {{ connectionReq.sender }}
                                 <b-row>
                                     <h5>{{ connectionReq.sender.first_name }} {{ connectionReq.sender.last_name }}</h5>
                                 </b-row>
@@ -43,11 +44,11 @@
                         <b-row>
                             <b-col>
                                 <div class="mb-2">
-                                    <b-avatar src="https://placekitten.com/300/300" size="4rem"></b-avatar>
+                                    <b-avatar :src="connectionReq.sender.profile_picture" size="4rem"></b-avatar>
                                 </div>
                             </b-col>
                             <b-col cols="7">
-                                <b-row>
+                                <b-row> 
                                    <a :href="`user/${connectionReq.sender.user_name}`">
                                     <h5>{{ connectionReq.sender.first_name }} {{ connectionReq.sender.last_name }}</h5>
                                    </a>

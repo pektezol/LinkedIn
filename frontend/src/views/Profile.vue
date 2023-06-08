@@ -4,8 +4,7 @@
       <div class="card-body">
         <div>
           <div class="header-photo">
-            <img alt="Header Photo"
-              src="https://64.media.tumblr.com/682b7be9273636dffb1d8fbe3220628b/tumblr_pdz53tIneb1sx8ybdo10_1280.png" />
+            <img alt="Header Photo" :src="profile_data.background" />
           </div>
           <div class="profile-photo ml-5">
             <img class="img-fluid rounded-circle mb-1" :src="profile_data.profile_picture" alt="Profile Image" />
@@ -24,7 +23,6 @@
                     <li><i class="fa fa-map-marker mr-2"></i>Location: {{ profile_data.location }}</li>
                     <li><i class="fa fa-map-marker mr-2"></i>Date of Birth: {{ profile_data.date_of_birth.split("T")[0] }}
                     </li>
-                    <li><i class="fa fa-map-marker mr-2"></i>{{ profile_data.location }}</li>
                   </ul>
                 </div>
               </div>
@@ -36,16 +34,58 @@
                     <b-modal id="bv-modal-example" hide-footer>
                       <form @submit.prevent="saveChangesProfileEdit()">
                         <div class="form-group">
+                          <label for="position">First Name</label>
+                          <input type="text" class="form-control" v-model="profile_edit.first_name">
+                        </div>
+                        <div class="form-group">
+                          <label for="position">Last Name</label>
+                          <input type="text" class="form-control" v-model="profile_edit.last_name">
+                        </div>
+                        <div class="form-group">
+                          <label for="position">User Name</label>
+                          <input type="text" class="form-control" v-model="profile_edit.user_name">
+                        </div>
+                        <div class="form-group">
+                          <label for="position">Email</label>
+                          <input type="text" class="form-control" v-model="profile_edit.email">
+                        </div>
+                        <div class="form-group">
+                          <label for="position">Password</label>
+                          <input type="text" class="form-control" v-model="profile_edit.password">
+                        </div>
+                        <div class="form-group">
+                          <label for="position">Date of Birth</label>
+                          <b-form-datepicker v-model="profile_edit.date_of_birth" class="mb-2"></b-form-datepicker>
+                        </div>
+                        <div class="form-group">
+                          <label for="position">Profile Photo</label>
+                          <b-form-file id="file-default" v-model="profile_edit.profile_picture"></b-form-file>
+                          <div class="mt-3">Selected file: {{ profile_edit.profile_picture ?
+                            profile_edit.profile_picture.name
+                            : '' }}</div>
+                        </div>
+                        <div class="form-group">
                           <label for="position">Headline</label>
                           <input type="text" class="form-control" v-model="profile_edit.headline">
+                        </div>
+                        <div class="form-group">
+                          <label for="position">Industry</label>
+                          <input type="text" class="form-control" v-model="profile_edit.industry">
+                        </div>
+                        <div class="form-group">
+                          <label for="position">Location</label>
+                          <input type="text" class="form-control" v-model="profile_edit.location">
                         </div>
                         <div class="form-group">
                           <label for="position">Bio</label>
                           <input type="text" class="form-control" v-model="profile_edit.bio">
                         </div>
                         <div class="form-group">
-                          <label for="position">Location</label>
-                          <input type="text" class="form-control" v-model="profile_edit.location">
+                          <label for="position">Background Photo</label>
+                          <b-form-file id="file-default-2" v-model="profile_edit.background"></b-form-file>
+                          <div class="mt-3">Selected file: {{ profile_edit.background ? profile_edit.background.name : ''
+                          }}
+                          </div>
                         </div>
                         <div class="row">
                           <div class="row ml-4 ">
@@ -372,9 +412,20 @@ export default {
       profileImage: 'profile-image.jpg',
 
       profile_edit: {
+        first_name: "",
+        last_name: "",
+        user_name: "",
+        email: "",
+        password: "",
+        date_of_birth: null,
+        profile_picture: null,
+        profile_picture_base64: null,
         headline: "",
+        industry: "",
         bio: "",
-        location: ""
+        location: "",
+        background: null,
+        background_base64: null
       },
 
       //educations
@@ -471,23 +522,147 @@ export default {
             end_date: `${res.data.data.experiences[index].end_date}`
           })
         }
-        this.profile_edit.bio = this.profile_data.bio
+        this.profile_edit.first_name = this.profile_data.first_name
+        this.profile_edit.last_name = this.profile_data.last_name
+        this.profile_edit.user_name = this.profile_data.user_name
+        this.profile_edit.email = this.profile_data.email
+        this.profile_edit.password = this.profile_data.password
+        this.profile_edit.date_of_birth = this.profile_data.date_of_birth
+        //this.profile_edit.profile_picture = 
+        this.profile_edit.profile_picture_base64 = this.profile_data.profile_picture
         this.profile_edit.headline = this.profile_data.headline
+        this.profile_edit.industry = this.profile_data.industry
         this.profile_edit.location = this.profile_data.location
+        this.profile_edit.bio = this.profile_data.bio
+        //this.profile_edit.background = this.profile_data.background
+        this.profile_edit.background_base64 = this.profile_data.background
+
       })
     },
     saveChangesProfileEdit() {
-      axios.put(`https://software.ardapektezol.com/api/profile`, {
-        headline: this.profile_edit.headline,
-        bio: this.profile_edit.bio,
-        location: this.profile_edit.location
-      }, {
-        headers: {
-          Authorization: this.$cookies.get("token")
+      if (this.profile_edit.profile_picture == null && this.profile_edit.background == null) {
+        console.log("empty");
+        axios.put(`https://software.ardapektezol.com/api/profile`, {
+            first_name: this.profile_edit.first_name,
+            last_name: this.profile_edit.last_name,
+            user_name: this.profile_edit.user_name,
+            email: this.profile_edit.email,
+            password: this.profile_edit.password,
+            date_of_birth: this.profile_edit.date_of_birth,
+            profile_picture: this.profile_edit.profile_picture,
+            headline: this.profile_edit.headline,
+            industry: this.profile_edit.industry,
+            bio: this.profile_edit.bio,
+            location: this.profile_edit.location,
+            background: this.profile_edit.background
+          }, {
+            headers: {
+              Authorization: this.$cookies.get("token")
+            }
+          }).then(() => {
+            this.profile_datas()
+          })
+      } else if (this.profile_edit.profile_picture != null && this.profile_edit.background != null) {
+        console.log("girdi çift");
+
+        const file = this.profile_edit.profile_picture
+        const reader = new FileReader()
+        reader.onloadend = () => {
+          this.profile_edit.profile_picture_base64 = reader.result;
         }
-      }).then(() => {
-        this.profile_datas()
-      })
+        reader.readAsDataURL(file);
+
+        const file2 = this.profile_edit.background
+        const reader2 = new FileReader()
+        reader2.onloadend = () => {
+          this.profile_edit.background_base64 = reader2.result;
+          console.log("SSSSSSSSS", this.profile_edit.background_base64);
+          console.log("pp", this.profile_edit.profile_picture_base64);
+          //here
+          axios.put(`https://software.ardapektezol.com/api/profile`, {
+            first_name: this.profile_edit.first_name,
+            last_name: this.profile_edit.last_name,
+            user_name: this.profile_edit.user_name,
+            email: this.profile_edit.email,
+            password: this.profile_edit.password,
+            date_of_birth: this.profile_edit.date_of_birth,
+            profile_picture: this.profile_edit.profile_picture_base64,
+            headline: this.profile_edit.headline,
+            industry: this.profile_edit.industry,
+            bio: this.profile_edit.bio,
+            location: this.profile_edit.location,
+            background: this.profile_edit.background_base64
+          }, {
+            headers: {
+              Authorization: this.$cookies.get("token")
+            }
+          }).then(() => {
+            this.profile_datas()
+          })
+        }
+        reader2.readAsDataURL(file2);
+
+      } else if (this.profile_edit.profile_picture != null && this.profile_edit.background == null) {
+        const file = this.profile_edit.profile_picture
+        const reader = new FileReader()
+        let rawImg;
+        reader.onloadend = () => {
+          rawImg = reader.result;
+          //here
+          axios.put(`https://software.ardapektezol.com/api/profile`, {
+            first_name: this.profile_edit.first_name,
+            last_name: this.profile_edit.last_name,
+            user_name: this.profile_edit.user_name,
+            email: this.profile_edit.email,
+            password: this.profile_edit.password,
+            date_of_birth: this.profile_edit.date_of_birth,
+            profile_picture: rawImg,
+            headline: this.profile_edit.headline,
+            industry: this.profile_edit.industry,
+            bio: this.profile_edit.bio,
+            location: this.profile_edit.location,
+            background: this.profile_edit.background
+          }, {
+            headers: {
+              Authorization: this.$cookies.get("token")
+            }
+          }).then(() => {
+            this.profile_datas()
+          })
+        }
+        reader.readAsDataURL(file);
+
+      } else if (this.profile_edit.profile_picture == null && this.profile_edit.background != null) {
+        const file = this.profile_edit.background
+        const reader = new FileReader()
+        let rawImg;
+        reader.onloadend = () => {
+          rawImg = reader.result; 
+          //here
+          axios.put(`https://software.ardapektezol.com/api/profile`, {
+            first_name: this.profile_edit.first_name,
+            last_name: this.profile_edit.last_name,
+            user_name: this.profile_edit.user_name,
+            email: this.profile_edit.email,
+            password: this.profile_edit.password,
+            date_of_birth: this.profile_edit.date_of_birth,
+            profile_picture: this.profile_edit.profile_picture,
+            headline: this.profile_edit.headline,
+            industry: this.profile_edit.industry,
+            bio: this.profile_edit.bio,
+            location: this.profile_edit.location,
+            background: rawImg
+          }, {
+            headers: {
+              Authorization: this.$cookies.get("token")
+            }
+          }).then(() => {
+            this.profile_datas()
+          })
+        }
+        reader.readAsDataURL(file);
+      }
+
     },
     resetForm() {
       // Reset form fields or any other necessary cleanup

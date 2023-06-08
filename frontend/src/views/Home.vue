@@ -10,8 +10,9 @@
         <div class="col-6"> 
           <mainUpper></mainUpper> 
           <hr>
-          <div v-for="(post) in post_data" :key="post.id"> 
-            <post :id="post.id" :date="post.date" :user_id="post.user.id" :first_name="post.user.first_name" :last_name="post.user.last_name" :headline="post.user.headline" :likes="post.likes" :content_text="post.content.text" :content_image="post.content.image_base64" :comments="post.comments" :liked_status="post.liked_status"></post> 
+          
+          <div v-for="(post) in post_data" :key="post.id">  
+            <post :id="post.id" :date="post.date" :user_id="post.user.id" :profile_picture="post.user.profile_picture" :first_name="post.user.first_name" :last_name="post.user.last_name" :headline="post.user.headline" :likes="post.likes" :content_text="post.content.text" :content_image="post.content.image_base64" :comments="post.comments" :liked_status="post.liked_status"></post> 
           </div> 
         </div> 
         <!-- Right - Start -->

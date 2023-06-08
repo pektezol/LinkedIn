@@ -60,13 +60,12 @@
 
             <li class="nav-item mr-3">
               <a class="nav-link" href="/profile">
-                <img class="rounded-circle ml-2 text-center" src="../../assets/images/profilPhoto.jpeg"
-                  style="width: 25px; height: 25px;" />
+                 
                 <div class="flex flex-wrap">
                   <div class="w-full text-center">
                     <!--             <img :src="user.data.photoURL" alt="" srcset=""  ref="btnRef" class="transform translate-x-px rounded-full w-7 h-7 ease-linear transition-all duration-150">
  -->
-                    <p class="flex">
+                    <p class="flex mt-4">
                       Me
                       <icon class="language-selector__label-chevron mx-1 lazy-loaded" aria-hidden="true">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" preserveAspectRatio="xMinYMin meet"
@@ -87,25 +86,7 @@
                   </div>
                 </div>
               </a>
-            </li>
-
-            <li class="nav-item border-left h-25">
-              <a class="nav-link ml-4 mr-2" href="#"><i class="fas fa-th fa-lg text-center">
-                  <div class="menutext">
-                    İş
-                  </div>
-                </i>
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" href="#"><i class="fas fa-chalkboard fa-lg text-center">
-                  <div class="menutext">
-                    İş İlanı Yayınla
-                  </div>
-                </i>
-              </a>
-            </li>
+            </li> 
           </ul>
         </div>
       </div>
@@ -136,8 +117,7 @@
           </div>
         </div>
       </div>
-    </div> 
-
+    </div>  
   </div>
 </template>
   

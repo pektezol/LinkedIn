@@ -3,14 +3,14 @@
     <!-- left -->
     <div class="card">
       <div class="card-header text-center"
-        style="background-image: url(https://image.shutterstock.com/image-vector/seamless-pattern-computer-background-numbers-260nw-1410295883.jpg); height: 50px;">
+        style="background-image: :url(); height: 50px;">
         <img
-          src="../../assets/images/profilPhoto.jpeg"
+          :src="profile_data.profile_picture"
           class="rounded-circle" style="width: 70px; height: 70px; border: 2px solid white;" />
       </div>
       <div class="card-body mt-4" style="font-family: 'Poppins', sans-serif;">
         <p class="card-title header text-center">
-          <a href="../../assets/images/profilPhoto.jpeg" target="_blank" style="color: #212529;">{{ profile_data.first_name }}
+          <a href="/profile" target="_blank" style="color: #212529;">{{ profile_data.first_name }}
              {{ profile_data.last_name }}</a>
         </p>
         <div class="text-center" style="margin-bottom: 10px; color: #5f5f5f;">

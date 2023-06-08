@@ -2,13 +2,13 @@
   <div class="container">
     <div class="card mt-4">
       <div class="card-body">
-        <div>
+        <div> 
           <div class="header-photo">
             <img alt="Header Photo"
-              src="https://64.media.tumblr.com/682b7be9273636dffb1d8fbe3220628b/tumblr_pdz53tIneb1sx8ybdo10_1280.png" />
+            :src="profile_data.background" />
           </div>
           <div class="profile-photo ml-5">
-            <img class="img-fluid rounded-circle mb-1" src="../assets/images/profilPhoto.jpeg" alt="Profile Image" />
+            <img class="img-fluid rounded-circle mb-1" :src="profile_data.profile_picture" alt="Profile Image" />
           </div>
           <b-card>
             <b-card-body>

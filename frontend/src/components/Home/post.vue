@@ -1,11 +1,10 @@
 <template>
   <div class="card mt-2 mb-3">
-    <div class="card-header">
-
-      <img src="../../assets/images/profilPhoto.jpeg" class="postphoto">
+    <div class="card-header"> 
+      <img :src="profile_picture" class="postphoto">
       <div class="d-inline-flex flex-column ml-1 align-middle">
         <span class="posttext">
-          <a href="../../assets/images/profilPhoto.jpeg" target="_blank" style="color: #212529">
+          <a href="" target="_blank" style="color: #212529">
             {{ first_name }} {{ last_name }}
           </a>
         </span>
@@ -91,7 +90,7 @@
 import axios from "axios";
 export default {
   name: "post",
-  props: ['id', 'user_id', 'first_name', 'last_name', 'headline', 'content_text', 'content_image', 'likes', 'comments', 'date', 'liked_status'],
+  props: ['id', 'user_id', 'first_name', 'last_name', 'headline', 'content_text', 'content_image', 'likes', 'comments', 'date', 'liked_status', "profile_picture"],
   data() {
     return {
       comment_text: "",
