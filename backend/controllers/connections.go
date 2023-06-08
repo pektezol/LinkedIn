@@ -93,6 +93,15 @@ func SendConnectionRequest(c *gin.Context) {
 		c.JSON(http.StatusOK, ErrorMessage("You already have sent a connection request to this person!"))
 		return
 	}
+	sql = `SELECT COUNT(*) FROM connections WHERE reciever_id = $1 AND sender_id = (SELECT id FROM users WHERE username = $2);`
+	if err := database.DB.QueryRow(sql, userObject.ID, targetUsername).Scan(&count); err != nil {
+		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+		return
+	}
+	if count != 0 {
+		c.JSON(http.StatusOK, ErrorMessage("You already have sent a connection request to this person!"))
+		return
+	}
 	sql = `INSERT INTO connections(sender_id,reciever_id,status) VALUES($1,(SELECT id FROM users WHERE username = $2),$3);`
 	_, err := database.DB.Exec(sql, userObject.ID, targetUsername, false)
 	if err != nil {
