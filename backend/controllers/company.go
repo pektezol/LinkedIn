@@ -40,16 +40,18 @@ func GetCompany(c *gin.Context) {
 		rows.Scan(&company.ID, &company.Name, &company.Industry, &company.Logo, &company.Location, &company.Description, &company.Employer.ID, &company.Employer.UserName, &company.Employer.FirstName, &company.Employer.LastName, &company.Employer.Headline)
 		response.Companies = append(response.Companies, company)
 	}
-	sql = `SELECT u.id, u.username, u.firstname, u.lastname, u.headline FROM applications a INNER JOIN users u ON a.user_id=u.id INNER JOIN jobs j ON a.job_id=j.id INNER JOIN companies c ON j.company_id=c.id WHERE c.id = $1 AND j.filled = true AND a.status = true;`
-	rows, err = database.DB.Query(sql, companyID)
-	if err != nil {
-		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
-		return
-	}
-	for rows.Next() {
-		var company Company
-		rows.Scan(&company.ID, &company.Name, &company.Industry, &company.Logo, &company.Location, &company.Description, &company.Employer.ID, &company.Employer.UserName, &company.Employer.FirstName, &company.Employer.LastName, &company.Employer.Headline)
-		response.Companies = append(response.Companies, company)
+	for _, v := range response.Companies {
+		sql = `SELECT u.id, u.username, u.firstname, u.lastname, u.headline FROM applications a INNER JOIN users u ON a.user_id=u.id INNER JOIN jobs j ON a.job_id=j.id INNER JOIN companies c ON j.company_id=c.id WHERE c.id = $1 AND j.filled = true AND a.status = true;`
+		rows, err = database.DB.Query(sql, v.ID)
+		if err != nil {
+			c.JSON(http.StatusOK, ErrorMessage(err.Error()))
+			return
+		}
+		for rows.Next() {
+			var user UserShort
+			rows.Scan(&user.ID, &user.UserName, &user.FirstName, &user.LastName, &user.Headline)
+			v.Employees = append(v.Employees, user)
+		}
 	}
 	c.JSON(http.StatusOK, OkMessage(response))
 }
