@@ -12,7 +12,7 @@ import (
 
 func GetAllCompany(c *gin.Context) {
 	var response CompanyResponse
-	sql := `SELECT c.id, c.name, c.industry, c.logo, c.location, c.description, u.id, u.username, u.firstname, u.lastname, u.headline FROM companies c INNER JOIN users u ON c.employer_id=u.id;`
+	sql := `SELECT c.id, c.name, c.industry, c.logo, c.location, c.description, u.id, u.username, u.firstname, u.lastname, u.headline, u.profilepicture FROM companies c INNER JOIN users u ON c.employer_id=u.id;`
 	rows, err := database.DB.Query(sql)
 	if err != nil {
 		c.JSON(http.StatusOK, ErrorMessage(err.Error()))
@@ -20,7 +20,7 @@ func GetAllCompany(c *gin.Context) {
 	}
 	for rows.Next() {
 		var company Company
-		rows.Scan(&company.ID, &company.Name, &company.Industry, &company.Logo, &company.Location, &company.Description, &company.Employer.ID, &company.Employer.UserName, &company.Employer.FirstName, &company.Employer.LastName, &company.Employer.Headline)
+		rows.Scan(&company.ID, &company.Name, &company.Industry, &company.Logo, &company.Location, &company.Description, &company.Employer.ID, &company.Employer.UserName, &company.Employer.FirstName, &company.Employer.LastName, &company.Employer.Headline, &company.Employer.ProfilePicture)
 		response.Companies = append(response.Companies, company)
 	}
 	c.JSON(http.StatusOK, OkMessage(response))
